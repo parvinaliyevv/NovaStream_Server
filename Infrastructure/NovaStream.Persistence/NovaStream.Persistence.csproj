@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Configurations\" />
-    <Folder Include="Services\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
 
@@ -22,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\NovaStream.Applicaton\NovaStream.Applicaton.csproj" />
+    <ProjectReference Include="..\..\Core\NovaStream.Applicaton\NovaStream.Application.csproj" />
   </ItemGroup>
 
 </Project>

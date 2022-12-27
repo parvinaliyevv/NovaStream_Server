@@ -9,15 +9,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{01705F9D-B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{E74ABEA1-59BE-44A0-BB3E-B5F9EA0BB2E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NovaStream.API", "Presentation\NovaStream.API\NovaStream.API.csproj", "{8EB6414B-1D1A-4268-B65E-666B6D542245}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NovaStream.API", "Presentation\NovaStream.API\NovaStream.API.csproj", "{8EB6414B-1D1A-4268-B65E-666B6D542245}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NovaStream.Infrastructure", "Infrastructure\NovaStream.Infrastructure\NovaStream.Infrastructure.csproj", "{0690BCF2-8D86-47FB-BC30-6E8213758947}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NovaStream.Infrastructure", "Infrastructure\NovaStream.Infrastructure\NovaStream.Infrastructure.csproj", "{0690BCF2-8D86-47FB-BC30-6E8213758947}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NovaStream.Persistence", "Infrastructure\NovaStream.Persistence\NovaStream.Persistence.csproj", "{F2B02019-3C04-4F04-BB04-9F4FCBDF4E09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NovaStream.Persistence", "Infrastructure\NovaStream.Persistence\NovaStream.Persistence.csproj", "{F2B02019-3C04-4F04-BB04-9F4FCBDF4E09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NovaStream.Applicaton", "Core\NovaStream.Applicaton\NovaStream.Applicaton.csproj", "{C9E7BCC0-BAC5-47A7-9B08-4CDF66126283}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NovaStream.Application", "Core\NovaStream.Applicaton\NovaStream.Application.csproj", "{C9E7BCC0-BAC5-47A7-9B08-4CDF66126283}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NovaStream.Domain", "Core\NovaStream.Domain\NovaStream.Domain.csproj", "{178B71BF-9389-4174-91F9-0A2D3D900C1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NovaStream.Domain", "Core\NovaStream.Domain\NovaStream.Domain.csproj", "{178B71BF-9389-4174-91F9-0A2D3D900C1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
