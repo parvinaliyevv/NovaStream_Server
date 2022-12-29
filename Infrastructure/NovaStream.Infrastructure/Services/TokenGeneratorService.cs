@@ -25,7 +25,6 @@ public class TokenGeneratorService : ITokenGeneratorService
             issuer: _configuration["JWT:Issuer"],
             audience: _configuration["JWT:Audience"],
             claims: claims,
-            expires: DateTime.Now.AddMinutes(30),
             signingCredentials: credentials
         );
 
