@@ -18,8 +18,8 @@ public class MovieController : ControllerBase
     {
         try
         {
-            var videos = _dbContext.Videos.ProjectToType<VideoDto>();
-            var json = $"\"videos\": {JsonConvert.SerializeObject(videos, Formatting.Indented)}";
+            var videos = _dbContext.Movies.ProjectToType<MovieDto>();
+            var json = $"\"videos\":{JsonConvert.SerializeObject(videos)}";
 
             return Ok(json);
         }
@@ -36,15 +36,15 @@ public class MovieController : ControllerBase
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var video = _dbContext.Videos?.FirstOrDefault(v => v.Name == name)?.Adapt<DetailsVideoDto>();
+            var video = _dbContext.Movies?.FirstOrDefault(v => v.Name == name)?.Adapt<DetailsMovieDto>();
 
             if (video != null)
             {
-                var json = JsonConvert.SerializeObject(video, Formatting.Indented);
+                var json = JsonConvert.SerializeObject(video);
 
                 return Ok(json);
             }
-            else ModelState.AddModelError("Exists", "Video with this name doesn't exist");
+            else ModelState.AddModelError("Exists", "Movie with this name doesn't exist");
 
             return BadRequest(ModelState);
         }

@@ -1,15 +1,15 @@
 ﻿namespace NovaStream.Application.Dtos;
 
-public abstract class BaseVideoDto
+public abstract class BaseMovieDto
 {
     public string Name { get; set; }
 
     public string ImagePath { get; set; }
 }
 
-public class VideoDto : BaseVideoDto {}
+public class MovieDto : BaseMovieDto { }
 
-public class DetailsVideoDto : BaseVideoDto 
+public class DetailsMovieDto : BaseMovieDto
 {
     public int Year { get; set; }
     public string Description { get; set; }

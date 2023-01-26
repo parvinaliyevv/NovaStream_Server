@@ -1,5 +1,6 @@
 ﻿
 global using NovaStream.Application.Services;
+global using NovaStream.Domain.Entities.Abstract;
 global using NovaStream.Domain.Entities.Concrete;
 global using NovaStream.Persistence.Data.Contexts;
 global using NovaStream.Persistence.Data.Configurations;
