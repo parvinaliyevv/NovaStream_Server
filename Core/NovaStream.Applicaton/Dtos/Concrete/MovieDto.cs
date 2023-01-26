@@ -16,6 +16,7 @@ public record MovieDetailsDto : BaseVideoDetailsDto
     public string VideoDescription { get; set; }
     public string VideoImageUrl { get; set; }
     public string VideoUrl { get; set; }
+    public string VideoLength { get; set; }
     public string TrailerUrl { get; set; }
 
     public ProducerDto Producer { get; set; }

@@ -11,9 +11,7 @@ public class SeasonConfiguration : IEntityTypeConfiguration<Season>
 
         var seasons = new Season[]
         {
-            new() { Id = 1, Number = 1, SerialName = "Peaky Blinders" },
-            new() { Id = 2, Number = 2, SerialName = "Peaky Blinders" },
-            new() { Id = 3, Number = 1, SerialName = "Wednesday" }
+            new() { Id = 1, Number = 1, SerialName = "The Last of Us" },
         };
 
         builder.HasData(seasons);

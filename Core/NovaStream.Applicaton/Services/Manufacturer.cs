@@ -14,4 +14,11 @@ public static class Manufacturer
 
         return builder.ToString();
     }
+
+    public static string ManufactureTime(TimeSpan time)
+    {
+        var minutes = time.Minutes;
+
+        return minutes > 60 ? $"{minutes / 60}h {minutes % 60}m" : $"{minutes % 60}m";
+    }
 }

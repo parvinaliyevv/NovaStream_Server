@@ -4,14 +4,18 @@
 [Route("api/[controller]")]
 public class AccountController : ControllerBase
 {
-    private readonly IUserManager _userManager;
     private readonly ITokenGeneratorService _tokenGeneratorService;
 
+    private readonly IUserManager _userManager;
+    private readonly IStorageManager _storageManager;
 
-    public AccountController(IUserManager userManager, ITokenGeneratorService tokenGeneratorService)
+
+    public AccountController(ITokenGeneratorService tokenGeneratorService, IUserManager userManager, IStorageManager storageManager)
     {
-        _userManager = userManager;
         _tokenGeneratorService = tokenGeneratorService;
+
+        _userManager = userManager;
+        _storageManager = storageManager;
     }
 
 
@@ -41,7 +45,7 @@ public class AccountController : ControllerBase
             {
                 var token = await _tokenGeneratorService.GenerateAuthorizeTokenAsync(user);
                 var response = new { Nickname = user.Nickname, AvatarUrl = user.AvatarUrl, Email = dto.Email, PasswordLength = dto.Password.Length, Token = token };
-                var json = JsonConvert.SerializeObject(response, Formatting.Indented);
+                var json = JsonConvert.SerializeObject(user.Adapt<SignInUserDto>(), Formatting.Indented);
 
                 return Ok(json);
             }

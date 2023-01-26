@@ -24,9 +24,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.ApplicationRegister();
-builder.Services.PersistenceRegister(builder.Configuration);
 builder.Services.InfrastructureRegister(builder.Configuration);
+builder.Services.PersistenceRegister(builder.Configuration);
+builder.Services.ApplicationRegister();
 
 var app = builder.Build();
 

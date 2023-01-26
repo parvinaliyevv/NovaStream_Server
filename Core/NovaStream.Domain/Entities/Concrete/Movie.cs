@@ -6,6 +6,7 @@ public class Movie : Video
     public string VideoName { get; set; }
     public string VideoImageUrl { get; set; }
     public string VideoDescription { get; set; }
+    public TimeSpan VideoLength { get; set; }
 
     public int? ProducerId { get; set; }
     public Producer? Producer { get; set; }

@@ -2,10 +2,11 @@
 global using System.Reflection;
 global using System.Globalization;
 
+global using NovaStream.Application.Services;
 global using NovaStream.Domain.Entities.Concrete;
 global using NovaStream.Application.Dtos.Abstract;
 global using NovaStream.Application.Dtos.Concrete;
-global using NovaStream.Domain.Entities.Concrete.Adapters;
+global using NovaStream.Application.MapsterProfiles;
 
 global using Mapster;
 global using FluentValidation;

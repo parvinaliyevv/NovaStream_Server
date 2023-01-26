@@ -7,6 +7,7 @@ public class Episode : Entity
     public string Description { get; set; }
     public string ImageUrl { get; set; }
     public string VideoUrl { get; set; }
+    public TimeSpan VideoLength { get; set; }
 
     public int? SeasonId { get; set; }
     public Season? Season { get; set; }

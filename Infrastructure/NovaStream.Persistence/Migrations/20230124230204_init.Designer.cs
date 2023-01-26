@@ -12,7 +12,7 @@ using NovaStream.Persistence.Data.Contexts;
 namespace NovaStream.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230123180126_init")]
+    [Migration("20230124230204_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,26 +56,74 @@ namespace NovaStream.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            About = "Yaxshi Oglan",
-                            ImageUrl = "baza",
-                            Name = "Cillian",
-                            Surname = "Murphy"
+                            About = "American actor and producer Matthew David McConaughey was born in Uvalde, Texas. His mother, Mary Kathleen (McCabe), is a substitute school teacher originally from New Jersey. His father, James Donald McConaughey, was a Mississippi-born gas station owner who ran an oil pipe supply business. He is of Irish, Scottish, German, English, and Swedish descent. Matthew grew up in Longview, Texas, where he graduated from the local High School (1988). Showing little interest in his father's oil business, which his two brothers later joined, Matthew was longing for a change of scenery, and spent a year in Australia, washing dishes and shoveling chicken manure. Back to the States, he attended the University of Texas in Austin, originally wishing to be a lawyer. But, when he discovered an inspirational Og Mandino book \"The Greatest Salesman in the World\" before one of his final exams, he suddenly knew he had to change his major from law to film.",
+                            ImageUrl = "Images/Actors/Matthew-McConaughey-image.jpg",
+                            Name = "Matthew",
+                            Surname = "McConaughey"
                         },
                         new
                         {
                             Id = 2,
-                            About = "Babat Oglan",
-                            ImageUrl = "baza",
-                            Name = "Tom",
-                            Surname = "Cruse"
+                            About = "Anne Jacqueline Hathaway was born in Brooklyn, New York, to Kate McCauley Hathaway, an actress, and Gerald T. Hathaway, a lawyer, both originally from Philadelphia. She is of mostly Irish descent, along with English, German, and French. Her first major role came in the short-lived television series Get Real (1999). She gained widespread recognition for her roles in The Princess Diaries (2001) and its 2004 sequel as a young girl who discovers she is a member of royalty, opposite Julie Andrews and Heather Matarazzo.",
+                            ImageUrl = "Images/Actors/Anne-Hathaway-image.jpg",
+                            Name = "Anne",
+                            Surname = "Hathaway"
                         },
                         new
                         {
                             Id = 3,
-                            About = "Zor Oglan",
-                            ImageUrl = "baza",
-                            Name = "Brad",
-                            Surname = "Pitt"
+                            About = "Jessica Michelle Chastain was born in Sacramento, California, and was raised in a middle-class household in a Northern California suburb. Her mother, Jerri Chastain, is a vegan chef whose family is originally from Kansas, and her stepfather is a fireman. She discovered dance at the age of nine and was in a dance troupe by age thirteen. She began performing in Shakespearean productions all over the Bay area.",
+                            ImageUrl = "Images/Actors/Jessica-Chastain-image.jpg",
+                            Name = "Jessica",
+                            Surname = "Chastain"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            About = "Pedro Pascal is a Chilean-born actor. He is best known for portraying the roles of Oberyn Martell in the fourth season of the HBO series Game of Thrones (2011), Javier Peña in the Netflix series Narcos (2015), the titular character in the Disney+ series The Mandalorian (2019) and Joel Miller in the HBO series The Last of Us (2023).",
+                            ImageUrl = "Images/Actors/Pedro-Pascal-image.jpg",
+                            Name = "Pedro",
+                            Surname = "Pascal"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            About = "Bella Ramsey made her professional acting debut as fierce young noblewoman Lyanna Mormont in Season 6 of HBO's 'Game of Thrones', a role that quickly became a fan favorite and saw Bella return for the next 2 seasons. Bella will be returning to HBO as the leading role of 'Ellie Williams' in their new flagship show 'The Last of Us' opposite Pedro Pascal. Bella is also known for playing the titular character Mildred Hubble in the newest adaptation of 'The Worst Witch' for which she won the Young Performer BAFTA in 2019. Bella lends her voice to 'Hilda', an award winning animation series for Netflix. Bella was recently on screens in the second season of BBC/HBO's adaptation of 'His Dark Materials'.",
+                            ImageUrl = "Images/Actors/Bella-Ramsey-Image.jpg",
+                            Name = "Bella",
+                            Surname = "Ramsey"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            About = "Gabriel Luna was born on December 5, 1982 in Austin, Texas, USA. He is an actor and producer, known for Terminator: Dark Fate (2019), Agents of S.H.I.E.L.D. (2013) and Bernie (2011). He has been married to Smaranda Luna since February 20, 2011.",
+                            ImageUrl = "Images/Actors/Gabriel-Luna-image.jpg",
+                            Name = "Gabriel",
+                            Surname = "Luna"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            About = "Few actors in the world have had a career quite as diverse as Leonardo DiCaprio's. DiCaprio has gone from relatively humble beginnings, as a supporting cast member of the sitcom Growing Pains (1985) and low budget horror movies, such as Critters 3 (1991), to a major teenage heartthrob in the 1990s, as the hunky lead actor in movies such as Romeo + Juliet (1996) and Titanic (1997), to then become a leading man in Hollywood blockbusters, made by internationally renowned directors such as Martin Scorsese and Christopher Nolan.\r\n",
+                            ImageUrl = "Images/Actors/Leonardo-DiCaprio-image.jpg",
+                            Name = "Leonardo",
+                            Surname = "DiCaprio"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            About = "Joseph Leonard Gordon-Levitt was born February 17, 1981 in Los Angeles, California, to Jane Gordon and Dennis Levitt. Joseph was raised in a Jewish family with his late older brother, Dan Gordon-Levitt, who passed away in October 2010. His parents worked for the Pacifica Radio station KPFK-FM and his maternal grandfather, Michael Gordon, had been a well-known movie director. Joseph first became well known for his starring role on NBC's award-winning comedy series 3rd Rock from the Sun (1996). During his six seasons on the show, he won two YoungStar Awards and also shared in three Screen Actors Guild Award® nominations for Outstanding Performance by a Comedy Series Ensemble.",
+                            ImageUrl = "Images/Actors/Joseph-Gordon-Levitt-image.jpg",
+                            Name = "Joseph",
+                            Surname = "Gordon-Levitt"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            About = "With his breakthrough performance as Eames in Christopher Nolan's sci-fi thriller Inception (2010), English actor Tom Hardy has been brought to the attention of mainstream audiences worldwide. However, the versatile actor has been steadily working on both stage and screen since his television debut in the miniseries Band of Brothers (2001). After being cast in the World War II drama, Hardy left his studies at the prestigious Drama Centre in London and was subsequently cast as Twombly in Ridley Scott's Black Hawk Down (2001) and as the villain Shinzon in Star Trek: Nemesis (2002).",
+                            ImageUrl = "Images/Actors/Tom-Hardy-image.jpg",
+                            Name = "Tom",
+                            Surname = "Hardy"
                         });
                 });
 
@@ -97,12 +145,32 @@ namespace NovaStream.Persistence.Migrations
                         new
                         {
                             MovieName = "Interstellar",
+                            ActorId = 1
+                        },
+                        new
+                        {
+                            MovieName = "Interstellar",
                             ActorId = 2
                         },
                         new
                         {
                             MovieName = "Interstellar",
                             ActorId = 3
+                        },
+                        new
+                        {
+                            MovieName = "Inception",
+                            ActorId = 7
+                        },
+                        new
+                        {
+                            MovieName = "Inception",
+                            ActorId = 8
+                        },
+                        new
+                        {
+                            MovieName = "Inception",
+                            ActorId = 9
                         });
                 });
 
@@ -129,16 +197,31 @@ namespace NovaStream.Persistence.Migrations
                         new
                         {
                             MovieName = "Interstellar",
+                            GenreId = 2
+                        },
+                        new
+                        {
+                            MovieName = "Interstellar",
+                            GenreId = 3
+                        },
+                        new
+                        {
+                            MovieName = "Inception",
+                            GenreId = 2
+                        },
+                        new
+                        {
+                            MovieName = "Inception",
+                            GenreId = 3
+                        },
+                        new
+                        {
+                            MovieName = "Inception",
                             GenreId = 4
                         },
                         new
                         {
-                            MovieName = "Interstellar",
-                            GenreId = 5
-                        },
-                        new
-                        {
-                            MovieName = "Interstellar",
+                            MovieName = "Inception",
                             GenreId = 6
                         });
                 });
@@ -182,13 +265,18 @@ namespace NovaStream.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            SerialName = "Peaky Blinders",
-                            ActorId = 1
+                            SerialName = "The Last of Us",
+                            ActorId = 4
                         },
                         new
                         {
-                            SerialName = "Peaky Blinders",
-                            ActorId = 2
+                            SerialName = "The Last of Us",
+                            ActorId = 5
+                        },
+                        new
+                        {
+                            SerialName = "The Last of Us",
+                            ActorId = 6
                         });
                 });
 
@@ -209,33 +297,33 @@ namespace NovaStream.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            SerialName = "Peaky Blinders",
+                            SerialName = "The Last of Us",
                             GenreId = 1
                         },
                         new
                         {
-                            SerialName = "Peaky Blinders",
+                            SerialName = "The Last of Us",
                             GenreId = 2
                         },
                         new
                         {
-                            SerialName = "Peaky Blinders",
+                            SerialName = "The Last of Us",
                             GenreId = 3
                         },
                         new
                         {
-                            SerialName = "Wednesday",
-                            GenreId = 9
+                            SerialName = "The Last of Us",
+                            GenreId = 4
                         },
                         new
                         {
-                            SerialName = "Wednesday",
-                            GenreId = 10
+                            SerialName = "The Last of Us",
+                            GenreId = 5
                         },
                         new
                         {
-                            SerialName = "Wednesday",
-                            GenreId = 11
+                            SerialName = "The Last of Us",
+                            GenreId = 6
                         });
                 });
 
@@ -272,47 +360,52 @@ namespace NovaStream.Persistence.Migrations
                         new
                         {
                             SoonName = "John Wick: Chapter 4",
+                            GenreId = 4
+                        },
+                        new
+                        {
+                            SoonName = "John Wick: Chapter 4",
+                            GenreId = 6
+                        },
+                        new
+                        {
+                            SoonName = "John Wick: Chapter 4",
+                            GenreId = 7
+                        },
+                        new
+                        {
+                            SoonName = "Guardians of the Galaxy Vol. 3",
                             GenreId = 2
                         },
                         new
                         {
-                            SoonName = "John Wick: Chapter 4",
-                            GenreId = 7
+                            SoonName = "Guardians of the Galaxy Vol. 3",
+                            GenreId = 3
                         },
                         new
                         {
-                            SoonName = "John Wick: Chapter 4",
+                            SoonName = "Guardians of the Galaxy Vol. 3",
+                            GenreId = 4
+                        },
+                        new
+                        {
+                            SoonName = "Guardians of the Galaxy Vol. 3",
                             GenreId = 8
                         },
                         new
                         {
-                            SoonName = "Guardians of the Galaxy Vol. 3",
-                            GenreId = 7
-                        },
-                        new
-                        {
-                            SoonName = "Guardians of the Galaxy Vol. 3",
-                            GenreId = 4
-                        },
-                        new
-                        {
-                            SoonName = "Guardians of the Galaxy Vol. 3",
-                            GenreId = 12
+                            SoonName = "Transformers: Rise of the Beasts",
+                            GenreId = 2
                         },
                         new
                         {
                             SoonName = "Transformers: Rise of the Beasts",
-                            GenreId = 7
+                            GenreId = 3
                         },
                         new
                         {
                             SoonName = "Transformers: Rise of the Beasts",
                             GenreId = 4
-                        },
-                        new
-                        {
-                            SoonName = "Transformers: Rise of the Beasts",
-                            GenreId = 13
                         });
                 });
 
@@ -342,6 +435,9 @@ namespace NovaStream.Persistence.Migrations
                     b.Property<int?>("SeasonId")
                         .HasColumnType("int");
 
+                    b.Property<TimeSpan>("VideoLength")
+                        .HasColumnType("time");
+
                     b.Property<string>("VideoUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -356,52 +452,24 @@ namespace NovaStream.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "Ambitious gang leader Thomas Shelby recognizes an opportunity to move up in the world thanks to a missing crate of guns.",
-                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/Season 1/Episode 1/peaky-blinders-S01E01-video-image",
-                            Name = "1. Episode 1",
+                            Description = "Twenty years after a fungal outbreak ravages the planet, survivors Joel and Ellie are tasked with a mission that could change everything.",
+                            ImageUrl = "Serials/The Last of Us/Season 1/Episode 1/the-last-of-us-S01E01-video-image.jpg",
+                            Name = "1. When You're Lost in the Darkness",
                             Number = 1,
                             SeasonId = 1,
-                            VideoUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/Season 1/Episode 1/peaky-blinders-S01E01-video.mp4"
+                            VideoLength = new TimeSpan(0, 1, 20, 0, 0),
+                            VideoUrl = "Serials/The Last of Us/Season 1/Episode 1/the-last-of-us-S01E01-video-720p.mkv"
                         },
                         new
                         {
                             Id = 2,
-                            Description = "Thomas provokes a local kingpin by fixing a horse race and starts a war with a gypsy family; Inspector Campbell carries out a vicious raid.",
-                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/Season 1/Episode 2/peaky-blinders-S01E02-video-image",
-                            Name = "2. Episode 2",
+                            Description = "Joel, Tess, and Ellie traverse through an abandoned and flooded Boston hotel on their way to drop Ellie off with a group of Fireflies.",
+                            ImageUrl = "Serials/The Last of Us/Season 1/Episode 2/the-last-of-us-S01E02-video-image.jpg",
+                            Name = "2. Infected",
                             Number = 2,
                             SeasonId = 1,
-                            VideoUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/Season 1/Episode 2/peaky-blinders-S01E02-video.mp4"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "When Birmingham crime boss Tommy Shelby's beloved Garrison pub is bombed, he finds himself blackmailed into murdering an Irish dissident.",
-                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/Season 2/Episode 1/peaky-blinders-S02E01-video-image",
-                            Name = "1. Episode 1",
-                            Number = 1,
-                            SeasonId = 2,
-                            VideoUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/Season 2/Episode 1/peaky-blinders-S02E01-video.mp4"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "When a deliciously wicked prank gets Wednesday expelled, her parents ship her off to Nevermore Academy, the boarding school where they fell in love.",
-                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Wednesday/Season 1/Episode 1/wednesday-S01E01-video-image",
-                            Name = "1. Wednesday's Child Is Full of Woe",
-                            Number = 1,
-                            SeasonId = 3,
-                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2FSeason%201%2Fwednesday-S01E01-video.mkv?alt=media&token=ac3169c1-7e09-46f4-baa9-cad6e290244b"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "The sheriff questions Wednesday about the night's strange happenings. Later, Wednesday faces off against a fierce rival in the cutthroat Poe Cup race.",
-                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Wednesday/Season 1/Episode 2/wednesday-S01E02-video-image",
-                            Name = "2. Woe Is the Loneliest Number",
-                            Number = 2,
-                            SeasonId = 3,
-                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2FSeason%201%2Fwednesday-S01E02-video.mkv?alt=media&token=3fdc19c2-224e-4c06-afda-c7d5fd1e2db1"
+                            VideoLength = new TimeSpan(0, 0, 52, 0, 0),
+                            VideoUrl = "Serials/The Last of Us/Season 1/Episode 2/the-last-of-us-S01E02-video-720p.mkv"
                         });
                 });
 
@@ -429,80 +497,50 @@ namespace NovaStream.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ImageUrl = "baza",
+                            ImageUrl = "Images/Genres/comedy-image.jpg",
                             Name = "Drama"
                         },
                         new
                         {
                             Id = 2,
-                            ImageUrl = "baza",
-                            Name = "Crime"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ImageUrl = "baza",
-                            Name = "Historical"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ImageUrl = "baza",
+                            ImageUrl = "Images/Genres/comedy-image.jpg",
                             Name = "Adventure"
                         },
                         new
                         {
-                            Id = 5,
-                            ImageUrl = "baza",
-                            Name = "Science fiction"
+                            Id = 3,
+                            ImageUrl = "Images/Genres/comedy-image.jpg",
+                            Name = "Sci-Fi"
                         },
                         new
                         {
-                            Id = 6,
-                            ImageUrl = "baza",
-                            Name = "Detective"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            ImageUrl = "baza",
+                            Id = 4,
+                            ImageUrl = "Images/Genres/comedy-image.jpg",
                             Name = "Action"
                         },
                         new
                         {
-                            Id = 8,
-                            ImageUrl = "baza",
+                            Id = 5,
+                            ImageUrl = "Images/Genres/comedy-image.jpg",
+                            Name = "Horror"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ImageUrl = "Images/Genres/comedy-image.jpg",
                             Name = "Thriller"
                         },
                         new
                         {
-                            Id = 9,
-                            ImageUrl = "baza",
-                            Name = "Comedy horror"
+                            Id = 7,
+                            ImageUrl = "Images/Genres/comedy-image.jpg",
+                            Name = "Crime"
                         },
                         new
                         {
-                            Id = 10,
-                            ImageUrl = "baza",
-                            Name = "Coming-of-age"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            ImageUrl = "baza",
-                            Name = "Supernatural"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            ImageUrl = "baza",
+                            Id = 8,
+                            ImageUrl = "Images/Genres/comedy-image.jpg",
                             Name = "Comedy"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            ImageUrl = "baza",
-                            Name = "Sci-Fi"
                         });
                 });
 
@@ -541,6 +579,9 @@ namespace NovaStream.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<TimeSpan>("VideoLength")
+                        .HasColumnType("time");
+
                     b.Property<string>("VideoName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -564,15 +605,32 @@ namespace NovaStream.Persistence.Migrations
                             Name = "Interstellar",
                             Age = 13,
                             Description = "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival. Earth's future has been riddled by disasters, famines, and droughts. There is only one way to ensure mankind's survival: Interstellar travel.",
-                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Movies/Interstellar/interstellar-image",
-                            ProducerId = 2,
-                            SearchImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Movies/Interstellar/interstellar-search-image",
-                            TrailerUrl = "https://novastreamstorage.blob.core.windows.net/root/Movies/Interstellar/interstellar-trailer",
+                            ImageUrl = "Movies/Interstellar/interstellar-image.jpg",
+                            ProducerId = 1,
+                            SearchImageUrl = "Movies/Interstellar/interstellar-search-image.jpg",
+                            TrailerUrl = "Movies/Interstellar/interstellar-trailer.mp4",
                             VideoDescription = "With humanity teetering on the brink of extinction, a group of astronauts travels through a wormhole in search of another inhabitable planet.",
-                            VideoImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Movies/Interstellar/interstellar-video-image",
-                            VideoName = "Episode",
-                            VideoUrl = "https://novastreamstorage.blob.core.windows.net/root/Movies/Interstellar/interstellar-video",
+                            VideoImageUrl = "Movies/Interstellar/interstellar-video-image.jpg",
+                            VideoLength = new TimeSpan(0, 2, 50, 0, 0),
+                            VideoName = "Interstellar",
+                            VideoUrl = "Movies/Interstellar/interstellar-video-720p.mp4",
                             Year = 2014
+                        },
+                        new
+                        {
+                            Name = "Inception",
+                            Age = 16,
+                            Description = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.",
+                            ImageUrl = "Movies/Inception/inception-image.jpg",
+                            ProducerId = 1,
+                            SearchImageUrl = "Movies/Inception/inception-search-image.jpg",
+                            TrailerUrl = "Movies/Inception/inception-trailer.mp4",
+                            VideoDescription = "A troubled thief who extracts secrets from people's dreams takes one last job: leading a dangerous mission to plant an idea in a target's subconscious.",
+                            VideoImageUrl = "Movies/Inception/inception-video-image.jpg",
+                            VideoLength = new TimeSpan(0, 2, 28, 0, 0),
+                            VideoName = "Inception",
+                            VideoUrl = "Movies/Inception/inception-video-720p.mkv",
+                            Year = 2010
                         });
                 });
 
@@ -608,26 +666,18 @@ namespace NovaStream.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            About = "zor oglan",
-                            ImageUrl = "baza",
-                            Name = "Murad",
-                            Surname = "Musayev"
+                            About = "Best known for his cerebral, often nonlinear, storytelling, acclaimed writer-director Christopher Nolan was born on July 30, 1970, in London, England. Over the course of 15 years of filmmaking, Nolan has gone from low-budget independent films to working on some of the biggest blockbusters ever made.",
+                            ImageUrl = "Images/Producers/Christopher-Nolan-image.jpg",
+                            Name = "Christopher",
+                            Surname = "Nolan"
                         },
                         new
                         {
                             Id = 2,
-                            About = "zor oglan",
-                            ImageUrl = "baza",
-                            Name = "Parvin",
-                            Surname = "Aliyev"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            About = "zor oglan",
-                            ImageUrl = "baza",
-                            Name = "Rustem",
-                            Surname = "Bayramov"
+                            About = "Craig Mazin was born on April 8, 1971 in Brooklyn, New York, USA. He is a producer and writer, known for Chernobyl (2019), The Hangover Part II (2011) and Identity Thief (2013).",
+                            ImageUrl = "Images/Producers/Craig-Mazin-image.jpg",
+                            Name = "Craig",
+                            Surname = "Mazin"
                         });
                 });
 
@@ -656,19 +706,7 @@ namespace NovaStream.Persistence.Migrations
                         {
                             Id = 1,
                             Number = 1,
-                            SerialName = "Peaky Blinders"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Number = 2,
-                            SerialName = "Peaky Blinders"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Number = 1,
-                            SerialName = "Wednesday"
+                            SerialName = "The Last of Us"
                         });
                 });
 
@@ -711,25 +749,14 @@ namespace NovaStream.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Name = "Peaky Blinders",
-                            Age = 18,
-                            Description = "A notorious gang in 1919 Birmingham, England, is led by the fierce Tommy Shelby, a crime boss set on moving up in the world no matter the cost.",
-                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/peaky-blinders-image",
-                            ProducerId = 1,
-                            SearchImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/peaky-blinders-search-image",
-                            TrailerUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/peaky-blinders-trailer",
-                            Year = 2013
-                        },
-                        new
-                        {
-                            Name = "Wednesday",
-                            Age = 14,
-                            Description = "Follows Wednesday Addams' years as a student, when she attempts to master her emerging psychic ability, thwart and solve the mystery that embroiled her parents.",
-                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Wednesday/wednesday-image",
-                            ProducerId = 3,
-                            SearchImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Wednesday/wednesday-search-image",
-                            TrailerUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Wednesday/wednesday-trailer",
-                            Year = 2022
+                            Name = "The Last of Us",
+                            Age = 16,
+                            Description = "After a global pandemic destroys civilization, a hardened survivor takes charge of a 14-year-old girl, who may be humanity's last hope.",
+                            ImageUrl = "Serials/The Last of Us/the-last-of-us-image.jpg",
+                            ProducerId = 2,
+                            SearchImageUrl = "Serials/The Last of Us/the-last-of-us-search-image.jpg",
+                            TrailerUrl = "Serials/The Last of Us/the-last-of-us-trailer.mp4",
+                            Year = 2023
                         });
                 });
 
@@ -763,24 +790,24 @@ namespace NovaStream.Persistence.Migrations
                             Name = "John Wick: Chapter 4",
                             Description = "John Wick uncovers a path to defeating The High Table. But before he can earn his freedom, Wick must face off against a new enemy with powerful alliances across the globe and forces that turn old friends into foes.",
                             OutDate = new DateTime(2023, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TrailerImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Soons/John Wick Chapter 4/john-wick-chapter-4-trailer-image",
-                            TrailerUrl = "https://novastreamstorage.blob.core.windows.net/root/Soons/John Wick Chapter 4/john-wick-chapter-4-trailer"
+                            TrailerImageUrl = "Soons/John Wick: Chapter 4/john-wick-chapter-4-trailer-image.jpg",
+                            TrailerUrl = "Soons/John Wick: Chapter 4/john-wick-chapter-4-trailer.mp4"
                         },
                         new
                         {
                             Name = "Guardians of the Galaxy Vol. 3",
                             Description = "Still reeling from the loss of Gamora, Peter Quill rallies his team to defend the universe and one of their own - a mission that could mean the end of the Guardians if not successful.",
                             OutDate = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TrailerImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Soons/Guardians of the Galaxy Vol. 3/guardians-of-the-galaxy-vol-3-trailer-image",
-                            TrailerUrl = "https://novastreamstorage.blob.core.windows.net/root/Soons/Guardians of the Galaxy Vol. 3/guardians-of-the-galaxy-vol-3-trailer"
+                            TrailerImageUrl = "Soons/Guardians of the Galaxy Vol. 3/guardians-of-the-galaxy-vol-3-trailer-image.jpg",
+                            TrailerUrl = "Soons/Guardians of the Galaxy Vol. 3/guardians-of-the-galaxy-vol-3-trailer.mp4"
                         },
                         new
                         {
                             Name = "Transformers: Rise of the Beasts",
                             Description = "Plot unknown. Reportedly based on the 'Transformers' spinoff 'Beast Wars' which feature robots that transform into robotic animals.",
                             OutDate = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TrailerImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Soons/Transformers Rise of the Beasts/transformers-rise-of-the-beasts-trailer-image",
-                            TrailerUrl = "https://novastreamstorage.blob.core.windows.net/root/Soons/Transformers Rise of the Beasts/transformers-rise-of-the-beasts-trailer"
+                            TrailerImageUrl = "Soons/Transformers: Rise of the Beasts/transformers-rise-of-the-beasts-trailer-image.jpg",
+                            TrailerUrl = "Soons/Transformers: Rise of the Beasts/transformers-rise-of-the-beasts-trailer.mp4"
                         });
                 });
 
@@ -816,7 +843,7 @@ namespace NovaStream.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            AvatarUrl = "https://novastreamstorage.blob.core.windows.net/root/Avatars/avatar-1",
+                            AvatarUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Avatars%2Favatar-1.png?alt=media&token=4fecc3bf-9511-4186-9c25-0347128c0181",
                             Email = "admin@novastream.api",
                             Nickname = "Admin",
                             PasswordHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"

@@ -18,8 +18,9 @@ public class SerialActorConfiguration : IEntityTypeConfiguration<SerialActor>
 
         var serialActors = new SerialActor[]
         {
-            new() { ActorId = 1, SerialName = "Peaky Blinders" },
-            new() { ActorId = 2, SerialName = "Peaky Blinders" }
+            new() { ActorId = 4, SerialName = "The Last of Us" },
+            new() { ActorId = 5, SerialName = "The Last of Us" },
+            new() { ActorId = 6, SerialName = "The Last of Us" }
         };
 
         builder.HasData(serialActors);

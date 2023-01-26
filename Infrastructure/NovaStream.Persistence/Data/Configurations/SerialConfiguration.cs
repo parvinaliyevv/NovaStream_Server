@@ -15,25 +15,14 @@ public class SerialConfiguration : IEntityTypeConfiguration<Serial>
         {
             new()
             {
-                Name = "Peaky Blinders",
-                Description = "A notorious gang in 1919 Birmingham, England, is led by the fierce Tommy Shelby, a crime boss set on moving up in the world no matter the cost.",
-                Year = 2013,
-                Age = 18,
-                ProducerId = 1,
-                ImageUrl = @"https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/peaky-blinders-image",
-                SearchImageUrl = @"https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/peaky-blinders-search-image",
-                TrailerUrl = @"https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/peaky-blinders-trailer"
-            },
-            new()
-            {
-                Name = "Wednesday",
-                Description = "Follows Wednesday Addams' years as a student, when she attempts to master her emerging psychic ability, thwart and solve the mystery that embroiled her parents.",
-                Year = 2022,
-                Age = 14,
-                ProducerId = 3,
-                ImageUrl = @"https://novastreamstorage.blob.core.windows.net/root/Serials/Wednesday/wednesday-image",
-                SearchImageUrl = @"https://novastreamstorage.blob.core.windows.net/root/Serials/Wednesday/wednesday-search-image",
-                TrailerUrl = @"https://novastreamstorage.blob.core.windows.net/root/Serials/Wednesday/wednesday-trailer"
+                Name = "The Last of Us",
+                Description = "After a global pandemic destroys civilization, a hardened survivor takes charge of a 14-year-old girl, who may be humanity's last hope.",
+                Year = 2023,
+                Age = 16,
+                ProducerId = 2,
+                ImageUrl = @"Serials/The Last of Us/the-last-of-us-image.jpg",
+                SearchImageUrl = @"Serials/The Last of Us/the-last-of-us-search-image.jpg",
+                TrailerUrl = @"Serials/The Last of Us/the-last-of-us-trailer.mp4"
             }
         };
 

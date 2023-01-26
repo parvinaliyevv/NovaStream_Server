@@ -12,15 +12,17 @@ public class ProducerController : ControllerBase
         _dbContext = dbContext;
     }
 
+
     [HttpGet("[Action]")]
     public async Task<IActionResult> Videos([FromQuery] int id)
     {
+        await Task.CompletedTask;
+
         try
         {
             var videos = new List<BaseVideoDto>();
 
             videos.AddRange(_dbContext.Serials.Include(s => s.Producer).Where(s => s.ProducerId == id).ProjectToType<SerialDto>());
-
             videos.AddRange(_dbContext.Movies.Include(s => s.Producer).Where(m => m.ProducerId == id).ProjectToType<MovieDto>());
 
             videos.Sort((a, b) => string.Compare(a.Name, b.Name));

@@ -12,9 +12,12 @@ public class ActorController : ControllerBase
         _dbContext = dbContext;
     }
 
+
     [HttpGet("[Action]")]
     public async Task<IActionResult> Videos([FromQuery] int id)
     {
+        await Task.CompletedTask;
+
         try
         {
             var videos = new List<BaseVideoDto>();

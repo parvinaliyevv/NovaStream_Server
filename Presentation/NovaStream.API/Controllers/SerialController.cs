@@ -5,13 +5,17 @@
 public class SerialController : ControllerBase
 {
     private readonly AppDbContext _dbContext;
+
     private readonly IUserManager _userManager;
+    private readonly IStorageManager _storageManager;
 
 
-    public SerialController(AppDbContext dbContext, IUserManager userManager)
+    public SerialController(AppDbContext dbContext, IUserManager userManager, IStorageManager storageManager)
     {
         _dbContext = dbContext;
+
         _userManager = userManager;
+        _storageManager = storageManager;
     }
 
 
@@ -123,7 +127,8 @@ public class SerialController : ControllerBase
             {
                 var episode = season.Episodes.FirstOrDefault(e => e.Number == episodeNumber);
 
-                if (episode is not null) return Ok(episode.VideoUrl);
+                if (episode is not null) 
+                    return Ok(_storageManager.GetSignedUrl(episode.VideoUrl, TimeSpan.FromHours(5)));
             }
 
             return NotFound();

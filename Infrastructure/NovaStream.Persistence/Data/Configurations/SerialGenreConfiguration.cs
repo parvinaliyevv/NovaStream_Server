@@ -18,12 +18,12 @@ public class SerialGenreConfiguration : IEntityTypeConfiguration<SerialGenre>
 
         var serialGenres = new SerialGenre[]
         {
-            new() { GenreId = 1, SerialName = "Peaky Blinders" },
-            new() { GenreId = 2, SerialName = "Peaky Blinders" },
-            new() { GenreId = 3, SerialName = "Peaky Blinders" },
-            new() { GenreId = 9, SerialName = "Wednesday" },
-            new() { GenreId = 10, SerialName = "Wednesday" },
-            new() { GenreId = 11, SerialName = "Wednesday" }
+            new() { GenreId = 1, SerialName = "The Last of Us" },
+            new() { GenreId = 2, SerialName = "The Last of Us" },
+            new() { GenreId = 3, SerialName = "The Last of Us" },
+            new() { GenreId = 4, SerialName = "The Last of Us" },
+            new() { GenreId = 5, SerialName = "The Last of Us" },
+            new() { GenreId = 6, SerialName = "The Last of Us" },
         };
 
         builder.HasData(serialGenres);
