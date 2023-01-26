@@ -6,14 +6,12 @@ public class MovieMarkConfiguration : IEntityTypeConfiguration<MovieMark>
     {
         builder.HasKey(mm => new { mm.MovieName, mm.UserEmail });
 
-        builder
-            .HasOne(mm => mm.Movie)
+        builder.HasOne(mm => mm.Movie)
             .WithMany(m => m.Marks)
             .HasForeignKey(mm => mm.MovieName)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder
-            .HasOne(mm => mm.User)
+        builder.HasOne(mm => mm.User)
             .WithMany(u => u.MovieMarks)
             .HasForeignKey(mm => mm.UserEmail)
             .OnDelete(DeleteBehavior.Cascade);

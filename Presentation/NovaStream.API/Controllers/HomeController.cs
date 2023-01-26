@@ -16,41 +16,38 @@ public class HomeController : ControllerBase
     [HttpGet("[Action]")]
     public async Task<IActionResult> Index()
     {
-        await Task.CompletedTask;
-
         try
         {
-            var videos = new List<VideoDto>();
+            var videos = new List<VideoShortDetaislDto>();
+            var builder = new StringBuilder();
 
-            videos.AddRange(_dbContext.Movies.ProjectToType<MovieDto>());
-            videos.AddRange(_dbContext.Serials.ProjectToType<SerialDto>());
+            List<string> categories;
+
+            videos.AddRange(_dbContext.Movies.ProjectToType<MovieShortDetailsDto>());
+            videos.AddRange(_dbContext.Serials.ProjectToType<SerialShortDetailsDto>());
 
             videos.Sort((a, b) => string.Compare(a.Name, b.Name));
 
-            videos.ForEach(dto =>
+            foreach (var dto in videos)
             {
-                var builder = new StringBuilder();
-
-                List<string> categories;
-
                 if (Convert.ToBoolean(dto.IsSerial))
                 {
                     dto.SeasonCount = _dbContext.Seasons.Count(s => s.SerialName == dto.Name);
 
-                    categories = _dbContext.SerialCategories.Include(mc => mc.Category).Where(sc => sc.SerialName == dto.Name).Select(mc => mc.Category.Name).ToList();
+                    categories = await _dbContext.SerialCategories.Include(mc => mc.Category).Where(sc => sc.SerialName == dto.Name).Select(mc => mc.Category.Name).ToListAsync();
                 }
-                else
-                    categories = _dbContext.MovieCategories.Include(mc => mc.Category).Where(mc => mc.MovieName == dto.Name).Select(mc => mc.Category.Name).ToList();
+                else categories = await _dbContext.MovieCategories.Include(mc => mc.Category).Where(mc => mc.MovieName == dto.Name).Select(mc => mc.Category.Name).ToListAsync();
 
-                for (int i = 0; i < categories.Count; i++)
-                {
-                    if (i == 0) builder.Append($"{categories[i]} •");
-                    else if (i == categories.Count - 1) builder.Append($" {categories[i]}");
-                    else builder.Append($" {categories[i]} •");
-                }
+                builder.Append($"{categories[0]} •");
+
+                for (int i = 1; i < categories.Count - 1; i++) builder.Append($" {categories[i]} •");
+
+                builder.Append($" {categories[categories.Count - 1]}");
 
                 dto.Categories = builder.ToString();
-            });
+
+                builder.Clear();
+            }
 
             var jsonSerializerOptions = new JsonSerializerSettings()
             {

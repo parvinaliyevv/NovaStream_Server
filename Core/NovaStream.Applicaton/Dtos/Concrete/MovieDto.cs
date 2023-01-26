@@ -1,6 +1,6 @@
 ﻿namespace NovaStream.Application.Dtos.Concrete;
 
-public class MovieDto : VideoDto
+public record MovieDto : BaseVideoDto
 {
     public MovieDto()
     {
@@ -8,18 +8,20 @@ public class MovieDto : VideoDto
     }
 }
 
-public class MovieDetailsDto : VideoDetailsDto
+public record MovieSearchDto : MovieDto { }
+
+public record MovieShortDetailsDto : VideoShortDetaislDto
+{
+    public MovieShortDetailsDto()
+    {
+        IsSerial = false;
+    }
+}
+
+public record MovieDetailsDto : VideoDetailsDto
 {
     public string VideoName { get; set; }
     public string VideoDescription { get; set; }
     public string VideoImageUrl { get; set; }
     public string VideoUrl { get; set; }
-}
-
-public class MovieSearchDto : VideoSearchDto
-{
-    public MovieSearchDto()
-    {
-        IsSerial = false;
-    }
 }

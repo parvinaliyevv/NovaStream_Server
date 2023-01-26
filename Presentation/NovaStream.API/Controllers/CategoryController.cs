@@ -14,16 +14,18 @@ public class CategoryController : ControllerBase
 
 
     [HttpGet("[Action]")]
-    public async Task<IActionResult> VideosByCategory([FromQuery] string name)
+    public async Task<IActionResult> Index([FromQuery] string name)
     {
         await Task.CompletedTask;
 
         try
         {
-            var videos = new List<VideoSearchDto>();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            videos.AddRange(_dbContext.MovieCategories.Include(mc => mc.Movie).Include(mc => mc.Category).Where(mc => mc.Category.Name == name).Select(mc => mc.Movie).ProjectToType<MovieSearchDto>());
-            videos.AddRange(_dbContext.SerialCategories.Include(sc => sc.Serial).Include(sc => sc.Category).Where(sc => sc.Category.Name == name).Select(sc => sc.Serial).ProjectToType<SerialSearchDto>());
+            var videos = new List<BaseVideoDto>();
+
+            videos.AddRange(_dbContext.MovieCategories.Include(mc => mc.Movie).Include(mc => mc.Category).Where(mc => mc.Category.Name == name).Select(mc => mc.Movie).ProjectToType<MovieDto>());
+            videos.AddRange(_dbContext.SerialCategories.Include(sc => sc.Serial).Include(sc => sc.Category).Where(sc => sc.Category.Name == name).Select(sc => sc.Serial).ProjectToType<SerialDto>());
 
             videos.Sort((a, b) => string.Compare(a.Name, b.Name));
 

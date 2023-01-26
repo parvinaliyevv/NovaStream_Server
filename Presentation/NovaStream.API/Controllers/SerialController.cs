@@ -20,24 +20,25 @@ public class SerialController : ControllerBase
     {
         try
         {
-            var serials = await _dbContext.Serials.ProjectToType<SerialDto>().ToListAsync();
+            var serials = await _dbContext.Serials.ProjectToType<SerialShortDetailsDto>().ToListAsync();
+
+            var builder = new StringBuilder();
 
             serials.ForEach(dto =>
             {
-                var builder = new StringBuilder();
-
                 var categories = _dbContext.SerialCategories.Include(mc => mc.Category).Where(mc => mc.SerialName == dto.Name).Select(mc => mc.Category.Name).ToList();
 
-                for (int i = 0; i < categories.Count; i++)
-                {
-                    if (i == 0) builder.Append($"{categories[i]} •");
-                    else if (i == categories.Count - 1) builder.Append($" {categories[i]}");
-                    else builder.Append($" {categories[i]} •");
-                }
+                builder.Append($"{categories[0]} •");
+
+                for (int i = 1; i < categories.Count - 1; i++) builder.Append($" {categories[i]} •");
+
+                builder.Append($" {categories[categories.Count - 1]}");
 
                 dto.IsSerial = null;
                 dto.Categories = builder.ToString();
                 dto.SeasonCount = _dbContext.Seasons.Count(s => s.SerialName == dto.Name);
+
+                builder.Clear();
             });
 
             var jsonSerializerOptions = new JsonSerializerSettings()

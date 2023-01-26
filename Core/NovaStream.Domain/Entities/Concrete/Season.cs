@@ -6,5 +6,6 @@ public class Season : Entity
 
     public string SerialName { get; set; }
     public Serial Serial { get; set; }
+
     public ICollection<Episode> Episodes { get; set; }
 }

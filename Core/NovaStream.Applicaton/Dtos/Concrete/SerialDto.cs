@@ -1,6 +1,6 @@
 ﻿namespace NovaStream.Application.Dtos.Concrete;
 
-public class SerialDto : VideoDto
+public record SerialDto : BaseVideoDto
 {
     public SerialDto()
     {
@@ -8,15 +8,17 @@ public class SerialDto : VideoDto
     }
 }
 
-public class SerialDetailsDto : VideoDetailsDto
-{
-    public ICollection<EpisodeDto> Episodes { get; set; }
-}
+public record SerialSearchDto : SerialDto { }
 
-public class SerialSearchDto : VideoSearchDto
+public record SerialShortDetailsDto : VideoShortDetaislDto
 {
-    public SerialSearchDto()
+    public SerialShortDetailsDto()
     {
         IsSerial = true;
     }
+}
+
+public record SerialDetailsDto : VideoDetailsDto
+{
+    public ICollection<EpisodeDto> Episodes { get; set; }
 }

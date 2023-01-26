@@ -10,7 +10,7 @@ public class SerialMark
 
     public SerialMark(string userEmail, string serialName)
     {
-        SerialName = serialName;
         UserEmail = userEmail;
+        SerialName = serialName;
     }
 }

@@ -20,7 +20,7 @@ public class SearchController : ControllerBase
 
         try
         {
-            var videos = new List<VideoSearchDto>();
+            var videos = new List<BaseVideoDto>();
 
             videos.AddRange(_dbContext.Movies.ProjectToType<MovieSearchDto>());
             videos.AddRange(_dbContext.Serials.ProjectToType<SerialSearchDto>());

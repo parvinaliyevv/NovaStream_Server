@@ -30,7 +30,7 @@ public class TokenGeneratorService : ITokenGeneratorService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-
+    
     public async Task<string> GenerateTokenAsync(User user)
         => await Task.Factory.StartNew(() => GenerateToken(user));
 }

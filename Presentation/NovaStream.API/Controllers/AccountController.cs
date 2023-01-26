@@ -71,21 +71,4 @@ public class AccountController : ControllerBase
             return StatusCode((int)HttpStatusCode.InternalServerError);
         }
     }
-
-    [HttpPost("[Action]")]
-    public async Task<IActionResult> UserExists([FromBody] string email)
-    {
-        try
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            var result = await _userManager.ExistsAsync(email);
-
-            return Ok(result);
-        }
-        catch
-        {
-            return StatusCode((int)HttpStatusCode.InternalServerError);
-        }
-    }
 }

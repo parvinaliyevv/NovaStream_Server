@@ -68,6 +68,16 @@ namespace NovaStream.Persistence.Migrations
                         {
                             Id = 6,
                             Name = "Detective"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Action"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Thriller"
                         });
                 });
 
@@ -111,94 +121,32 @@ namespace NovaStream.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "Baza",
-                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
-                            Name = "Episode 1",
+                            Description = "Thomas Shelby, leader of the Birmingham gang, the Peaky Blinders, comes into possession of a shipment of guns from the local BSA factory. Aware that keeping the guns could lead to trouble with the law, Thomas nonetheless wants to use the guns to increase the Peaky's power.",
+                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2FSeason%201%2FEpisode%201%2Fpeaky-blinders-S01E01-image.jpg?alt=media&token=10d57b41-f838-4110-acf7-63f8c01abebf",
+                            Name = "1. Episode 1",
                             Number = 1,
                             SeasonId = 1,
-                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FSerials%2FPeaky%20Blinders%2FSeason%201%2FPeaky-Blinders-S01E01.mp4?alt=media&token=728dbcd3-6215-4e76-ae69-6849ba9896f5"
+                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2FSeason%201%2FEpisode%201%2Fpeaky-blinders-S01E01-video.mp4?alt=media&token=1ddc4b67-579d-4081-ae49-aea3c95b9402"
                         },
                         new
                         {
                             Id = 2,
-                            Description = "Baza",
-                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
-                            Name = "Episode 2",
+                            Description = "Thomas Shelby sets out to get work with Billy Kimber - the man who can help Thomas achieve his dream of running a legal bookmaking business. Meanwhile, Polly is alarmed when she realizes Ada is pregnant and when Thomas discovers the news, he forces Ada to admit that Freddie Thorne is the father.",
+                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2FSeason%201%2FEpisode%202%2Fpeaky-blinders-S01E02-image.jpg?alt=media&token=7e07da2d-90b7-443e-b72a-088ebf61e2a3",
+                            Name = "1. Episode 2",
                             Number = 2,
                             SeasonId = 1,
-                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FSerials%2FPeaky%20Blinders%2FSeason%201%2FPeaky-Blinders-S01E02.mp4?alt=media&token=f2bcb626-2a22-4a69-bdb8-69fef93ca2c9"
+                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2FSeason%201%2FEpisode%202%2Fpeaky-blinders-S01E02-video.mp4?alt=media&token=c41cfa67-da90-4ee4-86af-7d5264617a69"
                         },
                         new
                         {
                             Id = 3,
-                            Description = "Baza",
-                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
-                            Name = "Episode 1",
+                            Description = "As the 1920s begin to roar, business is booming for the Peaky Blinders gang. Tommy Shelby starts to expand his legal and illegal operations, with an eye on the racetracks of the south. Meanwhile, an enemy from Tommy's past returns to Birmingham.",
+                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2FSeason%202%2FEpisode%201%2Fpeaky-blinders-S02E01-image.jpg?alt=media&token=acc1de8b-c971-41ee-9b0d-fff713ce484c",
+                            Name = "2. Episode 1",
                             Number = 1,
                             SeasonId = 2,
-                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FSerials%2FPeaky%20Blinders%2FSeason%202%2FPeaky-Blinders-S02E01.mp4?alt=media&token=740e66cd-9759-4b7b-8592-8a93919a059b"
-                        });
-                });
-
-            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.InComing", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("OutDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TrailerUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Name");
-
-                    b.ToTable("InComings");
-
-                    b.HasData(
-                        new
-                        {
-                            Name = "Sahmaran",
-                            Description = "DATABASES",
-                            OutDate = new DateTime(2023, 1, 8, 18, 21, 52, 813, DateTimeKind.Local).AddTicks(4973),
-                            TrailerUrl = "videobaza"
-                        });
-                });
-
-            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.InComingCategory", b =>
-                {
-                    b.Property<string>("InComingVideoName")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.HasKey("InComingVideoName", "CategoryId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("InComingCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            InComingVideoName = "Sahmaran",
-                            CategoryId = 1
-                        },
-                        new
-                        {
-                            InComingVideoName = "Sahmaran",
-                            CategoryId = 3
-                        },
-                        new
-                        {
-                            InComingVideoName = "Sahmaran",
-                            CategoryId = 5
+                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2FSeason%202%2FEpisode%201%2Fpeaky-blinders-S02E01-video.mp4?alt=media&token=1be97130-46ef-43d6-a195-c8e2e7d107d6"
                         });
                 });
 
@@ -215,6 +163,14 @@ namespace NovaStream.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SearchImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrailerImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -250,13 +206,15 @@ namespace NovaStream.Persistence.Migrations
                         {
                             Name = "Interstellar",
                             Age = 13,
-                            Description = "With humanity teetering on the brink of extinction, a group of astronauts travels through a wormhole in search of another inhabitable planet.",
-                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FInterstellar%2FInterstellar.png?alt=media&token=0a6c45f5-fc92-4b66-8d50-7222ae8815b8",
-                            TrailerUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FMovies%2FInterstellar%2FInterstellar%20Trailer.mp4?alt=media&token=562d9a36-a3b2-411b-9525-05ccdc65e11a",
-                            VideoDescription = "SELECT * BAZA FROM HASSANBAZA",
-                            VideoImageUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FInterstellar%2FInterstellar.png?alt=media&token=0a6c45f5-fc92-4b66-8d50-7222ae8815b8",
-                            VideoName = "HassanBaza",
-                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FMovies%2FInterstellar%2FInterstellar.mp4?alt=media&token=0fbe924c-8746-4132-8440-f8331d5214f6",
+                            Description = "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival. Earth's future has been riddled by disasters, famines, and droughts. There is only one way to ensure mankind's survival: Interstellar travel.",
+                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-image.png?alt=media&token=776eca25-eae0-426e-b103-8ed2c47a0811",
+                            SearchImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-search-image.jpg?alt=media&token=5799d5f0-f87d-424c-9c62-b0ba5904f499",
+                            TrailerImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-trailer-image.jpg?alt=media&token=1da9a664-0a92-4e35-90d9-7905fd33dfdf",
+                            TrailerUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-trailer.mp4?alt=media&token=3e5984d4-5fb8-438b-aa9a-3778e3f52ba8",
+                            VideoDescription = "With humanity teetering on the brink of extinction, a group of astronauts travels through a wormhole in search of another inhabitable planet.",
+                            VideoImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-video-image.jpg?alt=media&token=5a18e02b-3976-4116-a591-d6e334c50772",
+                            VideoName = "Episode",
+                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-video.mp4?alt=media&token=aa6a5dca-7570-45de-87ed-22d35d25189b",
                             Year = 2014
                         });
                 });
@@ -372,6 +330,14 @@ namespace NovaStream.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SearchImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrailerImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("TrailerUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -389,8 +355,10 @@ namespace NovaStream.Persistence.Migrations
                             Name = "Peaky Blinders",
                             Age = 18,
                             Description = "A notorious gang in 1919 Birmingham, England, is led by the fierce Tommy Shelby, a crime boss set on moving up in the world no matter the cost.",
-                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
-                            TrailerUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FSerials%2FPeaky%20Blinders%2FSeason%201%2FPeaky%20Blinder%20Season%201%20Trailer.mp4?alt=media&token=ce9640c0-b5ea-4f6f-9d1d-11b5a518ab32",
+                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-image.jpg?alt=media&token=356b23bd-755e-4daf-822e-50a029c87f9c",
+                            SearchImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-search-image.jpg?alt=media&token=8ea5abb6-b969-4bf4-a20a-13ffcd3a07fd",
+                            TrailerImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-trailer-image.jpg?alt=media&token=a99966d3-1793-4cac-97fc-80b9b75686f0",
+                            TrailerUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-trailer.mp4?alt=media&token=c5e7aef9-cfcf-4a31-8e77-8c678d95bd7b",
                             Year = 2013
                         });
                 });
@@ -442,6 +410,73 @@ namespace NovaStream.Persistence.Migrations
                     b.ToTable("SerialMarks");
                 });
 
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Soon", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OutDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TrailerImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrailerUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Soons");
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "John Wick: Chapter 4",
+                            Description = "John Wick uncovers a path to defeating The High Table. But before he can earn his freedom, Wick must face off against a new enemy with powerful alliances across the globe and forces that turn old friends into foes.",
+                            OutDate = new DateTime(2023, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TrailerImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Soons%2FJohn%20Wick%3A%20Chapter%204%2Fjohn-wick-chapter-4-trailer-image.jpg?alt=media&token=410d8c6b-fe9c-4da4-a654-1980eb72c78e",
+                            TrailerUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Soons%2FJohn%20Wick%3A%20Chapter%204%2Fjohn-wick-chapter-4-trailer.mp4?alt=media&token=2c1e4eea-4a4f-4e00-add3-eb10b9dd5030"
+                        });
+                });
+
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.SoonCategory", b =>
+                {
+                    b.Property<string>("SoonName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SoonName", "CategoryId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("SoonCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            SoonName = "John Wick: Chapter 4",
+                            CategoryId = 2
+                        },
+                        new
+                        {
+                            SoonName = "John Wick: Chapter 4",
+                            CategoryId = 7
+                        },
+                        new
+                        {
+                            SoonName = "John Wick: Chapter 4",
+                            CategoryId = 8
+                        });
+                });
+
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.User", b =>
                 {
                     b.Property<string>("Email")
@@ -476,25 +511,6 @@ namespace NovaStream.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Season");
-                });
-
-            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.InComingCategory", b =>
-                {
-                    b.HasOne("NovaStream.Domain.Entities.Concrete.Category", "Category")
-                        .WithMany("InComingCategories")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NovaStream.Domain.Entities.Concrete.InComing", "InComingVideo")
-                        .WithMany("Categories")
-                        .HasForeignKey("InComingVideoName")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("InComingVideo");
                 });
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.MovieCategory", b =>
@@ -584,6 +600,25 @@ namespace NovaStream.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.SoonCategory", b =>
+                {
+                    b.HasOne("NovaStream.Domain.Entities.Concrete.Category", "Category")
+                        .WithMany("InComingCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NovaStream.Domain.Entities.Concrete.Soon", "Soon")
+                        .WithMany("Categories")
+                        .HasForeignKey("SoonName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Soon");
+                });
+
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Category", b =>
                 {
                     b.Navigation("InComingCategories");
@@ -591,11 +626,6 @@ namespace NovaStream.Persistence.Migrations
                     b.Navigation("MovieCategories");
 
                     b.Navigation("SerialCategories");
-                });
-
-            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.InComing", b =>
-                {
-                    b.Navigation("Categories");
                 });
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Movie", b =>
@@ -617,6 +647,11 @@ namespace NovaStream.Persistence.Migrations
                     b.Navigation("Marks");
 
                     b.Navigation("Seasons");
+                });
+
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Soon", b =>
+                {
+                    b.Navigation("Categories");
                 });
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.User", b =>

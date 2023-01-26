@@ -6,21 +6,20 @@ public class MovieCategoryConfiguration : IEntityTypeConfiguration<MovieCategory
     {
         builder.HasKey(sc => new { sc.MovieName, sc.CategoryId });
 
-        builder
-            .HasOne(bc => bc.Movie)
+        builder.HasOne(bc => bc.Movie)
             .WithMany(b => b.Categories)
             .HasForeignKey(bc => bc.MovieName);
-        builder
-            .HasOne(bc => bc.Category)
+
+        builder.HasOne(bc => bc.Category)
             .WithMany(c => c.MovieCategories)
             .HasForeignKey(bc => bc.CategoryId);
 
-        var movieCategories = new List<MovieCategory>()
+        var movieCategories = new[]
         {
-            new() { MovieName="Interstellar", CategoryId=1 },
-            new() { MovieName="Interstellar", CategoryId=4 },
-            new() { MovieName="Interstellar", CategoryId=5 },
-            new() { MovieName="Interstellar", CategoryId=6 }
+            new MovieCategory() { MovieName = "Interstellar", CategoryId = 1 },
+            new MovieCategory() { MovieName = "Interstellar", CategoryId = 4 },
+            new MovieCategory() { MovieName = "Interstellar", CategoryId = 5 },
+            new MovieCategory() { MovieName = "Interstellar", CategoryId = 6 }
         };
 
         builder.HasData(movieCategories);
