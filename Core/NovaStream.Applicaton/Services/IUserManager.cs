@@ -8,6 +8,9 @@ public interface IUserManager
     User? FindUserByEmail(string email);
     Task<User?> FindUserByEmailAsync(string email);
 
+    User? ReturnUserFromContext(HttpContext httpContext);
+    Task<User?> ReturnUserFromContextAsync(HttpContext httpContext);
+
     bool CheckPassword(User user, string password);
     Task<bool> CheckPasswordAsync(User user, string password);
 

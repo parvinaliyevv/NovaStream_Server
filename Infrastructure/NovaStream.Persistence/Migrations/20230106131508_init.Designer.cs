@@ -11,7 +11,7 @@ using NovaStream.Persistence.Data.Contexts;
 namespace NovaStream.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230104092142_init")]
+    [Migration("20230106131508_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,7 +84,7 @@ namespace NovaStream.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImagePath")
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -98,7 +98,7 @@ namespace NovaStream.Persistence.Migrations
                     b.Property<int>("SeasonId")
                         .HasColumnType("int");
 
-                    b.Property<string>("VideoPath")
+                    b.Property<string>("VideoUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -113,31 +113,31 @@ namespace NovaStream.Persistence.Migrations
                         {
                             Id = 1,
                             Description = "Baza",
-                            ImagePath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
+                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
                             Name = "Episode 1",
                             Number = 1,
                             SeasonId = 1,
-                            VideoPath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FSerials%2FPeaky%20Blinders%2FSeason%201%2FPeaky-Blinders-S01E01.mp4?alt=media&token=728dbcd3-6215-4e76-ae69-6849ba9896f5"
+                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FSerials%2FPeaky%20Blinders%2FSeason%201%2FPeaky-Blinders-S01E01.mp4?alt=media&token=728dbcd3-6215-4e76-ae69-6849ba9896f5"
                         },
                         new
                         {
                             Id = 2,
                             Description = "Baza",
-                            ImagePath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
+                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
                             Name = "Episode 2",
                             Number = 2,
                             SeasonId = 1,
-                            VideoPath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FSerials%2FPeaky%20Blinders%2FSeason%201%2FPeaky-Blinders-S01E02.mp4?alt=media&token=f2bcb626-2a22-4a69-bdb8-69fef93ca2c9"
+                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FSerials%2FPeaky%20Blinders%2FSeason%201%2FPeaky-Blinders-S01E02.mp4?alt=media&token=f2bcb626-2a22-4a69-bdb8-69fef93ca2c9"
                         },
                         new
                         {
                             Id = 3,
                             Description = "Baza",
-                            ImagePath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
+                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
                             Name = "Episode 1",
                             Number = 1,
                             SeasonId = 2,
-                            VideoPath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FSerials%2FPeaky%20Blinders%2FSeason%202%2FPeaky-Blinders-S02E01.mp4?alt=media&token=740e66cd-9759-4b7b-8592-8a93919a059b"
+                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FSerials%2FPeaky%20Blinders%2FSeason%202%2FPeaky-Blinders-S02E01.mp4?alt=media&token=740e66cd-9759-4b7b-8592-8a93919a059b"
                         });
                 });
 
@@ -146,15 +146,22 @@ namespace NovaStream.Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImagePath")
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("VideoPath")
+                    b.Property<string>("TrailerUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VideoUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -169,9 +176,11 @@ namespace NovaStream.Persistence.Migrations
                         new
                         {
                             Name = "Interstellar",
+                            Age = 13,
                             Description = "With humanity teetering on the brink of extinction, a group of astronauts travels through a wormhole in search of another inhabitable planet.",
-                            ImagePath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FInterstellar%2FInterstellar.png?alt=media&token=0a6c45f5-fc92-4b66-8d50-7222ae8815b8",
-                            VideoPath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FMovies%2FInterstellar%2FInterstellar.mp4?alt=media&token=0fbe924c-8746-4132-8440-f8331d5214f6",
+                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FInterstellar%2FInterstellar.png?alt=media&token=0a6c45f5-fc92-4b66-8d50-7222ae8815b8",
+                            TrailerUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FMovies%2FInterstellar%2FInterstellar%20Trailer.mp4?alt=media&token=562d9a36-a3b2-411b-9525-05ccdc65e11a",
+                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FMovies%2FInterstellar%2FInterstellar.mp4?alt=media&token=0fbe924c-8746-4132-8440-f8331d5214f6",
                             Year = 2014
                         });
                 });
@@ -226,6 +235,13 @@ namespace NovaStream.Persistence.Migrations
                     b.HasIndex("UserEmail");
 
                     b.ToTable("MovieMarks");
+
+                    b.HasData(
+                        new
+                        {
+                            MovieName = "Interstellar",
+                            UserEmail = "admin@novastream.api"
+                        });
                 });
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Season", b =>
@@ -269,11 +285,18 @@ namespace NovaStream.Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImagePath")
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrailerUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -288,8 +311,10 @@ namespace NovaStream.Persistence.Migrations
                         new
                         {
                             Name = "Peaky Blinders",
+                            Age = 18,
                             Description = "A notorious gang in 1919 Birmingham, England, is led by the fierce Tommy Shelby, a crime boss set on moving up in the world no matter the cost.",
-                            ImagePath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
+                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
+                            TrailerUrl = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FSerials%2FPeaky%20Blinders%2FSeason%201%2FPeaky%20Blinder%20Season%201%20Trailer.mp4?alt=media&token=ce9640c0-b5ea-4f6f-9d1d-11b5a518ab32",
                             Year = 2013
                         });
                 });
@@ -346,6 +371,9 @@ namespace NovaStream.Persistence.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -353,6 +381,14 @@ namespace NovaStream.Persistence.Migrations
                     b.HasKey("Email");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Email = "admin@novastream.api",
+                            Id = 1,
+                            PasswordHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
+                        });
                 });
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Episode", b =>
@@ -375,7 +411,7 @@ namespace NovaStream.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("NovaStream.Domain.Entities.Concrete.Movie", "Movie")
-                        .WithMany("MovieCategories")
+                        .WithMany("Categories")
                         .HasForeignKey("MovieName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -388,7 +424,7 @@ namespace NovaStream.Persistence.Migrations
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.MovieMark", b =>
                 {
                     b.HasOne("NovaStream.Domain.Entities.Concrete.Movie", "Movie")
-                        .WithMany("MovieMarks")
+                        .WithMany("Marks")
                         .HasForeignKey("MovieName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -424,7 +460,7 @@ namespace NovaStream.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("NovaStream.Domain.Entities.Concrete.Serial", "Serial")
-                        .WithMany("SerialCategories")
+                        .WithMany("Categories")
                         .HasForeignKey("SerialName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -437,7 +473,7 @@ namespace NovaStream.Persistence.Migrations
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.SerialMark", b =>
                 {
                     b.HasOne("NovaStream.Domain.Entities.Concrete.Serial", "Serial")
-                        .WithMany("SerialMarks")
+                        .WithMany("Marks")
                         .HasForeignKey("SerialName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -462,9 +498,9 @@ namespace NovaStream.Persistence.Migrations
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Movie", b =>
                 {
-                    b.Navigation("MovieCategories");
+                    b.Navigation("Categories");
 
-                    b.Navigation("MovieMarks");
+                    b.Navigation("Marks");
                 });
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Season", b =>
@@ -474,11 +510,11 @@ namespace NovaStream.Persistence.Migrations
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Serial", b =>
                 {
+                    b.Navigation("Categories");
+
+                    b.Navigation("Marks");
+
                     b.Navigation("Seasons");
-
-                    b.Navigation("SerialCategories");
-
-                    b.Navigation("SerialMarks");
                 });
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.User", b =>

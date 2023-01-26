@@ -8,7 +8,7 @@ public class MovieMarkConfiguration : IEntityTypeConfiguration<MovieMark>
 
         builder
             .HasOne(mm => mm.Movie)
-            .WithMany(m => m.MovieMarks)
+            .WithMany(m => m.Marks)
             .HasForeignKey(mm => mm.MovieName)
             .OnDelete(DeleteBehavior.Cascade);
 
@@ -17,5 +17,9 @@ public class MovieMarkConfiguration : IEntityTypeConfiguration<MovieMark>
             .WithMany(u => u.MovieMarks)
             .HasForeignKey(mm => mm.UserEmail)
             .OnDelete(DeleteBehavior.Cascade);
+
+        var movieMark = new MovieMark("admin@novastream.api", "Interstellar");
+
+        builder.HasData(movieMark);
     }
 }

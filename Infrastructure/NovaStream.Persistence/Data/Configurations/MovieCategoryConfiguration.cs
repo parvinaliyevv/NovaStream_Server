@@ -8,7 +8,7 @@ public class MovieCategoryConfiguration : IEntityTypeConfiguration<MovieCategory
 
         builder
             .HasOne(bc => bc.Movie)
-            .WithMany(b => b.MovieCategories)
+            .WithMany(b => b.Categories)
             .HasForeignKey(bc => bc.MovieName);
         builder
             .HasOne(bc => bc.Category)

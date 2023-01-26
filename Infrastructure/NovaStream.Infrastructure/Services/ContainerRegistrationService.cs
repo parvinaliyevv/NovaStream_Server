@@ -2,8 +2,10 @@
 
 public static class ContainerRegistrationService
 {
-    public static void InfrastructureRegister(this IServiceCollection services)
+    public static void InfrastructureRegister(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<JsonWebTokenOptions>(configuration.GetSection("JsonWebToken"));
+
         services.AddTransient<ITokenGeneratorService, TokenGeneratorService>();
         services.AddTransient<IPasswordEncryptorService, Sha256PasswordEncryptorService>();
     }

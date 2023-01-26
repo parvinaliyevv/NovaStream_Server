@@ -6,4 +6,11 @@ public class MovieMark
     public Movie Movie { get; set; }
     public string UserEmail { get; set; }
     public User User { get; set; }
+
+
+    public MovieMark(string userEmail, string movieName)
+    {
+        UserEmail = userEmail;
+        MovieName = movieName;
+    }
 }

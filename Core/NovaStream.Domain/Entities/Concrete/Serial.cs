@@ -3,7 +3,6 @@
 public class Serial : Video
 {
     public ICollection<Season> Seasons { get; set; }
-    public ICollection<SerialCategory> SerialCategories { get; set; }
-
-    public ICollection<SerialMark> SerialMarks { get; set; }
+    public ICollection<SerialMark> Marks { get; set; }
+    public ICollection<SerialCategory> Categories { get; set; }
 }

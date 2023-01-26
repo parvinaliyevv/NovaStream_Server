@@ -1,6 +1,6 @@
 ﻿namespace NovaStream.Application.Dtos.Abstract;
 
-public record BaseCategoryDto
+public abstract record BaseMarkDto
 {
     public string Name { get; set; }
 }

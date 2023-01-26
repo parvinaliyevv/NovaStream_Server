@@ -1,17 +1,17 @@
-﻿using NovaStream.Domain.Entities.Concrete;
-
-namespace NovaStream.API.Controllers;
+﻿namespace NovaStream.API.Controllers;
 
 [ApiController, Authorize]
 [Route("api/[controller]")]
 public class MarkController : ControllerBase
 {
     private readonly AppDbContext _dbContext;
+    private readonly IUserManager _userManager;
 
 
-    public MarkController(AppDbContext dbContext)
+    public MarkController(AppDbContext dbContext, IUserManager userManager)
     {
         _dbContext = dbContext;
+        _userManager = userManager;
     }
 
 
@@ -22,34 +22,29 @@ public class MarkController : ControllerBase
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var user = GetDataBAZA();
+            var user = _userManager.ReturnUserFromContext(HttpContext);
 
-            if (user is not null)
+            if (user is null) return Unauthorized();
+
+            var movie = _dbContext.Movies.FirstOrDefault(s => s.Name == name);
+
+            if (movie is null) return NotFound();
+
+            var IsMarked = _dbContext.MovieMarks.Any(ms => ms.MovieName == movie.Name && ms.UserEmail == user.Email);
+
+            if (IsMarked)
             {
-                var movie = _dbContext.Movies.FirstOrDefault(m => m.Name == name);
+                ModelState.AddModelError("IsMarked", "This movie is alredy marked!");
 
-                if (movie is not null)
-                {
-                    if (_dbContext.MovieMarks.Any(mm => mm.MovieName == movie.Name && mm.UserEmail == user.Email))
-                    {
-                        ModelState.AddModelError("Marked", "This movie is alredy marked!");
-                        return BadRequest(ModelState);
-                    }
-                    else
-                    {
-                        await _dbContext.MovieMarks.AddAsync(new () { UserEmail = user.Email, MovieName = movie.Name });                 
-                        await _dbContext.SaveChangesAsync();
-
-                        return Ok();
-                    }
-                    
-                }
-
-                ModelState.AddModelError("NotFound", "Movie with this name is not found!");
+                return BadRequest(ModelState);
             }
-            else ModelState.AddModelError("NotFound", "This user is not found!");
 
-            return NotFound(ModelState);
+            var movieMark = new MovieMark(user.Email, movie.Name);
+
+            await _dbContext.MovieMarks.AddAsync(movieMark);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
         }
         catch
         {
@@ -64,33 +59,29 @@ public class MarkController : ControllerBase
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var user = GetDataBAZA();
+            var user = _userManager.ReturnUserFromContext(HttpContext);
 
-            if (user is not null)
+            if (user is null) return Unauthorized();
+
+            var serial = _dbContext.Serials.FirstOrDefault(s => s.Name == name);
+
+            if (serial is null) return NotFound(ModelState);
+
+            var IsMarked = _dbContext.SerialMarks.Any(ms => ms.SerialName == serial.Name && ms.UserEmail == user.Email);
+
+            if (IsMarked)
             {
-                var serial = _dbContext.Serials.FirstOrDefault(s => s.Name == name);
+                ModelState.AddModelError("IsMarked", "This serial is alredy marked!");
 
-                if (serial is not null)
-                {
-                    if (_dbContext.SerialMarks.Any(ms => ms.SerialName == serial.Name && ms.UserEmail == user.Email))
-                    {
-                        ModelState.AddModelError("Marked", "This movie is alredy marked!");
-                        return BadRequest(ModelState);
-                    }
-                    else
-                    {
-                        await _dbContext.SerialMarks.AddAsync(new SerialMark() { UserEmail = user.Email, SerialName = serial.Name });
-                        await _dbContext.SaveChangesAsync();
-
-                        return Ok();
-                    }                    
-                }
-
-                ModelState.AddModelError("NotFound", "Serial with this name is not found!");
+                return BadRequest(ModelState);
             }
-            else ModelState.AddModelError("NotFound", "This user is not found!");
 
-            return NotFound(ModelState);
+            var serialMark = new SerialMark(user.Email, serial.Name);
+
+            await _dbContext.SerialMarks.AddAsync(serialMark);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
         }
         catch
         {
@@ -103,41 +94,24 @@ public class MarkController : ControllerBase
     {
         try
         {
-            var user = GetDataBAZA();
+            var user = await _userManager.ReturnUserFromContextAsync(HttpContext);
 
-            if (user is not null)
-            {
-                var markedVideos = new List<string>();
+            if (user is null) return Unauthorized();
 
-                markedVideos.AddRange(await _dbContext.MovieMarks.Where(mm => mm.UserEmail == user.Email).Select(mm => mm.MovieName).ToListAsync());
-                markedVideos.AddRange(await _dbContext.SerialMarks.Where(ms => ms.UserEmail == user.Email).Select(ms => ms.SerialName).ToListAsync());
+            var markedVideos = new List<MarkDto>();
 
-                markedVideos.Sort();
+            markedVideos.AddRange(_dbContext.MovieMarks.Include(mm => mm.Movie).Where(mm => mm.UserEmail == user.Email).Select(mm => new MarkDto(mm.Movie.ImageUrl) { Name = mm.MovieName }));
+            markedVideos.AddRange(_dbContext.SerialMarks.Include(ms => ms.Serial).Where(ms => ms.UserEmail == user.Email).Select(ms => new MarkDto(ms.Serial.ImageUrl) { Name = ms.SerialName }));
 
-                var json = $"\"markedVideos\": {JsonConvert.SerializeObject(markedVideos, Formatting.Indented)}";
+            markedVideos.Sort((a, b) => string.Compare(a.Name, b.Name));
 
-                return Ok(json);
-            }
+            var json = JsonConvert.SerializeObject(markedVideos, Formatting.Indented);
 
-            return NotFound();
+            return Ok(json);
         }
         catch
         {
             return StatusCode((int)HttpStatusCode.InternalServerError);
         }
-    }
-
-    private User? GetDataBAZA()
-    {
-        var identity = HttpContext.User.Identity as ClaimsIdentity;
-        if (identity != null)
-        {
-            var userClaims = identity.Claims;
-            return new User
-            {
-                Email = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value
-            };
-        }
-        return null;
     }
 }

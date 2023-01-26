@@ -23,18 +23,16 @@ public class AccountController : ControllerBase
 
             var user = await _userManager.FindUserByEmailAsync(dto.Email);
 
-            if (user is not null && await _userManager.CheckPasswordAsync(user, dto.Password))
+            if (user is not null && _userManager.CheckPassword(user, dto.Password))
             {
                 var token = await _tokenGeneratorService.GenerateTokenAsync(user);
                 var response = new { Email = dto.Email, PasswordLength = dto.Password.Length, Token = token };
-                var json = $"\"users\": {JsonConvert.SerializeObject(response, Formatting.Indented)}";
+                var json = JsonConvert.SerializeObject(response, Formatting.Indented);
 
                 return Ok(json);
             }
 
-            ModelState.AddModelError("Invalid", "Invalid email or password!");
-
-            return Unauthorized(ModelState);
+            return Unauthorized();
         }
         catch
         {
@@ -51,7 +49,7 @@ public class AccountController : ControllerBase
 
             var user = dto.Adapt<User>();
 
-            if (!await _userManager.ExistsAsync(user.Email))
+            if (!_userManager.Exists(user.Email))
             {
                 var result = await _userManager.CreateUserAsync(user, dto.Password);
 
@@ -59,7 +57,7 @@ public class AccountController : ControllerBase
                 {
                     var token = await _tokenGeneratorService.GenerateTokenAsync(user);
                     var response = new { Email = dto.Email, PasswordLength = dto.Password.Length, Token = token };
-                    var json = $"\"users\": {JsonConvert.SerializeObject(response, Formatting.Indented)}";
+                    var json = JsonConvert.SerializeObject(response, Formatting.Indented);
 
                     return Ok(json);
                 }
@@ -67,6 +65,23 @@ public class AccountController : ControllerBase
             else ModelState.AddModelError("Exists", "User with this email already exists!");
 
             return BadRequest(ModelState);
+        }
+        catch
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpPost("[Action]")]
+    public async Task<IActionResult> UserExists([FromBody] string email)
+    {
+        try
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var result = await _userManager.ExistsAsync(email);
+
+            return Ok(result);
         }
         catch
         {

@@ -2,8 +2,8 @@
 
 public class Movie : Video
 {
-    public string VideoPath { get; set; }
-    public ICollection<MovieCategory> MovieCategories { get; set; }
+    public string VideoUrl { get; set; }
 
-    public ICollection<MovieMark> MovieMarks { get; set; }
+    public ICollection<MovieMark> Marks { get; set; }
+    public ICollection<MovieCategory> Categories { get; set; }
 }

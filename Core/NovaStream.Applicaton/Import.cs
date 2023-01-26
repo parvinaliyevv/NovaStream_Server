@@ -5,5 +5,6 @@ global using NovaStream.Application.Dtos.Abstract;
 global using NovaStream.Application.Dtos.Concrete;
 
 global using FluentValidation;
+global using Microsoft.AspNetCore.Http;
 global using FluentValidation.AspNetCore;
 global using Microsoft.Extensions.DependencyInjection;

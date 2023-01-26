@@ -6,4 +6,11 @@ public class SerialMark
     public Serial Serial { get; set; }
     public string UserEmail { get; set; }
     public User User { get; set; }
+
+
+    public SerialMark(string userEmail, string serialName)
+    {
+        SerialName = serialName;
+        UserEmail = userEmail;
+    }
 }

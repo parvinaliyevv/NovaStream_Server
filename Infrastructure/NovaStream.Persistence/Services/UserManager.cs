@@ -1,6 +1,6 @@
 ﻿namespace NovaStream.Persistence.Services;
 
-public class UserManager: IUserManager
+public class UserManager : IUserManager
 {
     private readonly AppDbContext _dbContext;
 
@@ -53,4 +53,22 @@ public class UserManager: IUserManager
     }
     public async Task<User?> FindUserByEmailAsync(string email)
         => await Task.Factory.StartNew(() => FindUserByEmail(email));
+
+    public User? ReturnUserFromContext(HttpContext httpContext)
+    {
+        var identity = httpContext.User.Identity as ClaimsIdentity;
+
+        if (identity is null) return null;
+
+        var userClaims = identity.Claims;
+
+        var user = new User()
+        {
+            Email = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value
+        };
+
+        return user;
+    }
+    public async Task<User?> ReturnUserFromContextAsync(HttpContext httpContext)
+        => await Task.Factory.StartNew(() => ReturnUserFromContext(httpContext));
 }
