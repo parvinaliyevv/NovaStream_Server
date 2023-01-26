@@ -28,11 +28,18 @@ public class SerialController : ControllerBase
             {
                 var categories = _dbContext.SerialCategories.Include(mc => mc.Category).Where(mc => mc.SerialName == dto.Name).Select(mc => mc.Category.Name).ToList();
 
-                builder.Append($"{categories[0]} •");
+                try
+                {
+                    builder.Append($"{categories[0]} •");
 
-                for (int i = 1; i < categories.Count - 1; i++) builder.Append($" {categories[i]} •");
+                    for (int i = 1; i < categories.Count - 1; i++) builder.Append($" {categories[i]} •");
 
-                builder.Append($" {categories[categories.Count - 1]}");
+                    builder.Append($" {categories[categories.Count - 1]}");
+                }
+                catch
+                {
+                    continue;
+                }
 
                 dto.IsSerial = null;
                 dto.Categories = builder.ToString();
@@ -71,7 +78,7 @@ public class SerialController : ControllerBase
 
             var user = _userManager.ReturnUserFromContext(HttpContext);
 
-            serial.IsMarked = _dbContext.SerialMarks.Any(mm => mm.SerialName == name && mm.UserEmail == user.Email);
+            serial.IsMarked = _dbContext.SerialMarks.Any(mm => mm.SerialName == name && mm.UserId == user.Id);
             serial.SeasonCount = _dbContext.Seasons.Count(s => s.SerialName == name);
             serial.Episodes = await _dbContext.Episodes.Where(e => e.SeasonId == season.Id).ProjectToType<EpisodeDto>().ToListAsync();
 
@@ -84,9 +91,43 @@ public class SerialController : ControllerBase
             return StatusCode((int)HttpStatusCode.InternalServerError);
         }
     }
-    
+
     [HttpGet("[Action]")]
-    public async Task<IActionResult> Season([FromQuery] string name, [FromQuery] int seasonNumber)
+    public async Task<IActionResult> ViewDetails([FromQuery] string name)
+    {
+        try
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var serial = _dbContext.Serials.FirstOrDefault(s => s.Name == name)?.Adapt<SerialViewDetailsDto>();
+
+            if (serial is null) return NotFound();
+
+            var season = await _dbContext.Seasons.FirstOrDefaultAsync(s => s.Number == 1 && s.SerialName == name);
+
+            var user = _userManager.ReturnUserFromContext(HttpContext);
+
+            serial.IsMarked = _dbContext.SerialMarks.Any(mm => mm.SerialName == name && mm.UserId == user.Id);
+            serial.SeasonCount = _dbContext.Seasons.Count(s => s.SerialName == name);
+            serial.TrailerUrl = null;
+
+            var jsonSerializerOptions = new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+            };
+
+            var json = JsonConvert.SerializeObject(serial, Formatting.Indented, jsonSerializerOptions);
+
+            return Ok(json);
+        }
+        catch
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpGet("[Action]")]
+    public async Task<IActionResult> Season([FromQuery] string name, [FromQuery] int seasonNumber = 1)
     {
         try
         {
@@ -108,7 +149,7 @@ public class SerialController : ControllerBase
     }
 
     [HttpGet("[Action]")]
-    public async Task<IActionResult> Episode([FromQuery] string name, [FromQuery] int seasonNumber, [FromQuery] int episodeNumber)
+    public async Task<IActionResult> Episode([FromQuery] string name, [FromQuery] int seasonNumber = 1, [FromQuery] int episodeNumber = 1)
     {
         try
         {

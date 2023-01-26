@@ -8,11 +8,13 @@ public class SoonCategoryConfiguration : IEntityTypeConfiguration<SoonCategory>
 
         builder.HasOne(icc => icc.Soon)
             .WithMany(ic => ic.Categories)
-            .HasForeignKey(icc => icc.SoonName);
+            .HasForeignKey(icc => icc.SoonName)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(icc => icc.Category)
-            .WithMany(c => c.InComingCategories)
-            .HasForeignKey(c => c.CategoryId);
+            .WithMany(c => c.SoonCategories)
+            .HasForeignKey(c => c.CategoryId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         var soonCategories = new[]
         {

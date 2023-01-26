@@ -6,5 +6,5 @@ public class Category : Entity
 
     public ICollection<MovieCategory> MovieCategories { get; set; }
     public ICollection<SerialCategory> SerialCategories { get; set; }
-    public ICollection<SoonCategory> InComingCategories { get; set; }
+    public ICollection<SoonCategory> SoonCategories { get; set; }
 }

@@ -18,6 +18,11 @@ public record SerialShortDetailsDto : VideoShortDetaislDto
     }
 }
 
+public record SerialViewDetailsDto : VideoDetailsDto
+{
+    public string ImageUrl { get; set; }
+}
+
 public record SerialDetailsDto : VideoDetailsDto
 {
     public ICollection<EpisodeDto> Episodes { get; set; }

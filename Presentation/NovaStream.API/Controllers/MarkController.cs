@@ -26,8 +26,8 @@ public class MarkController : ControllerBase
 
             var markedVideos = new List<BaseVideoDto>();
 
-            markedVideos.AddRange(_dbContext.MovieMarks.Include(mm => mm.Movie).Where(mm => mm.UserEmail == user.Email).Select(mm => mm.Movie).ProjectToType<MovieDto>());
-            markedVideos.AddRange(_dbContext.SerialMarks.Include(ms => ms.Serial).Where(ms => ms.UserEmail == user.Email).Select(ms => ms.Serial).ProjectToType<SerialDto>());
+            markedVideos.AddRange(_dbContext.MovieMarks.Include(mm => mm.Movie).Where(mm => mm.UserId == user.Id).Select(mm => mm.Movie).ProjectToType<MovieDto>());
+            markedVideos.AddRange(_dbContext.SerialMarks.Include(ms => ms.Serial).Where(ms => ms.UserId == user.Id).Select(ms => ms.Serial).ProjectToType<SerialDto>());
 
             markedVideos.Sort((a, b) => string.Compare(a.Name, b.Name));
 
@@ -40,9 +40,9 @@ public class MarkController : ControllerBase
             return StatusCode((int)HttpStatusCode.InternalServerError);
         }
     }
-
-    [HttpGet("[Action]")]
-    public async Task<IActionResult> State([FromQuery] string name, [FromQuery] bool isSerial)
+    
+    [HttpPut("[Action]")]
+    public async Task<IActionResult> State([FromBody] UpdateMarkDto dto)
     {
         try
         {
@@ -54,17 +54,17 @@ public class MarkController : ControllerBase
 
             bool result = true;
 
-            if (isSerial)
+            if (dto.IsSerial)
             {
-                var serial = _dbContext.Serials.FirstOrDefault(s => s.Name == name);
+                var serial = _dbContext.Serials.FirstOrDefault(s => s.Name == dto.Name);
 
                 if (serial is null) return NotFound(ModelState);
 
-                var serialMark = _dbContext.SerialMarks.FirstOrDefault(ms => ms.SerialName == serial.Name && ms.UserEmail == user.Email);
+                var serialMark = _dbContext.SerialMarks.FirstOrDefault(ms => ms.SerialName == serial.Name && ms.UserId == user.Id);
 
                 if (serialMark is null)
                 {
-                    serialMark = new SerialMark(user.Email, serial.Name);
+                    serialMark = new SerialMark(serial.Name, user.Id);
 
                     _dbContext.SerialMarks.Add(serialMark);
                     await _dbContext.SaveChangesAsync();
@@ -79,15 +79,15 @@ public class MarkController : ControllerBase
             }
             else
             {
-                var movie = _dbContext.Movies.FirstOrDefault(s => s.Name == name);
+                var movie = _dbContext.Movies.FirstOrDefault(s => s.Name == dto.Name);
 
                 if (movie is null) return NotFound();
 
-                var movieMark = _dbContext.MovieMarks.FirstOrDefault(ms => ms.MovieName == movie.Name && ms.UserEmail == user.Email);
+                var movieMark = _dbContext.MovieMarks.FirstOrDefault(ms => ms.MovieName == movie.Name && ms.UserId == user.Id);
 
                 if (movieMark is null)
                 {
-                    movieMark = new MovieMark(user.Email, movie.Name);
+                    movieMark = new MovieMark(movie.Name, user.Id);
 
                     _dbContext.MovieMarks.Add(movieMark);
                     await _dbContext.SaveChangesAsync();

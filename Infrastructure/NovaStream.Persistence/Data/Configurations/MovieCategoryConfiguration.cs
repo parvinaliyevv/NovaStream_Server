@@ -8,11 +8,13 @@ public class MovieCategoryConfiguration : IEntityTypeConfiguration<MovieCategory
 
         builder.HasOne(bc => bc.Movie)
             .WithMany(b => b.Categories)
-            .HasForeignKey(bc => bc.MovieName);
+            .HasForeignKey(bc => bc.MovieName)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(bc => bc.Category)
             .WithMany(c => c.MovieCategories)
-            .HasForeignKey(bc => bc.CategoryId);
+            .HasForeignKey(bc => bc.CategoryId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         var movieCategories = new[]
         {

@@ -2,4 +2,6 @@
 
 public record SignInUserDto(): BaseUserDto;
 
-public record SignUpUserDto(): BaseUserDto;
+public record SignUpUserDto(string Nickname, string AvatarUrl) : BaseUserDto;
+
+public record EditUserDto(string Nickname, string AvatarUrl);

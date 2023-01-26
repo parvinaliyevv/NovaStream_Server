@@ -17,8 +17,6 @@ public class SoonController : ControllerBase
     {
         try
         {
-            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("es");
-
             var soons = new List<SoonDto>();
             var builder = new StringBuilder();
 
@@ -28,11 +26,18 @@ public class SoonController : ControllerBase
             {
                 var categories = await _dbContext.SoonCategories.Include(sc => sc.Category).Where(icc => icc.SoonName == dto.Name).Select(icc => icc.Category.Name).ToListAsync();
 
-                builder.Append($"{categories[0]} •");
+                try
+                {
+                    builder.Append($"{categories[0]} •");
 
-                for (int i = 1; i < categories.Count - 1; i++) builder.Append($" {categories[i]} •");
+                    for (int i = 1; i < categories.Count - 1; i++) builder.Append($" {categories[i]} •");
 
-                builder.Append($" {categories[categories.Count - 1]}");
+                    builder.Append($" {categories[categories.Count - 1]}");
+                }
+                catch
+                {
+                    continue;
+                }
 
                 dto.Categories = builder.ToString();
 

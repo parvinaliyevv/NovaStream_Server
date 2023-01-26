@@ -4,7 +4,7 @@ public class SerialMarkConfiguration : IEntityTypeConfiguration<SerialMark>
 {
     public void Configure(EntityTypeBuilder<SerialMark> builder)
     {
-        builder.HasKey(sm => new { sm.SerialName, sm.UserEmail });
+        builder.HasKey(sm => new { sm.SerialName, sm.UserId });
 
         builder.HasOne(sm => sm.Serial)
             .WithMany(s => s.Marks)
@@ -13,7 +13,7 @@ public class SerialMarkConfiguration : IEntityTypeConfiguration<SerialMark>
 
         builder.HasOne(sm => sm.User)
             .WithMany(u => u.SerialMarks)
-            .HasForeignKey(sm => sm.UserEmail)
+            .HasForeignKey(sm => sm.UserId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

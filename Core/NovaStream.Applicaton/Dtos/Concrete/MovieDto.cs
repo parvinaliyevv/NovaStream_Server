@@ -25,3 +25,8 @@ public record MovieDetailsDto : VideoDetailsDto
     public string VideoImageUrl { get; set; }
     public string VideoUrl { get; set; }
 }
+
+public record MovieViewDetailsDto : VideoDetailsDto
+{
+    public string ImageUrl { get; set; }
+}

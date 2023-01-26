@@ -1,6 +1,6 @@
 ﻿namespace NovaStream.API.Controllers;
 
-[ApiController]
+[ApiController, Authorize]
 [Route("api/[controller]")]
 public class CategoryController : ControllerBase 
 {

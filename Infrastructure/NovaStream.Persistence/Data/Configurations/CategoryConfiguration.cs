@@ -14,6 +14,9 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             new Category() { Id = 6, Name = "Detective" },
             new Category() { Id = 7, Name = "Action" },
             new Category() { Id = 8, Name = "Thriller" },
+            new Category() { Id = 9, Name = "Comedy horror" },
+            new Category() { Id = 10, Name = "Coming-of-age" },
+            new Category() { Id = 11, Name = "Supernatural" }
         };
 
         builder.HasData(categories);

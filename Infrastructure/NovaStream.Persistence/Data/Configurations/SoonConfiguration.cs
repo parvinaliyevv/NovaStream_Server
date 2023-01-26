@@ -15,6 +15,14 @@ public class SoonConfiguration : IEntityTypeConfiguration<Soon>
                 TrailerImageUrl = @"https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Soons%2FJohn%20Wick%3A%20Chapter%204%2Fjohn-wick-chapter-4-trailer-image.jpg?alt=media&token=410d8c6b-fe9c-4da4-a654-1980eb72c78e",
                 TrailerUrl = @"https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Soons%2FJohn%20Wick%3A%20Chapter%204%2Fjohn-wick-chapter-4-trailer.mp4?alt=media&token=2c1e4eea-4a4f-4e00-add3-eb10b9dd5030",
                 OutDate = DateTime.ParseExact("2023:03:24","yyyy:MM:dd", null)
+            },
+            new Soon()
+            {
+                Name = "Wednesday: Season 2",
+                Description = "Smart, sarcastic and a little dead inside, Wednesday Addams investigates a murder spree while making new friends — and foes — at Nevermore Academy.",
+                TrailerImageUrl = @"https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-trailer-image.jpg?alt=media&token=6763d2c7-2994-46ff-9d61-45956081e0d4",
+                TrailerUrl = @"https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-trailer.mp4?alt=media&token=cd22789d-43ef-477d-bf5d-442adee817f0",
+                OutDate = DateTime.ParseExact("2023:11:25","yyyy:MM:dd", null)
             }
         };
 

@@ -2,6 +2,6 @@
 
 public interface ITokenGeneratorService
 {
-    string GenerateToken(User user);
-    Task<string> GenerateTokenAsync(User user);
+    string GenerateAuthorizeToken(User user);
+    Task<string> GenerateAuthorizeTokenAsync(User user);
 }

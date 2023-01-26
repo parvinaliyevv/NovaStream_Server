@@ -38,11 +38,18 @@ public class HomeController : ControllerBase
                 }
                 else categories = await _dbContext.MovieCategories.Include(mc => mc.Category).Where(mc => mc.MovieName == dto.Name).Select(mc => mc.Category.Name).ToListAsync();
 
-                builder.Append($"{categories[0]} •");
+                try
+                {
+                    builder.Append($"{categories[0]} •");
 
-                for (int i = 1; i < categories.Count - 1; i++) builder.Append($" {categories[i]} •");
+                    for (int i = 1; i < categories.Count - 1; i++) builder.Append($" {categories[i]} •");
 
-                builder.Append($" {categories[categories.Count - 1]}");
+                    builder.Append($" {categories[categories.Count - 1]}");
+                }
+                catch
+                {
+                    continue;
+                }
 
                 dto.Categories = builder.ToString();
 

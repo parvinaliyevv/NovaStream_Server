@@ -14,7 +14,7 @@ public static class ContainerRegistrationService
         TypeAdapterConfig<Soon, SoonDto>
             .NewConfig()
             .Map(dest => dest.Day, src => src.OutDate.Day)
-            .Map(dest => dest.Moon, src => CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(src.OutDate.Month).ToUpper().Substring(0, 3));
+            .Map(dest => dest.Month, src => CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(src.OutDate.Month).ToUpper().Substring(0, 3));
 
         TypeAdapterConfig<Movie, MovieSearchDto>
             .NewConfig()
