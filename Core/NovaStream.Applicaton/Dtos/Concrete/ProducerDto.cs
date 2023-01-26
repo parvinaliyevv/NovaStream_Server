@@ -1,3 +1,3 @@
 ﻿namespace NovaStream.Application.Dtos.Concrete;
 
-public record ProducerDto() : BaseProducerDto;
+public record ProducerDto() : BasePersonDto;

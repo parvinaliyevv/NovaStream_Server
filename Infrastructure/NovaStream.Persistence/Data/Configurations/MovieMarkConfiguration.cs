@@ -16,7 +16,7 @@ public class MovieMarkConfiguration : IEntityTypeConfiguration<MovieMark>
             .HasForeignKey(mm => mm.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        var movieMark = new MovieMark("Interstellar", 1);
+        var movieMark = new MovieMark(1, "Interstellar");
 
         builder.HasData(movieMark);
     }

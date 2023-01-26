@@ -4,13 +4,11 @@ public class ProducerConfiguration : IEntityTypeConfiguration<Producer>
 {
     public void Configure(EntityTypeBuilder<Producer> builder)
     {
-        builder.HasKey(p => new { p.Id });
-
-        var producers = new[]
+        var producers = new Producer[]
         {
-            new Producer { Id = 1, Name = "Murad", Surname = "Musayev", About = "zor oglan" },
-            new Producer { Id = 2, Name = "Parvin", Surname = "Aliyev", About = "zor oglan" },
-            new Producer { Id = 3, Name = "Rustem", Surname = "Bayramov", About = "zor oglan" }
+            new() { Id = 1, Name = "Murad", Surname = "Musayev", About = "zor oglan", ImageUrl = "baza" },
+            new() { Id = 2, Name = "Parvin", Surname = "Aliyev", About = "zor oglan", ImageUrl = "baza" },
+            new() { Id = 3, Name = "Rustem", Surname = "Bayramov", About = "zor oglan", ImageUrl = "baza" }
         };
 
         builder.HasData(producers);

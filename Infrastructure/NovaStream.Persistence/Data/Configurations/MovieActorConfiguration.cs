@@ -16,10 +16,10 @@ public class MovieActorConfiguration : IEntityTypeConfiguration<MovieActor>
             .HasForeignKey(ma => ma.ActorId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        var movieActors = new[]
+        var movieActors = new MovieActor[]
         {
-            new MovieActor() { MovieName = "Interstellar", ActorId = 2 },
-            new MovieActor() { MovieName = "Interstellar", ActorId = 3 },
+            new() { ActorId = 2, MovieName = "Interstellar" },
+            new() { ActorId = 3, MovieName = "Interstellar" }
         };
 
         builder.HasData(movieActors);

@@ -2,6 +2,6 @@
 
 public class Actor : Person 
 {
-    public ICollection<MovieActor> Movies { get; set; } //
-    public ICollection<SerialActor> Serials { get; set; } //
+    public ICollection<MovieActor> Movies { get; set; }
+    public ICollection<SerialActor> Serials { get; set; }
 }

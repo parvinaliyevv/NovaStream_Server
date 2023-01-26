@@ -20,40 +20,9 @@ public class SerialController : ControllerBase
     {
         try
         {
-            var serials = await _dbContext.Serials.ProjectToType<SerialShortDetailsDto>().ToListAsync();
+            var serials = await _dbContext.Serials.ProjectToType<SerialDto>().ToListAsync();
 
-            var builder = new StringBuilder();
-
-            serials.ForEach(dto =>
-            {
-                var categories = _dbContext.SerialCategories.Include(mc => mc.Category).Where(mc => mc.SerialName == dto.Name).Select(mc => mc.Category.Name).ToList();
-
-                try
-                {
-                    builder.Append($"{categories[0]} •");
-
-                    for (int i = 1; i < categories.Count - 1; i++) builder.Append($" {categories[i]} •");
-
-                    builder.Append($" {categories[categories.Count - 1]}");
-                }
-                catch
-                {
-                    return;
-                }
-
-                dto.IsSerial = null;
-                dto.Categories = builder.ToString();
-                dto.SeasonCount = _dbContext.Seasons.Count(s => s.SerialName == dto.Name);
-
-                builder.Clear();
-            });
-
-            var jsonSerializerOptions = new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-            };
-
-            var json = JsonConvert.SerializeObject(serials, Formatting.Indented, jsonSerializerOptions);
+            var json = JsonConvert.SerializeObject(serials, Formatting.Indented);
 
             return Ok(json);
         }
@@ -70,9 +39,7 @@ public class SerialController : ControllerBase
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var serial = _dbContext.Serials.Include(s => s.Producer).FirstOrDefault(s => s.Name == name)?.Adapt<SerialDetailsDto>();
-
-            serial.Actors = _dbContext.SerialActors.Include(sa => sa.Actor).Where(sa => sa.SerialName == name).Select(sa => sa.Actor).ProjectToType<ActorDto>().ToList(); // 
+            var serial = _dbContext.Serials.Include(s => s.Producer).Include(s => s.Actors).ThenInclude(a => a.Actor).FirstOrDefault(s => s.Name == name)?.Adapt<SerialDetailsDto>();
 
             if (serial is null) return NotFound();
 
@@ -105,20 +72,12 @@ public class SerialController : ControllerBase
 
             if (serial is null) return NotFound();
 
-            var season = await _dbContext.Seasons.FirstOrDefaultAsync(s => s.Number == 1 && s.SerialName == name);
+            var user = await _userManager.ReturnUserFromContextAsync(HttpContext);
 
-            var user = _userManager.ReturnUserFromContext(HttpContext);
-
-            serial.IsMarked = _dbContext.SerialMarks.Any(mm => mm.SerialName == name && mm.UserId == user.Id);
             serial.SeasonCount = _dbContext.Seasons.Count(s => s.SerialName == name);
-            serial.TrailerUrl = null;
+            serial.IsMarked = _dbContext.SerialMarks.Any(mm => mm.SerialName == name && mm.UserId == user.Id);
 
-            var jsonSerializerOptions = new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-            };
-
-            var json = JsonConvert.SerializeObject(serial, Formatting.Indented, jsonSerializerOptions);
+            var json = JsonConvert.SerializeObject(serial, Formatting.Indented);
 
             return Ok(json);
         }
@@ -140,6 +99,7 @@ public class SerialController : ControllerBase
             if (season is null) return NotFound();
 
             var episodes = season.Episodes.Adapt<ICollection<EpisodeDto>>();
+
             var json = JsonConvert.SerializeObject(episodes, Formatting.Indented);
 
             return Ok(json);

@@ -42,7 +42,7 @@ public class MarkController : ControllerBase
     }
     
     [HttpPut("[Action]")]
-    public async Task<IActionResult> State([FromBody] UpdateMarkDto dto)
+    public async Task<IActionResult> State([FromForm] UpdateMarkDto dto)
     {
         try
         {
@@ -64,7 +64,7 @@ public class MarkController : ControllerBase
 
                 if (serialMark is null)
                 {
-                    serialMark = new SerialMark(serial.Name, user.Id);
+                    serialMark = new SerialMark(user.Id, serial.Name);
 
                     _dbContext.SerialMarks.Add(serialMark);
                     await _dbContext.SaveChangesAsync();
@@ -87,7 +87,7 @@ public class MarkController : ControllerBase
 
                 if (movieMark is null)
                 {
-                    movieMark = new MovieMark(movie.Name, user.Id);
+                    movieMark = new MovieMark(user.Id, movie.Name);
 
                     _dbContext.MovieMarks.Add(movieMark);
                     await _dbContext.SaveChangesAsync();

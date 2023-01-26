@@ -136,4 +136,25 @@ public class AccountController : ControllerBase
             return StatusCode((int)HttpStatusCode.InternalServerError);
         }
     }
+
+    [HttpDelete("[Action]"), Authorize]
+    public async Task<IActionResult> Delete([FromForm] string password)
+    {
+        try
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = await _userManager.ReturnUserFromContextAsync(HttpContext);
+
+            if (user is null) return Unauthorized();
+
+            var result = await _userManager.DeleteUserAsync(user);
+
+            return Ok(result);
+        }
+        catch
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+    }
 }

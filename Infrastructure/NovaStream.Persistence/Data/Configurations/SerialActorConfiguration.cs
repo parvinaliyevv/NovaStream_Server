@@ -16,10 +16,10 @@ public class SerialActorConfiguration : IEntityTypeConfiguration<SerialActor>
             .HasForeignKey(sa => sa.ActorId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        var serialActors = new[]
+        var serialActors = new SerialActor[]
         {
-            new SerialActor() { SerialName = "Peaky Blinders", ActorId = 1 },
-            new SerialActor() { SerialName = "Peaky Blinders", ActorId = 2 },
+            new() { ActorId = 1, SerialName = "Peaky Blinders" },
+            new() { ActorId = 2, SerialName = "Peaky Blinders" }
         };
 
         builder.HasData(serialActors);

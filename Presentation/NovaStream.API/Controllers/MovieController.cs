@@ -20,39 +20,9 @@ public class MovieController : ControllerBase
     {
         try
         {
-            var movies = await _dbContext.Movies.ProjectToType<MovieShortDetailsDto>().ToListAsync();
+            var movies = await _dbContext.Movies.ProjectToType<MovieDto>().ToListAsync();
 
-            var builder = new StringBuilder();
-
-            movies.ForEach(dto =>
-            {
-                var categories = _dbContext.MovieCategories.Include(mc => mc.Category).Where(mc => mc.MovieName == dto.Name).Select(mc => mc.Category.Name).ToList();
-
-                try
-                {
-                    builder.Append($"{categories[0]} •");
-
-                    for (int i = 1; i < categories.Count - 1; i++) builder.Append($" {categories[i]} •");
-
-                    builder.Append($" {categories[categories.Count - 1]}");
-                }
-                catch
-                {
-                    return;
-                }
-
-                dto.IsSerial = null;
-                dto.Categories = builder.ToString();
-
-                builder.Clear();
-            });
-
-            var jsonSerializerOptions = new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-            };
-
-            var json = JsonConvert.SerializeObject(movies, Formatting.Indented, jsonSerializerOptions);
+            var json = JsonConvert.SerializeObject(movies, Formatting.Indented);
 
             return Ok(json);
         }
@@ -69,9 +39,7 @@ public class MovieController : ControllerBase
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var movie = _dbContext.Movies.Include(m => m.Producer).FirstOrDefault(m => m.Name == name)?.Adapt<MovieDetailsDto>();
-
-            movie.Actors = _dbContext.MovieActors.Include(ma => ma.Actor).Where(ma => ma.MovieName == name).Select(ma => ma.Actor).ProjectToType<ActorDto>().ToList(); // 
+            var movie = _dbContext.Movies.Include(m => m.Producer).Include(m => m.Actors).ThenInclude(a => a.Actor).FirstOrDefault(m => m.Name == name)?.Adapt<MovieDetailsDto>();
 
             if (movie is null) return NotFound();
 
@@ -103,14 +71,8 @@ public class MovieController : ControllerBase
             var user = await _userManager.ReturnUserFromContextAsync(HttpContext);
 
             movie.IsMarked = _dbContext.MovieMarks.Any(mm => mm.MovieName == name && mm.UserId == user.Id);
-            movie.TrailerUrl = null;
 
-            var jsonSerializerOptions = new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-            };
-
-            var json = JsonConvert.SerializeObject(movie, Formatting.Indented, jsonSerializerOptions);
+            var json = JsonConvert.SerializeObject(movie, Formatting.Indented);
 
             return Ok(json);
         }

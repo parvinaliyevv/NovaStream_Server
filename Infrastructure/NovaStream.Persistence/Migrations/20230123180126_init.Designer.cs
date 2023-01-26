@@ -12,7 +12,7 @@ using NovaStream.Persistence.Data.Contexts;
 namespace NovaStream.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230119084523_init")]
+    [Migration("20230123180126_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,7 @@ namespace NovaStream.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -56,6 +57,7 @@ namespace NovaStream.Persistence.Migrations
                         {
                             Id = 1,
                             About = "Yaxshi Oglan",
+                            ImageUrl = "baza",
                             Name = "Cillian",
                             Surname = "Murphy"
                         },
@@ -63,6 +65,7 @@ namespace NovaStream.Persistence.Migrations
                         {
                             Id = 2,
                             About = "Babat Oglan",
+                            ImageUrl = "baza",
                             Name = "Tom",
                             Surname = "Cruse"
                         },
@@ -70,6 +73,7 @@ namespace NovaStream.Persistence.Migrations
                         {
                             Id = 3,
                             About = "Zor Oglan",
+                            ImageUrl = "baza",
                             Name = "Brad",
                             Surname = "Pitt"
                         });
@@ -102,40 +106,40 @@ namespace NovaStream.Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Adapters.MovieCategory", b =>
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Adapters.MovieGenre", b =>
                 {
                     b.Property<string>("MovieName")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("GenreId")
                         .HasColumnType("int");
 
-                    b.HasKey("MovieName", "CategoryId");
+                    b.HasKey("MovieName", "GenreId");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("GenreId");
 
-                    b.ToTable("MovieCategories");
+                    b.ToTable("MovieGenres");
 
                     b.HasData(
                         new
                         {
                             MovieName = "Interstellar",
-                            CategoryId = 1
+                            GenreId = 1
                         },
                         new
                         {
                             MovieName = "Interstellar",
-                            CategoryId = 4
+                            GenreId = 4
                         },
                         new
                         {
                             MovieName = "Interstellar",
-                            CategoryId = 5
+                            GenreId = 5
                         },
                         new
                         {
                             MovieName = "Interstellar",
-                            CategoryId = 6
+                            GenreId = 6
                         });
                 });
 
@@ -144,7 +148,7 @@ namespace NovaStream.Persistence.Migrations
                     b.Property<string>("MovieName")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("MovieName", "UserId");
@@ -188,50 +192,50 @@ namespace NovaStream.Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Adapters.SerialCategory", b =>
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Adapters.SerialGenre", b =>
                 {
                     b.Property<string>("SerialName")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("GenreId")
                         .HasColumnType("int");
 
-                    b.HasKey("SerialName", "CategoryId");
+                    b.HasKey("SerialName", "GenreId");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("GenreId");
 
-                    b.ToTable("SerialCategories");
+                    b.ToTable("SerialGenres");
 
                     b.HasData(
                         new
                         {
                             SerialName = "Peaky Blinders",
-                            CategoryId = 1
+                            GenreId = 1
                         },
                         new
                         {
                             SerialName = "Peaky Blinders",
-                            CategoryId = 2
+                            GenreId = 2
                         },
                         new
                         {
                             SerialName = "Peaky Blinders",
-                            CategoryId = 3
+                            GenreId = 3
                         },
                         new
                         {
                             SerialName = "Wednesday",
-                            CategoryId = 9
+                            GenreId = 9
                         },
                         new
                         {
                             SerialName = "Wednesday",
-                            CategoryId = 10
+                            GenreId = 10
                         },
                         new
                         {
                             SerialName = "Wednesday",
-                            CategoryId = 11
+                            GenreId = 11
                         });
                 });
 
@@ -240,7 +244,7 @@ namespace NovaStream.Persistence.Migrations
                     b.Property<string>("SerialName")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("SerialName", "UserId");
@@ -250,109 +254,65 @@ namespace NovaStream.Persistence.Migrations
                     b.ToTable("SerialMarks");
                 });
 
-            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Adapters.SoonCategory", b =>
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Adapters.SoonGenre", b =>
                 {
                     b.Property<string>("SoonName")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("GenreId")
                         .HasColumnType("int");
 
-                    b.HasKey("SoonName", "CategoryId");
+                    b.HasKey("SoonName", "GenreId");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("GenreId");
 
-                    b.ToTable("SoonCategories");
+                    b.ToTable("SoonGenres");
 
                     b.HasData(
                         new
                         {
                             SoonName = "John Wick: Chapter 4",
-                            CategoryId = 2
+                            GenreId = 2
                         },
                         new
                         {
                             SoonName = "John Wick: Chapter 4",
-                            CategoryId = 7
+                            GenreId = 7
                         },
                         new
                         {
                             SoonName = "John Wick: Chapter 4",
-                            CategoryId = 8
-                        });
-                });
-
-            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Drama"
+                            GenreId = 8
                         },
                         new
                         {
-                            Id = 2,
-                            Name = "Crime"
+                            SoonName = "Guardians of the Galaxy Vol. 3",
+                            GenreId = 7
                         },
                         new
                         {
-                            Id = 3,
-                            Name = "Historical"
+                            SoonName = "Guardians of the Galaxy Vol. 3",
+                            GenreId = 4
                         },
                         new
                         {
-                            Id = 4,
-                            Name = "Adventure"
+                            SoonName = "Guardians of the Galaxy Vol. 3",
+                            GenreId = 12
                         },
                         new
                         {
-                            Id = 5,
-                            Name = "Science fiction"
+                            SoonName = "Transformers: Rise of the Beasts",
+                            GenreId = 7
                         },
                         new
                         {
-                            Id = 6,
-                            Name = "Detective"
+                            SoonName = "Transformers: Rise of the Beasts",
+                            GenreId = 4
                         },
                         new
                         {
-                            Id = 7,
-                            Name = "Action"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Thriller"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Comedy horror"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Coming-of-age"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Supernatural"
+                            SoonName = "Transformers: Rise of the Beasts",
+                            GenreId = 13
                         });
                 });
 
@@ -397,37 +357,37 @@ namespace NovaStream.Persistence.Migrations
                         {
                             Id = 1,
                             Description = "Ambitious gang leader Thomas Shelby recognizes an opportunity to move up in the world thanks to a missing crate of guns.",
-                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2FSeason%201%2FEpisode%201%2Fpeaky-blinders-S01E01-image.jpg?alt=media&token=10d57b41-f838-4110-acf7-63f8c01abebf",
+                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/Season 1/Episode 1/peaky-blinders-S01E01-video-image",
                             Name = "1. Episode 1",
                             Number = 1,
                             SeasonId = 1,
-                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2FSeason%201%2FEpisode%201%2Fpeaky-blinders-S01E01-video.mp4?alt=media&token=1ddc4b67-579d-4081-ae49-aea3c95b9402"
+                            VideoUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/Season 1/Episode 1/peaky-blinders-S01E01-video.mp4"
                         },
                         new
                         {
                             Id = 2,
                             Description = "Thomas provokes a local kingpin by fixing a horse race and starts a war with a gypsy family; Inspector Campbell carries out a vicious raid.",
-                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2FSeason%201%2FEpisode%202%2Fpeaky-blinders-S01E02-image.jpg?alt=media&token=7e07da2d-90b7-443e-b72a-088ebf61e2a3",
+                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/Season 1/Episode 2/peaky-blinders-S01E02-video-image",
                             Name = "2. Episode 2",
                             Number = 2,
                             SeasonId = 1,
-                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2FSeason%201%2FEpisode%202%2Fpeaky-blinders-S01E02-video.mp4?alt=media&token=c41cfa67-da90-4ee4-86af-7d5264617a69"
+                            VideoUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/Season 1/Episode 2/peaky-blinders-S01E02-video.mp4"
                         },
                         new
                         {
                             Id = 3,
                             Description = "When Birmingham crime boss Tommy Shelby's beloved Garrison pub is bombed, he finds himself blackmailed into murdering an Irish dissident.",
-                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2FSeason%202%2FEpisode%201%2Fpeaky-blinders-S02E01-image.jpg?alt=media&token=acc1de8b-c971-41ee-9b0d-fff713ce484c",
+                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/Season 2/Episode 1/peaky-blinders-S02E01-video-image",
                             Name = "1. Episode 1",
                             Number = 1,
                             SeasonId = 2,
-                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2FSeason%202%2FEpisode%201%2Fpeaky-blinders-S02E01-video.mp4?alt=media&token=1be97130-46ef-43d6-a195-c8e2e7d107d6"
+                            VideoUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/Season 2/Episode 1/peaky-blinders-S02E01-video.mp4"
                         },
                         new
                         {
                             Id = 4,
                             Description = "When a deliciously wicked prank gets Wednesday expelled, her parents ship her off to Nevermore Academy, the boarding school where they fell in love.",
-                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2FSeason%201%2FEpisode%201%2Fwednesday-S01E01-image.jpg?alt=media&token=1a5b46ae-7cf3-46a0-994e-3b6072f36e43",
+                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Wednesday/Season 1/Episode 1/wednesday-S01E01-video-image",
                             Name = "1. Wednesday's Child Is Full of Woe",
                             Number = 1,
                             SeasonId = 3,
@@ -437,11 +397,112 @@ namespace NovaStream.Persistence.Migrations
                         {
                             Id = 5,
                             Description = "The sheriff questions Wednesday about the night's strange happenings. Later, Wednesday faces off against a fierce rival in the cutthroat Poe Cup race.",
-                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2FSeason%201%2FEpisode%202%2Fwednesday-S01E02-image.jpg?alt=media&token=a387f24e-4dfb-4cd8-8381-1707b941ad2f",
+                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Wednesday/Season 1/Episode 2/wednesday-S01E02-video-image",
                             Name = "2. Woe Is the Loneliest Number",
                             Number = 2,
                             SeasonId = 3,
                             VideoUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2FSeason%201%2Fwednesday-S01E02-video.mkv?alt=media&token=3fdc19c2-224e-4c06-afda-c7d5fd1e2db1"
+                        });
+                });
+
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Genre", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Genres");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ImageUrl = "baza",
+                            Name = "Drama"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ImageUrl = "baza",
+                            Name = "Crime"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ImageUrl = "baza",
+                            Name = "Historical"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ImageUrl = "baza",
+                            Name = "Adventure"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ImageUrl = "baza",
+                            Name = "Science fiction"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ImageUrl = "baza",
+                            Name = "Detective"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ImageUrl = "baza",
+                            Name = "Action"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ImageUrl = "baza",
+                            Name = "Thriller"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ImageUrl = "baza",
+                            Name = "Comedy horror"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            ImageUrl = "baza",
+                            Name = "Coming-of-age"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            ImageUrl = "baza",
+                            Name = "Supernatural"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            ImageUrl = "baza",
+                            Name = "Comedy"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            ImageUrl = "baza",
+                            Name = "Sci-Fi"
                         });
                 });
 
@@ -461,14 +522,10 @@ namespace NovaStream.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProducerId")
+                    b.Property<int?>("ProducerId")
                         .HasColumnType("int");
 
                     b.Property<string>("SearchImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TrailerImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -507,15 +564,14 @@ namespace NovaStream.Persistence.Migrations
                             Name = "Interstellar",
                             Age = 13,
                             Description = "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival. Earth's future has been riddled by disasters, famines, and droughts. There is only one way to ensure mankind's survival: Interstellar travel.",
-                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-image.jpg?alt=media&token=0015bcdb-c50b-4b4b-a86f-ee3c1a5efc8e",
+                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Movies/Interstellar/interstellar-image",
                             ProducerId = 2,
-                            SearchImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-search-image.jpg?alt=media&token=5799d5f0-f87d-424c-9c62-b0ba5904f499",
-                            TrailerImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-trailer-image.jpg?alt=media&token=1da9a664-0a92-4e35-90d9-7905fd33dfdf",
-                            TrailerUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-trailer.mp4?alt=media&token=3e5984d4-5fb8-438b-aa9a-3778e3f52ba8",
+                            SearchImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Movies/Interstellar/interstellar-search-image",
+                            TrailerUrl = "https://novastreamstorage.blob.core.windows.net/root/Movies/Interstellar/interstellar-trailer",
                             VideoDescription = "With humanity teetering on the brink of extinction, a group of astronauts travels through a wormhole in search of another inhabitable planet.",
-                            VideoImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-video-image.jpg?alt=media&token=5a18e02b-3976-4116-a591-d6e334c50772",
+                            VideoImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Movies/Interstellar/interstellar-video-image",
                             VideoName = "Episode",
-                            VideoUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-video.mp4?alt=media&token=aa6a5dca-7570-45de-87ed-22d35d25189b",
+                            VideoUrl = "https://novastreamstorage.blob.core.windows.net/root/Movies/Interstellar/interstellar-video",
                             Year = 2014
                         });
                 });
@@ -533,6 +589,7 @@ namespace NovaStream.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -552,6 +609,7 @@ namespace NovaStream.Persistence.Migrations
                         {
                             Id = 1,
                             About = "zor oglan",
+                            ImageUrl = "baza",
                             Name = "Murad",
                             Surname = "Musayev"
                         },
@@ -559,6 +617,7 @@ namespace NovaStream.Persistence.Migrations
                         {
                             Id = 2,
                             About = "zor oglan",
+                            ImageUrl = "baza",
                             Name = "Parvin",
                             Surname = "Aliyev"
                         },
@@ -566,6 +625,7 @@ namespace NovaStream.Persistence.Migrations
                         {
                             Id = 3,
                             About = "zor oglan",
+                            ImageUrl = "baza",
                             Name = "Rustem",
                             Surname = "Bayramov"
                         });
@@ -628,14 +688,10 @@ namespace NovaStream.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProducerId")
+                    b.Property<int?>("ProducerId")
                         .HasColumnType("int");
 
                     b.Property<string>("SearchImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TrailerImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -658,11 +714,10 @@ namespace NovaStream.Persistence.Migrations
                             Name = "Peaky Blinders",
                             Age = 18,
                             Description = "A notorious gang in 1919 Birmingham, England, is led by the fierce Tommy Shelby, a crime boss set on moving up in the world no matter the cost.",
-                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-image.jpg?alt=media&token=356b23bd-755e-4daf-822e-50a029c87f9c",
+                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/peaky-blinders-image",
                             ProducerId = 1,
-                            SearchImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-search-image.jpg?alt=media&token=8ea5abb6-b969-4bf4-a20a-13ffcd3a07fd",
-                            TrailerImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-trailer-image.jpg?alt=media&token=a99966d3-1793-4cac-97fc-80b9b75686f0",
-                            TrailerUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-trailer.mp4?alt=media&token=c5e7aef9-cfcf-4a31-8e77-8c678d95bd7b",
+                            SearchImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/peaky-blinders-search-image",
+                            TrailerUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Peaky Blinders/peaky-blinders-trailer",
                             Year = 2013
                         },
                         new
@@ -670,11 +725,10 @@ namespace NovaStream.Persistence.Migrations
                             Name = "Wednesday",
                             Age = 14,
                             Description = "Follows Wednesday Addams' years as a student, when she attempts to master her emerging psychic ability, thwart and solve the mystery that embroiled her parents.",
-                            ImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-image.jpg?alt=media&token=54703ac5-97e4-48fb-929b-3b7c57759764",
+                            ImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Wednesday/wednesday-image",
                             ProducerId = 3,
-                            SearchImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-search-image.jpg?alt=media&token=ea516245-d4a0-4649-8c67-68bc39cbda9b",
-                            TrailerImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-trailer-image.jpg?alt=media&token=6763d2c7-2994-46ff-9d61-45956081e0d4",
-                            TrailerUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-trailer.mp4?alt=media&token=cd22789d-43ef-477d-bf5d-442adee817f0",
+                            SearchImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Wednesday/wednesday-search-image",
+                            TrailerUrl = "https://novastreamstorage.blob.core.windows.net/root/Serials/Wednesday/wednesday-trailer",
                             Year = 2022
                         });
                 });
@@ -709,16 +763,24 @@ namespace NovaStream.Persistence.Migrations
                             Name = "John Wick: Chapter 4",
                             Description = "John Wick uncovers a path to defeating The High Table. But before he can earn his freedom, Wick must face off against a new enemy with powerful alliances across the globe and forces that turn old friends into foes.",
                             OutDate = new DateTime(2023, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TrailerImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Soons%2FJohn%20Wick%3A%20Chapter%204%2Fjohn-wick-chapter-4-trailer-image.jpg?alt=media&token=410d8c6b-fe9c-4da4-a654-1980eb72c78e",
-                            TrailerUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Soons%2FJohn%20Wick%3A%20Chapter%204%2Fjohn-wick-chapter-4-trailer.mp4?alt=media&token=2c1e4eea-4a4f-4e00-add3-eb10b9dd5030"
+                            TrailerImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Soons/John Wick Chapter 4/john-wick-chapter-4-trailer-image",
+                            TrailerUrl = "https://novastreamstorage.blob.core.windows.net/root/Soons/John Wick Chapter 4/john-wick-chapter-4-trailer"
                         },
                         new
                         {
-                            Name = "Wednesday: Season 2",
-                            Description = "Smart, sarcastic and a little dead inside, Wednesday Addams investigates a murder spree while making new friends — and foes — at Nevermore Academy.",
-                            OutDate = new DateTime(2023, 11, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TrailerImageUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-trailer-image.jpg?alt=media&token=6763d2c7-2994-46ff-9d61-45956081e0d4",
-                            TrailerUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-trailer.mp4?alt=media&token=cd22789d-43ef-477d-bf5d-442adee817f0"
+                            Name = "Guardians of the Galaxy Vol. 3",
+                            Description = "Still reeling from the loss of Gamora, Peter Quill rallies his team to defend the universe and one of their own - a mission that could mean the end of the Guardians if not successful.",
+                            OutDate = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TrailerImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Soons/Guardians of the Galaxy Vol. 3/guardians-of-the-galaxy-vol-3-trailer-image",
+                            TrailerUrl = "https://novastreamstorage.blob.core.windows.net/root/Soons/Guardians of the Galaxy Vol. 3/guardians-of-the-galaxy-vol-3-trailer"
+                        },
+                        new
+                        {
+                            Name = "Transformers: Rise of the Beasts",
+                            Description = "Plot unknown. Reportedly based on the 'Transformers' spinoff 'Beast Wars' which feature robots that transform into robotic animals.",
+                            OutDate = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TrailerImageUrl = "https://novastreamstorage.blob.core.windows.net/root/Soons/Transformers Rise of the Beasts/transformers-rise-of-the-beasts-trailer-image",
+                            TrailerUrl = "https://novastreamstorage.blob.core.windows.net/root/Soons/Transformers Rise of the Beasts/transformers-rise-of-the-beasts-trailer"
                         });
                 });
 
@@ -754,7 +816,7 @@ namespace NovaStream.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            AvatarUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Avatars%2Favatar-1.png?alt=media&token=4fecc3bf-9511-4186-9c25-0347128c0181",
+                            AvatarUrl = "https://novastreamstorage.blob.core.windows.net/root/Avatars/avatar-1",
                             Email = "admin@novastream.api",
                             Nickname = "Admin",
                             PasswordHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
@@ -780,21 +842,21 @@ namespace NovaStream.Persistence.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Adapters.MovieCategory", b =>
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Adapters.MovieGenre", b =>
                 {
-                    b.HasOne("NovaStream.Domain.Entities.Concrete.Category", "Category")
-                        .WithMany("MovieCategories")
-                        .HasForeignKey("CategoryId")
+                    b.HasOne("NovaStream.Domain.Entities.Concrete.Genre", "Genre")
+                        .WithMany("MovieGenres")
+                        .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("NovaStream.Domain.Entities.Concrete.Movie", "Movie")
-                        .WithMany("Categories")
+                        .WithMany("Genres")
                         .HasForeignKey("MovieName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("Genre");
 
                     b.Navigation("Movie");
                 });
@@ -837,21 +899,21 @@ namespace NovaStream.Persistence.Migrations
                     b.Navigation("Serial");
                 });
 
-            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Adapters.SerialCategory", b =>
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Adapters.SerialGenre", b =>
                 {
-                    b.HasOne("NovaStream.Domain.Entities.Concrete.Category", "Category")
-                        .WithMany("SerialCategories")
-                        .HasForeignKey("CategoryId")
+                    b.HasOne("NovaStream.Domain.Entities.Concrete.Genre", "Genre")
+                        .WithMany("SerialGenres")
+                        .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("NovaStream.Domain.Entities.Concrete.Serial", "Serial")
-                        .WithMany("Categories")
+                        .WithMany("Genres")
                         .HasForeignKey("SerialName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("Genre");
 
                     b.Navigation("Serial");
                 });
@@ -875,21 +937,21 @@ namespace NovaStream.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Adapters.SoonCategory", b =>
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Adapters.SoonGenre", b =>
                 {
-                    b.HasOne("NovaStream.Domain.Entities.Concrete.Category", "Category")
-                        .WithMany("SoonCategories")
-                        .HasForeignKey("CategoryId")
+                    b.HasOne("NovaStream.Domain.Entities.Concrete.Genre", "Genre")
+                        .WithMany("SoonGenres")
+                        .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("NovaStream.Domain.Entities.Concrete.Soon", "Soon")
-                        .WithMany("Categories")
+                        .WithMany("Genres")
                         .HasForeignKey("SoonName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("Genre");
 
                     b.Navigation("Soon");
                 });
@@ -909,8 +971,7 @@ namespace NovaStream.Persistence.Migrations
                     b.HasOne("NovaStream.Domain.Entities.Concrete.Producer", "Producer")
                         .WithMany("Movies")
                         .HasForeignKey("ProducerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Producer");
                 });
@@ -930,8 +991,7 @@ namespace NovaStream.Persistence.Migrations
                     b.HasOne("NovaStream.Domain.Entities.Concrete.Producer", "Producer")
                         .WithMany("Serials")
                         .HasForeignKey("ProducerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Producer");
                 });
@@ -943,20 +1003,20 @@ namespace NovaStream.Persistence.Migrations
                     b.Navigation("Serials");
                 });
 
-            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Category", b =>
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Genre", b =>
                 {
-                    b.Navigation("MovieCategories");
+                    b.Navigation("MovieGenres");
 
-                    b.Navigation("SerialCategories");
+                    b.Navigation("SerialGenres");
 
-                    b.Navigation("SoonCategories");
+                    b.Navigation("SoonGenres");
                 });
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Movie", b =>
                 {
                     b.Navigation("Actors");
 
-                    b.Navigation("Categories");
+                    b.Navigation("Genres");
 
                     b.Navigation("Marks");
                 });
@@ -977,7 +1037,7 @@ namespace NovaStream.Persistence.Migrations
                 {
                     b.Navigation("Actors");
 
-                    b.Navigation("Categories");
+                    b.Navigation("Genres");
 
                     b.Navigation("Marks");
 
@@ -986,7 +1046,7 @@ namespace NovaStream.Persistence.Migrations
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Soon", b =>
                 {
-                    b.Navigation("Categories");
+                    b.Navigation("Genres");
                 });
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.User", b =>

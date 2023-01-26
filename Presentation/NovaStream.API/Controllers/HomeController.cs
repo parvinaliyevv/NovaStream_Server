@@ -16,52 +16,40 @@ public class HomeController : ControllerBase
     [HttpGet("[Action]")]
     public async Task<IActionResult> Index()
     {
+        await Task.CompletedTask;
+
         try
         {
-            var videos = new List<VideoShortDetaislDto>();
-            var builder = new StringBuilder();
+            var videos = new List<BaseVideoDto>();
 
-            List<string> categories;
+            videos.AddRange(_dbContext.Movies.ProjectToType<MovieDto>());
+            videos.AddRange(_dbContext.Serials.ProjectToType<SerialDto>());
 
-            videos.AddRange(_dbContext.Movies.ProjectToType<MovieShortDetailsDto>());
-            videos.AddRange(_dbContext.Serials.ProjectToType<SerialShortDetailsDto>());
+            // sort for popular hit videos
 
-            videos.Sort((a, b) => string.Compare(a.Name, b.Name));
+            var json = JsonConvert.SerializeObject(videos, Formatting.Indented);
 
-            foreach (var dto in videos)
-            {
-                if (Convert.ToBoolean(dto.IsSerial))
-                {
-                    dto.SeasonCount = _dbContext.Seasons.Count(s => s.SerialName == dto.Name);
+            return Ok(json);
+        }
+        catch
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+    }
 
-                    categories = await _dbContext.SerialCategories.Include(mc => mc.Category).Where(sc => sc.SerialName == dto.Name).Select(mc => mc.Category.Name).ToListAsync();
-                }
-                else categories = await _dbContext.MovieCategories.Include(mc => mc.Category).Where(mc => mc.MovieName == dto.Name).Select(mc => mc.Category.Name).ToListAsync();
+    [HttpGet("[Action]")]
+    public async Task<IActionResult> Recommended()
+    {
+        await Task.CompletedTask;
 
-                try
-                {
-                    builder.Append($"{categories[0]} •");
+        try
+        {
+            var videos = new List<BaseVideoDto>();
 
-                    for (int i = 1; i < categories.Count - 1; i++) builder.Append($" {categories[i]} •");
+            videos.AddRange(_dbContext.Movies.Take(3).ProjectToType<MovieSearchDto>());
+            videos.AddRange(_dbContext.Serials.Take(3).ProjectToType<SerialSearchDto>());
 
-                    builder.Append($" {categories[categories.Count - 1]}");
-                }
-                catch
-                {
-                    continue;
-                }
-
-                dto.Categories = builder.ToString();
-
-                builder.Clear();
-            }
-
-            var jsonSerializerOptions = new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-            };
-
-            var json = JsonConvert.SerializeObject(videos, Formatting.Indented, jsonSerializerOptions);
+            var json = JsonConvert.SerializeObject(videos, Formatting.Indented);
 
             return Ok(json);
         }

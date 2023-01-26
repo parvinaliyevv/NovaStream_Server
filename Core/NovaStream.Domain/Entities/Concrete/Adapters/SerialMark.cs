@@ -2,15 +2,15 @@
 
 public class SerialMark
 {
-    public string? SerialName { get; set; }
-    public Serial? Serial { get; set; }
-    public int? UserId { get; set; }
-    public User? User { get; set; }
+    public Serial Serial { get; set; }
+    public User User { get; set; }
+    public int UserId { get; set; }
+    public string SerialName { get; set; }
 
 
-    public SerialMark(string? serialName, int? userId)
+    public SerialMark(int userId, string serialName)
     {
-        SerialName = serialName;
         UserId = userId;
+        SerialName = serialName;
     }
 }

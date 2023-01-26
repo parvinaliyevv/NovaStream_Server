@@ -10,23 +10,18 @@ public record SerialDto : BaseVideoDto
 
 public record SerialSearchDto : SerialDto { }
 
-public record SerialShortDetailsDto : VideoShortDetaislDto
+public record SerialDetailsDto : BaseVideoDetailsDto
 {
-    public SerialShortDetailsDto()
-    {
-        IsSerial = true;
-    }
+    public string TrailerUrl { get; set; }
+    public int SeasonCount { get; set; }
+
+    public ProducerDto Producer { get; set; }
+    public ICollection<ActorDto> Actors { get; set; }
+    public ICollection<EpisodeDto> Episodes { get; set; }
 }
 
-public record SerialViewDetailsDto : VideoDetailsDto
+public record SerialViewDetailsDto : BaseVideoDetailsDto
 {
     public string ImageUrl { get; set; }
-}
-
-public record SerialDetailsDto : VideoDetailsDto
-{
-    public ICollection<EpisodeDto> Episodes { get; set; }
-    public ICollection<ActorDto> Actors { get; set; } //
-    public ProducerDto Producer { get; set; } // 
-    //public int ProducerId { get; set; } // 
+    public int SeasonCount { get; set; }
 }

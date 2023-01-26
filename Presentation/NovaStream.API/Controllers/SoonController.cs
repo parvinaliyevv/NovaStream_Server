@@ -17,34 +17,13 @@ public class SoonController : ControllerBase
     {
         try
         {
-            var soons = new List<SoonDto>();
-            var builder = new StringBuilder();
+            var soons = await _dbContext.Soons.Include(s => s.Genres).ThenInclude(c => c.Genre).ToListAsync();
 
-            soons.AddRange(_dbContext.Soons.ProjectToType<SoonDto>());
+            soons.Sort((a, b) => DateTime.Compare(a.OutDate, b.OutDate));
+            
+            var dtos = soons.Adapt<List<SoonDto>>();
 
-            foreach (var dto in soons)
-            {
-                var categories = await _dbContext.SoonCategories.Include(sc => sc.Category).Where(icc => icc.SoonName == dto.Name).Select(icc => icc.Category.Name).ToListAsync();
-
-                try
-                {
-                    builder.Append($"{categories[0]} •");
-
-                    for (int i = 1; i < categories.Count - 1; i++) builder.Append($" {categories[i]} •");
-
-                    builder.Append($" {categories[categories.Count - 1]}");
-                }
-                catch
-                {
-                    continue;
-                }
-
-                dto.Categories = builder.ToString();
-
-                builder.Clear();
-            }
-
-            var json = JsonConvert.SerializeObject(soons, Formatting.Indented);
+            var json = JsonConvert.SerializeObject(dtos, Formatting.Indented);
 
             return Ok(json);
         }

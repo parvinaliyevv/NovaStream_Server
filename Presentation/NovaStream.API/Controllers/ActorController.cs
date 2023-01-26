@@ -20,7 +20,6 @@ public class ActorController : ControllerBase
             var videos = new List<BaseVideoDto>();
 
             videos.AddRange(_dbContext.MovieActors.Include(ma => ma.Actor).Where(ma => ma.ActorId == id).Select(ma => ma.Movie).ProjectToType<MovieDto>());
-
             videos.AddRange(_dbContext.SerialActors.Include(sa => sa.Actor).Where(sa => sa.ActorId == id).Select(sa => sa.Serial).ProjectToType<SerialDto>());
 
             videos.Sort((a, b) => string.Compare(a.Name, b.Name));

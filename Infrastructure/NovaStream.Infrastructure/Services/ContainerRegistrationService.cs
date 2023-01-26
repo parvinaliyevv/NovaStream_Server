@@ -7,6 +7,6 @@ public static class ContainerRegistrationService
         services.Configure<JsonWebTokenOptions>(configuration.GetSection("JsonWebToken"));
 
         services.AddTransient<ITokenGeneratorService, TokenGeneratorService>();
-        services.AddTransient<IPasswordEncryptorService, Sha256PasswordEncryptorService>();
+        services.AddTransient<IEncryptorService, Sha256EncryptorService>();
     }
 }

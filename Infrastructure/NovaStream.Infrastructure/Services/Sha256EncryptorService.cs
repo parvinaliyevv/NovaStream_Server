@@ -1,8 +1,8 @@
 ﻿namespace NovaStream.Infrastructure.Services;
 
-public class Sha256PasswordEncryptorService : IPasswordEncryptorService
+public class Sha256EncryptorService : IEncryptorService
 {
-    public string Encrypt(string password)
+    public string EncryptPassword(string password)
     {
         using var encryptor = SHA256.Create();
         var builder = new StringBuilder();
@@ -14,6 +14,6 @@ public class Sha256PasswordEncryptorService : IPasswordEncryptorService
         return builder.ToString();
     }
 
-    public async Task<string> EncryptAsync(string password)
-        => await Task.Factory.StartNew(() => Encrypt(password));
+    public async Task<string> EncryptPasswordAsync(string password)
+        => await Task.Factory.StartNew(() => EncryptPassword(password));
 }

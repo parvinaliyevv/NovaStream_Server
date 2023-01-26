@@ -1,9 +1,11 @@
-﻿global using System.Reflection;
+﻿global using System.Text;
+global using System.Reflection;
 global using System.Globalization;
 
 global using NovaStream.Domain.Entities.Concrete;
 global using NovaStream.Application.Dtos.Abstract;
 global using NovaStream.Application.Dtos.Concrete;
+global using NovaStream.Domain.Entities.Concrete.Adapters;
 
 global using Mapster;
 global using FluentValidation;

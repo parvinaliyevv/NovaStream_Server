@@ -2,15 +2,15 @@
 
 public class MovieMark
 {
-    public string? MovieName { get; set; }
-    public Movie? Movie { get; set; }
-    public int? UserId { get; set; }
-    public User? User { get; set; }
+    public Movie Movie { get; set; }
+    public User User { get; set; }
+    public int UserId { get; set; }
+    public string MovieName { get; set; }
 
 
-    public MovieMark(string? movieName, int? userId)
+    public MovieMark(int userId, string movieName)
     {
-        MovieName = movieName;
         UserId = userId;
+        MovieName = movieName;
     }
 }

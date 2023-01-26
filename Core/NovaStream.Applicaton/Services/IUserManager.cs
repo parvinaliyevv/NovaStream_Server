@@ -8,6 +8,9 @@ public interface IUserManager
     bool UpdateUser(User user);
     Task<bool> UpdateUserAsync(User user);
 
+    bool DeleteUser(User user);
+    Task<bool> DeleteUserAsync(User user);
+
     User? FindUserByEmail(string email);
     Task<User?> FindUserByEmailAsync(string email);
 

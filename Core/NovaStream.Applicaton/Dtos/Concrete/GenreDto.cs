@@ -1,3 +1,3 @@
 ﻿namespace NovaStream.Application.Dtos.Concrete;
 
-public record ActorDto() : BasePersonDto;
+public record GenreDto() : BaseGenreDto;

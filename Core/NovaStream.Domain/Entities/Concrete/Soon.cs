@@ -8,5 +8,5 @@ public class Soon
     public string TrailerImageUrl { get; set; }
     public DateTime OutDate { get; set; }
     
-    public ICollection<SoonCategory> Categories { get; set; }
+    public ICollection<SoonGenre> Genres { get; set; }
 }

@@ -9,11 +9,11 @@ public class SeasonConfiguration : IEntityTypeConfiguration<Season>
             .HasForeignKey(s => s.SerialName)
             .OnDelete(DeleteBehavior.Cascade);
 
-        var seasons = new[]
+        var seasons = new Season[]
         {
-            new Season() { Id = 1, SerialName = "Peaky Blinders", Number = 1 },
-            new Season() { Id = 2, SerialName = "Peaky Blinders", Number = 2 },
-            new Season() { Id = 3, SerialName = "Wednesday", Number = 1 }
+            new() { Id = 1, Number = 1, SerialName = "Peaky Blinders" },
+            new() { Id = 2, Number = 2, SerialName = "Peaky Blinders" },
+            new() { Id = 3, Number = 1, SerialName = "Wednesday" }
         };
 
         builder.HasData(seasons);

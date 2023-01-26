@@ -1,9 +1,9 @@
 ﻿namespace NovaStream.Domain.Entities.Concrete.Adapters;
 
-public class SerialActor
+public class SerialGenre
 {
     public Serial Serial { get; set; }
-    public Actor Actor { get; set; }
-    public int ActorId { get; set; }
+    public Genre Genre { get; set; }
+    public int GenreId { get; set; }
     public string SerialName { get; set; }
 }

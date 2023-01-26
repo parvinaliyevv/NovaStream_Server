@@ -4,25 +4,33 @@ public class SoonConfiguration : IEntityTypeConfiguration<Soon>
 {
     public void Configure(EntityTypeBuilder<Soon> builder)
     {
-        builder.HasKey(x => new { x.Name });
+        builder.HasKey(s => s.Name);
 
-        var soons = new[]
+        var soons = new Soon[]
         {
-            new Soon()
+            new()
             {
                 Name = "John Wick: Chapter 4",
                 Description = "John Wick uncovers a path to defeating The High Table. But before he can earn his freedom, Wick must face off against a new enemy with powerful alliances across the globe and forces that turn old friends into foes.",
-                TrailerImageUrl = @"https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Soons%2FJohn%20Wick%3A%20Chapter%204%2Fjohn-wick-chapter-4-trailer-image.jpg?alt=media&token=410d8c6b-fe9c-4da4-a654-1980eb72c78e",
-                TrailerUrl = @"https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Soons%2FJohn%20Wick%3A%20Chapter%204%2Fjohn-wick-chapter-4-trailer.mp4?alt=media&token=2c1e4eea-4a4f-4e00-add3-eb10b9dd5030",
+                TrailerImageUrl = @"https://novastreamstorage.blob.core.windows.net/root/Soons/John Wick Chapter 4/john-wick-chapter-4-trailer-image",
+                TrailerUrl = @"https://novastreamstorage.blob.core.windows.net/root/Soons/John Wick Chapter 4/john-wick-chapter-4-trailer",
                 OutDate = DateTime.ParseExact("2023:03:24","yyyy:MM:dd", null)
             },
-            new Soon()
+            new()
             {
-                Name = "Wednesday: Season 2",
-                Description = "Smart, sarcastic and a little dead inside, Wednesday Addams investigates a murder spree while making new friends — and foes — at Nevermore Academy.",
-                TrailerImageUrl = @"https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-trailer-image.jpg?alt=media&token=6763d2c7-2994-46ff-9d61-45956081e0d4",
-                TrailerUrl = @"https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-trailer.mp4?alt=media&token=cd22789d-43ef-477d-bf5d-442adee817f0",
-                OutDate = DateTime.ParseExact("2023:11:25","yyyy:MM:dd", null)
+                Name = "Guardians of the Galaxy Vol. 3",
+                Description = "Still reeling from the loss of Gamora, Peter Quill rallies his team to defend the universe and one of their own - a mission that could mean the end of the Guardians if not successful.",
+                TrailerImageUrl = @"https://novastreamstorage.blob.core.windows.net/root/Soons/Guardians of the Galaxy Vol. 3/guardians-of-the-galaxy-vol-3-trailer-image",
+                TrailerUrl = @"https://novastreamstorage.blob.core.windows.net/root/Soons/Guardians of the Galaxy Vol. 3/guardians-of-the-galaxy-vol-3-trailer",
+                OutDate = DateTime.ParseExact("2023:05:05","yyyy:MM:dd", null)
+            },
+            new()
+            {
+                Name = "Transformers: Rise of the Beasts",
+                Description = "Plot unknown. Reportedly based on the 'Transformers' spinoff 'Beast Wars' which feature robots that transform into robotic animals.",
+                TrailerImageUrl = @"https://novastreamstorage.blob.core.windows.net/root/Soons/Transformers Rise of the Beasts/transformers-rise-of-the-beasts-trailer-image",
+                TrailerUrl = @"https://novastreamstorage.blob.core.windows.net/root/Soons/Transformers Rise of the Beasts/transformers-rise-of-the-beasts-trailer",
+                OutDate = DateTime.ParseExact("2023:06:09","yyyy:MM:dd", null)
             }
         };
 
