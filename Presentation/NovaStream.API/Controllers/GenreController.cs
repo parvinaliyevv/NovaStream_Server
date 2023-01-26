@@ -1,6 +1,6 @@
 ﻿namespace NovaStream.API.Controllers;
 
-[ApiController, Authorize]
+[ApiController]
 [Route("api/[controller]")]
 public class GenreController : ControllerBase 
 {
@@ -27,9 +27,9 @@ public class GenreController : ControllerBase
             genres.AddRange(_dbContext.MovieGenres.Include(mc => mc.Genre).Select(mc => mc.Genre).ProjectToType<GenreDto>());
             genres.AddRange(_dbContext.SerialGenres.Include(sc => sc.Genre).Select(sc => sc.Genre).ProjectToType<GenreDto>());
 
-            genres.Distinct();
+            var unique = genres.Distinct();
 
-            var json = JsonConvert.SerializeObject(genres, Formatting.Indented);
+            var json = JsonConvert.SerializeObject(unique, Formatting.Indented);
 
             return Ok(json);
         }

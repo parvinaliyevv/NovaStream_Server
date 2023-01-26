@@ -20,6 +20,9 @@ public interface IUserManager
     bool CheckPassword(User user, string password);
     Task<bool> CheckPasswordAsync(User user, string password);
 
+    bool CheckOldPassword(User user, string password);
+    Task<bool> CheckOldPasswordAsync(User user, string password);
+
     bool ChangePassword(User user, string newPassword);
     Task<bool> ChangePasswordAsync(User user, string newPassword);
 

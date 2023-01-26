@@ -128,7 +128,7 @@ public class SerialController : ControllerBase
                 var episode = season.Episodes.FirstOrDefault(e => e.Number == episodeNumber);
 
                 if (episode is not null) 
-                    return Ok(_storageManager.GetSignedUrl(episode.VideoUrl, TimeSpan.FromHours(5)));
+                    return Ok(_storageManager.GetSignedUrl(episode.VideoUrl, TimeSpan.FromHours(7)));
             }
 
             return NotFound();

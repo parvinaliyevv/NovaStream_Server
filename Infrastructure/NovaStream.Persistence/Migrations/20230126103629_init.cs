@@ -78,7 +78,8 @@ public partial class init : Migration
                 Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                 Nickname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                 AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                OldPasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false)
             },
             constraints: table =>
             {
@@ -372,14 +373,14 @@ public partial class init : Migration
             columns: new[] { "Id", "ImageUrl", "Name" },
             values: new object[,]
             {
-                { 1, "Images/Genres/comedy-image.jpg", "Drama" },
-                { 2, "Images/Genres/comedy-image.jpg", "Adventure" },
-                { 3, "Images/Genres/comedy-image.jpg", "Sci-Fi" },
-                { 4, "Images/Genres/comedy-image.jpg", "Action" },
-                { 5, "Images/Genres/comedy-image.jpg", "Horror" },
-                { 6, "Images/Genres/comedy-image.jpg", "Thriller" },
-                { 7, "Images/Genres/comedy-image.jpg", "Crime" },
-                { 8, "Images/Genres/comedy-image.jpg", "Comedy" }
+                { 1, "Images/Genres/drama-image.png", "Drama" },
+                { 2, "Images/Genres/adventure-image.png", "Adventure" },
+                { 3, "Images/Genres/sci-fi-image.png", "Sci-Fi" },
+                { 4, "Images/Genres/action-image.png", "Action" },
+                { 5, "Images/Genres/horror-image.png", "Horror" },
+                { 6, "Images/Genres/thriller-image.png", "Thriller" },
+                { 7, "Images/Genres/crime-image.png", "Crime" },
+                { 8, "Images/Genres/comedy-image.png", "Comedy" }
             });
 
         migrationBuilder.InsertData(
@@ -403,8 +404,8 @@ public partial class init : Migration
 
         migrationBuilder.InsertData(
             table: "Users",
-            columns: new[] { "Id", "AvatarUrl", "Email", "Nickname", "PasswordHash" },
-            values: new object[] { 1, "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Avatars%2Favatar-1.png?alt=media&token=4fecc3bf-9511-4186-9c25-0347128c0181", "admin@novastream.api", "Admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" });
+            columns: new[] { "Id", "AvatarUrl", "Email", "Nickname", "OldPasswordHash", "PasswordHash" },
+            values: new object[] { 1, "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Avatars%2Favatar-1.png?alt=media&token=4fecc3bf-9511-4186-9c25-0347128c0181", "admin@novastream.api", "Admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" });
 
         migrationBuilder.InsertData(
             table: "Movies",

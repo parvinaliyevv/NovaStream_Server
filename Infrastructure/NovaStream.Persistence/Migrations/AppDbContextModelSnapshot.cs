@@ -495,49 +495,49 @@ namespace NovaStream.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ImageUrl = "Images/Genres/comedy-image.jpg",
+                            ImageUrl = "Images/Genres/drama-image.png",
                             Name = "Drama"
                         },
                         new
                         {
                             Id = 2,
-                            ImageUrl = "Images/Genres/comedy-image.jpg",
+                            ImageUrl = "Images/Genres/adventure-image.png",
                             Name = "Adventure"
                         },
                         new
                         {
                             Id = 3,
-                            ImageUrl = "Images/Genres/comedy-image.jpg",
+                            ImageUrl = "Images/Genres/sci-fi-image.png",
                             Name = "Sci-Fi"
                         },
                         new
                         {
                             Id = 4,
-                            ImageUrl = "Images/Genres/comedy-image.jpg",
+                            ImageUrl = "Images/Genres/action-image.png",
                             Name = "Action"
                         },
                         new
                         {
                             Id = 5,
-                            ImageUrl = "Images/Genres/comedy-image.jpg",
+                            ImageUrl = "Images/Genres/horror-image.png",
                             Name = "Horror"
                         },
                         new
                         {
                             Id = 6,
-                            ImageUrl = "Images/Genres/comedy-image.jpg",
+                            ImageUrl = "Images/Genres/thriller-image.png",
                             Name = "Thriller"
                         },
                         new
                         {
                             Id = 7,
-                            ImageUrl = "Images/Genres/comedy-image.jpg",
+                            ImageUrl = "Images/Genres/crime-image.png",
                             Name = "Crime"
                         },
                         new
                         {
                             Id = 8,
-                            ImageUrl = "Images/Genres/comedy-image.jpg",
+                            ImageUrl = "Images/Genres/comedy-image.png",
                             Name = "Comedy"
                         });
                 });
@@ -829,6 +829,10 @@ namespace NovaStream.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("OldPasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -844,6 +848,7 @@ namespace NovaStream.Persistence.Migrations
                             AvatarUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Avatars%2Favatar-1.png?alt=media&token=4fecc3bf-9511-4186-9c25-0347128c0181",
                             Email = "admin@novastream.api",
                             Nickname = "Admin",
+                            OldPasswordHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
                             PasswordHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
                         });
                 });

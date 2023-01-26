@@ -4,18 +4,14 @@
 [Route("api/[controller]")]
 public class AccountController : ControllerBase
 {
+    private readonly IUserManager _userManager;
     private readonly ITokenGeneratorService _tokenGeneratorService;
 
-    private readonly IUserManager _userManager;
-    private readonly IStorageManager _storageManager;
 
-
-    public AccountController(ITokenGeneratorService tokenGeneratorService, IUserManager userManager, IStorageManager storageManager)
+    public AccountController(ITokenGeneratorService tokenGeneratorService, IUserManager userManager)
     {
-        _tokenGeneratorService = tokenGeneratorService;
-
         _userManager = userManager;
-        _storageManager = storageManager;
+        _tokenGeneratorService = tokenGeneratorService;
     }
 
 
@@ -45,7 +41,7 @@ public class AccountController : ControllerBase
             {
                 var token = await _tokenGeneratorService.GenerateAuthorizeTokenAsync(user);
                 var response = new { Nickname = user.Nickname, AvatarUrl = user.AvatarUrl, Email = dto.Email, PasswordLength = dto.Password.Length, Token = token };
-                var json = JsonConvert.SerializeObject(user.Adapt<SignInUserDto>(), Formatting.Indented);
+                var json = JsonConvert.SerializeObject(response, Formatting.Indented);
 
                 return Ok(json);
             }
@@ -125,15 +121,19 @@ public class AccountController : ControllerBase
             if (user is null) return Unauthorized();
 
             if (!_userManager.CheckPassword(user, oldPassword))
-            {
                 ModelState.AddModelError("Invalid password", "the entered password is not correct!");
+            
+            else if (_userManager.CheckOldPassword(user, newPassword)) 
+                ModelState.AddModelError("Already used password", "you have already used this password");
+            
+            else
+            {
+                var result = await _userManager.ChangePasswordAsync(user, newPassword);
 
-                return BadRequest(ModelState);
+                return Ok(result);
             }
 
-            var result = await _userManager.ChangePasswordAsync(user, newPassword);
-
-            return Ok(result);
+            return BadRequest(ModelState);
         }
         catch
         {

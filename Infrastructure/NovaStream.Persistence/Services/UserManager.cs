@@ -18,6 +18,7 @@ public class UserManager : IUserManager
     public bool CreateUser(User user, string password)
     {
         user.PasswordHash = _passwordEncryptorService.EncryptPassword(password);
+        user.OldPasswordHash = user.PasswordHash;
 
         var entry = _dbContext.Users.Add(user);
         _dbContext.SaveChanges();
@@ -33,7 +34,7 @@ public class UserManager : IUserManager
 
         _dbContext.SaveChanges();
 
-        return entry.State == EntityState.Modified;
+        return entry.State == EntityState.Unchanged;
     }
     public async Task<bool> UpdateUserAsync(User user)
         => await Task.Factory.StartNew(() => UpdateUser(user));
@@ -44,7 +45,7 @@ public class UserManager : IUserManager
 
         _dbContext.SaveChanges();
 
-        return entry.State == EntityState.Deleted;
+        return entry.State == EntityState.Detached;
     }
     public async Task<bool> DeleteUserAsync(User user)
         => await Task.Factory.StartNew(() => DeleteUser(user));
@@ -87,8 +88,18 @@ public class UserManager : IUserManager
     public async Task<bool> CheckPasswordAsync(User user, string password)
         => await Task.Factory.StartNew(() => CheckPassword(user, password));
 
+    public bool CheckOldPassword(User user, string password)
+    {
+        var encryptedPassword = _passwordEncryptorService.EncryptPassword(password);
+
+        return user.OldPasswordHash == encryptedPassword;
+    }
+    public async Task<bool> CheckOldPasswordAsync(User user, string password)
+        => await Task.Factory.StartNew(() => CheckPassword(user, password));
+
     public bool ChangePassword(User user, string newPassword)
     {
+        user.OldPasswordHash = user.PasswordHash;
         user.PasswordHash = _passwordEncryptorService.EncryptPassword(newPassword);
 
         return UpdateUser(user);
@@ -96,12 +107,6 @@ public class UserManager : IUserManager
     public async Task<bool> ChangePasswordAsync(User user, string newPassword)
         => await Task.Factory.StartNew(() => ChangePassword(user, newPassword));
 
-    public bool Exists(string email)
-    {
-        var user = _dbContext.Users.FirstOrDefault(user => user.Email == email);
-
-        return user is not null;
-    }
-    public async Task<bool> ExistsAsync(string email)
-        => await Task.Factory.StartNew(() => Exists(email));
+    public bool Exists(string email) => _dbContext.Users.Any(user => user.Email == email);
+    public async Task<bool> ExistsAsync(string email) => await Task.Factory.StartNew(() => Exists(email));
 }
