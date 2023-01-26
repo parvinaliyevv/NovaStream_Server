@@ -17,7 +17,7 @@ public static class Manufacturer
 
     public static string ManufactureTime(TimeSpan time)
     {
-        var minutes = time.Minutes;
+        var minutes = Convert.ToInt32(time.TotalMinutes);
 
         return minutes > 60 ? $"{minutes / 60}h {minutes % 60}m" : $"{minutes % 60}m";
     }
