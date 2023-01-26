@@ -6,4 +6,5 @@ public class Category : Entity
 
     public ICollection<SerialCategory> SerialCategories { get; set; }
     public ICollection<MovieCategory> MovieCategories { get; set; }
+    public ICollection<InComingCategory> InComingCategories { get; set; }
 }

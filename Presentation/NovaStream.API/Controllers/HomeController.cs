@@ -66,28 +66,4 @@ public class HomeController : ControllerBase
             return StatusCode((int)HttpStatusCode.InternalServerError);
         }
     }
-
-    [HttpGet("[Action]")]
-    public async Task<IActionResult> Search()
-    {
-        await Task.CompletedTask;
-
-        try
-        {
-            var videos = new List<VideoSearchDto>();
-
-            videos.AddRange(_dbContext.Movies.ProjectToType<MovieSearchDto>());
-            videos.AddRange(_dbContext.Serials.ProjectToType<SerialSearchDto>());
-
-            videos.Sort((a, b) => string.Compare(a.Name, b.Name));
-
-            var json = JsonConvert.SerializeObject(videos, Formatting.Indented);
-
-            return Ok(json);
-        }
-        catch
-        {
-            return StatusCode((int)HttpStatusCode.InternalServerError);
-        }
-    }
 }

@@ -10,6 +10,7 @@ public class SerialCategoryConfiguration : IEntityTypeConfiguration<SerialCatego
             .HasOne(bc => bc.Serial)
             .WithMany(b => b.Categories)
             .HasForeignKey(bc => bc.SerialName);
+
         builder
             .HasOne(bc => bc.Category)
             .WithMany(c => c.SerialCategories)

@@ -10,6 +10,9 @@ public class MovieDto : VideoDto
 
 public class MovieDetailsDto : VideoDetailsDto
 {
+    public string VideoName { get; set; }
+    public string VideoDescription { get; set; }
+    public string VideoImageUrl { get; set; }
     public string VideoUrl { get; set; }
 }
 
