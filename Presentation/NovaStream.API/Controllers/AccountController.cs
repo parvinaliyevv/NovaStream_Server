@@ -28,7 +28,7 @@ public class AccountController : ControllerBase
         }
     }
 
-    [HttpGet("[Action]")]
+    [HttpPost("[Action]")]
     public async Task<IActionResult> SignIn([FromBody] SignInUserDto dto)
     {
         try

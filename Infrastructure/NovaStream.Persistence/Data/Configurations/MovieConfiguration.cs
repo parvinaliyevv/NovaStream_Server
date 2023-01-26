@@ -6,6 +6,10 @@ public class MovieConfiguration : IEntityTypeConfiguration<Movie>
     {
         builder.HasKey(v => new { v.Name });
 
+        builder.HasOne(m => m.Producer)
+            .WithMany(p => p.Movies)
+            .HasForeignKey(m => m.ProducerId);
+
         var movie = new Movie()
         {
             Name = "Interstellar",
@@ -19,7 +23,8 @@ public class MovieConfiguration : IEntityTypeConfiguration<Movie>
             ImageUrl = @"https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-image.jpg?alt=media&token=0015bcdb-c50b-4b4b-a86f-ee3c1a5efc8e",
             SearchImageUrl = @"https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-search-image.jpg?alt=media&token=5799d5f0-f87d-424c-9c62-b0ba5904f499",
             TrailerUrl = @"https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-trailer.mp4?alt=media&token=3e5984d4-5fb8-438b-aa9a-3778e3f52ba8",
-            TrailerImageUrl = @"https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-trailer-image.jpg?alt=media&token=1da9a664-0a92-4e35-90d9-7905fd33dfdf"
+            TrailerImageUrl = @"https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-trailer-image.jpg?alt=media&token=1da9a664-0a92-4e35-90d9-7905fd33dfdf",
+            ProducerId = 2
         };
 
         builder.HasData(movie);

@@ -26,4 +26,7 @@ public record SerialViewDetailsDto : VideoDetailsDto
 public record SerialDetailsDto : VideoDetailsDto
 {
     public ICollection<EpisodeDto> Episodes { get; set; }
+    public ICollection<ActorDto> Actors { get; set; } //
+    public ProducerDto Producer { get; set; } // 
+    //public int ProducerId { get; set; } // 
 }

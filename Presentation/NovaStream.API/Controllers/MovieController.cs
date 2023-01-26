@@ -38,7 +38,7 @@ public class MovieController : ControllerBase
                 }
                 catch
                 {
-                    continue;
+                    return;
                 }
 
                 dto.IsSerial = null;
@@ -69,7 +69,9 @@ public class MovieController : ControllerBase
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var movie = _dbContext.Movies.FirstOrDefault(m => m.Name == name)?.Adapt<MovieDetailsDto>();
+            var movie = _dbContext.Movies.Include(m => m.Producer).FirstOrDefault(m => m.Name == name)?.Adapt<MovieDetailsDto>();
+
+            movie.Actors = _dbContext.MovieActors.Include(ma => ma.Actor).Where(ma => ma.MovieName == name).Select(ma => ma.Actor).ProjectToType<ActorDto>().ToList(); // 
 
             if (movie is null) return NotFound();
 
@@ -77,12 +79,7 @@ public class MovieController : ControllerBase
 
             movie.IsMarked = _dbContext.MovieMarks.Any(mm => mm.MovieName == name && mm.UserId == user.Id);
 
-            var jsonSerializerOptions = new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-            };
-
-            var json = JsonConvert.SerializeObject(movie, Formatting.Indented, jsonSerializerOptions);
+            var json = JsonConvert.SerializeObject(movie, Formatting.Indented);
 
             return Ok(json);
         }

@@ -38,7 +38,7 @@ public class SerialController : ControllerBase
                 }
                 catch
                 {
-                    continue;
+                    return;
                 }
 
                 dto.IsSerial = null;
@@ -70,7 +70,9 @@ public class SerialController : ControllerBase
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var serial = _dbContext.Serials.FirstOrDefault(s => s.Name == name)?.Adapt<SerialDetailsDto>();
+            var serial = _dbContext.Serials.Include(s => s.Producer).FirstOrDefault(s => s.Name == name)?.Adapt<SerialDetailsDto>();
+
+            serial.Actors = _dbContext.SerialActors.Include(sa => sa.Actor).Where(sa => sa.SerialName == name).Select(sa => sa.Actor).ProjectToType<ActorDto>().ToList(); // 
 
             if (serial is null) return NotFound();
 

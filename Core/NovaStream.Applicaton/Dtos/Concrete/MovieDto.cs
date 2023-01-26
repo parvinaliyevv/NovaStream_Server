@@ -24,6 +24,8 @@ public record MovieDetailsDto : VideoDetailsDto
     public string VideoDescription { get; set; }
     public string VideoImageUrl { get; set; }
     public string VideoUrl { get; set; }
+    public ICollection<ActorDto> Actors { get; set; } //
+    public ProducerDto Producer { get; set; } //
 }
 
 public record MovieViewDetailsDto : VideoDetailsDto

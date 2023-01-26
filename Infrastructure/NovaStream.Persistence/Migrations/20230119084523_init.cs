@@ -10,6 +10,22 @@ namespace NovaStream.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Actors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    About = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Actors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
@@ -23,43 +39,19 @@ namespace NovaStream.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Movies",
+                name: "Producers",
                 columns: table => new
                 {
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    VideoName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VideoDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VideoImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VideoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Year = table.Column<int>(type: "int", nullable: false),
-                    Age = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TrailerUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SearchImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TrailerImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    About = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Movies", x => x.Name);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Serials",
-                columns: table => new
-                {
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Year = table.Column<int>(type: "int", nullable: false),
-                    Age = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TrailerUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SearchImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TrailerImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Serials", x => x.Name);
+                    table.PrimaryKey("PK_Producers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -94,70 +86,56 @@ namespace NovaStream.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MovieCategories",
+                name: "Movies",
                 columns: table => new
                 {
-                    MovieName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    VideoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VideoName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VideoImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VideoDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProducerId = table.Column<int>(type: "int", nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: false),
+                    Age = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TrailerUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SearchImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TrailerImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MovieCategories", x => new { x.MovieName, x.CategoryId });
+                    table.PrimaryKey("PK_Movies", x => x.Name);
                     table.ForeignKey(
-                        name: "FK_MovieCategories_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
+                        name: "FK_Movies_Producers_ProducerId",
+                        column: x => x.ProducerId,
+                        principalTable: "Producers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MovieCategories_Movies_MovieName",
-                        column: x => x.MovieName,
-                        principalTable: "Movies",
-                        principalColumn: "Name",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Seasons",
+                name: "Serials",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Number = table.Column<int>(type: "int", nullable: false),
-                    SerialName = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProducerId = table.Column<int>(type: "int", nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: false),
+                    Age = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TrailerUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SearchImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TrailerImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Seasons", x => x.Id);
+                    table.PrimaryKey("PK_Serials", x => x.Name);
                     table.ForeignKey(
-                        name: "FK_Seasons_Serials_SerialName",
-                        column: x => x.SerialName,
-                        principalTable: "Serials",
-                        principalColumn: "Name",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SerialCategories",
-                columns: table => new
-                {
-                    SerialName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SerialCategories", x => new { x.SerialName, x.CategoryId });
-                    table.ForeignKey(
-                        name: "FK_SerialCategories_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
+                        name: "FK_Serials_Producers_ProducerId",
+                        column: x => x.ProducerId,
+                        principalTable: "Producers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SerialCategories_Serials_SerialName",
-                        column: x => x.SerialName,
-                        principalTable: "Serials",
-                        principalColumn: "Name",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -186,6 +164,54 @@ namespace NovaStream.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MovieActors",
+                columns: table => new
+                {
+                    MovieName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ActorId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MovieActors", x => new { x.MovieName, x.ActorId });
+                    table.ForeignKey(
+                        name: "FK_MovieActors_Actors_ActorId",
+                        column: x => x.ActorId,
+                        principalTable: "Actors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MovieActors_Movies_MovieName",
+                        column: x => x.MovieName,
+                        principalTable: "Movies",
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MovieCategories",
+                columns: table => new
+                {
+                    MovieName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MovieCategories", x => new { x.MovieName, x.CategoryId });
+                    table.ForeignKey(
+                        name: "FK_MovieCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MovieCategories_Movies_MovieName",
+                        column: x => x.MovieName,
+                        principalTable: "Movies",
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MovieMarks",
                 columns: table => new
                 {
@@ -206,6 +232,74 @@ namespace NovaStream.Persistence.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Seasons",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    SerialName = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Seasons", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Seasons_Serials_SerialName",
+                        column: x => x.SerialName,
+                        principalTable: "Serials",
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SerialActors",
+                columns: table => new
+                {
+                    SerialName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ActorId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SerialActors", x => new { x.SerialName, x.ActorId });
+                    table.ForeignKey(
+                        name: "FK_SerialActors_Actors_ActorId",
+                        column: x => x.ActorId,
+                        principalTable: "Actors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SerialActors_Serials_SerialName",
+                        column: x => x.SerialName,
+                        principalTable: "Serials",
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SerialCategories",
+                columns: table => new
+                {
+                    SerialName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SerialCategories", x => new { x.SerialName, x.CategoryId });
+                    table.ForeignKey(
+                        name: "FK_SerialCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SerialCategories_Serials_SerialName",
+                        column: x => x.SerialName,
+                        principalTable: "Serials",
+                        principalColumn: "Name",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -258,6 +352,16 @@ namespace NovaStream.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Actors",
+                columns: new[] { "Id", "About", "ImageUrl", "Name", "Surname" },
+                values: new object[,]
+                {
+                    { 1, "Yaxshi Oglan", null, "Cillian", "Murphy" },
+                    { 2, "Babat Oglan", null, "Tom", "Cruse" },
+                    { 3, "Zor Oglan", null, "Brad", "Pitt" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -276,17 +380,13 @@ namespace NovaStream.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Movies",
-                columns: new[] { "Name", "Age", "Description", "ImageUrl", "SearchImageUrl", "TrailerImageUrl", "TrailerUrl", "VideoDescription", "VideoImageUrl", "VideoName", "VideoUrl", "Year" },
-                values: new object[] { "Interstellar", 13, "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival. Earth's future has been riddled by disasters, famines, and droughts. There is only one way to ensure mankind's survival: Interstellar travel.", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-image.jpg?alt=media&token=0015bcdb-c50b-4b4b-a86f-ee3c1a5efc8e", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-search-image.jpg?alt=media&token=5799d5f0-f87d-424c-9c62-b0ba5904f499", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-trailer-image.jpg?alt=media&token=1da9a664-0a92-4e35-90d9-7905fd33dfdf", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-trailer.mp4?alt=media&token=3e5984d4-5fb8-438b-aa9a-3778e3f52ba8", "With humanity teetering on the brink of extinction, a group of astronauts travels through a wormhole in search of another inhabitable planet.", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-video-image.jpg?alt=media&token=5a18e02b-3976-4116-a591-d6e334c50772", "Episode", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-video.mp4?alt=media&token=aa6a5dca-7570-45de-87ed-22d35d25189b", 2014 });
-
-            migrationBuilder.InsertData(
-                table: "Serials",
-                columns: new[] { "Name", "Age", "Description", "ImageUrl", "SearchImageUrl", "TrailerImageUrl", "TrailerUrl", "Year" },
+                table: "Producers",
+                columns: new[] { "Id", "About", "ImageUrl", "Name", "Surname" },
                 values: new object[,]
                 {
-                    { "Peaky Blinders", 18, "A notorious gang in 1919 Birmingham, England, is led by the fierce Tommy Shelby, a crime boss set on moving up in the world no matter the cost.", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-image.jpg?alt=media&token=356b23bd-755e-4daf-822e-50a029c87f9c", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-search-image.jpg?alt=media&token=8ea5abb6-b969-4bf4-a20a-13ffcd3a07fd", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-trailer-image.jpg?alt=media&token=a99966d3-1793-4cac-97fc-80b9b75686f0", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-trailer.mp4?alt=media&token=c5e7aef9-cfcf-4a31-8e77-8c678d95bd7b", 2013 },
-                    { "Wednesday", 14, "Follows Wednesday Addams' years as a student, when she attempts to master her emerging psychic ability, thwart and solve the mystery that embroiled her parents.", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-image.jpg?alt=media&token=54703ac5-97e4-48fb-929b-3b7c57759764", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-search-image.jpg?alt=media&token=ea516245-d4a0-4649-8c67-68bc39cbda9b", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-trailer-image.jpg?alt=media&token=6763d2c7-2994-46ff-9d61-45956081e0d4", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-trailer.mp4?alt=media&token=cd22789d-43ef-477d-bf5d-442adee817f0", 2022 }
+                    { 1, "zor oglan", null, "Murad", "Musayev" },
+                    { 2, "zor oglan", null, "Parvin", "Aliyev" },
+                    { 3, "zor oglan", null, "Rustem", "Bayramov" }
                 });
 
             migrationBuilder.InsertData(
@@ -302,6 +402,39 @@ namespace NovaStream.Persistence.Migrations
                 table: "Users",
                 columns: new[] { "Id", "AvatarUrl", "Email", "Nickname", "PasswordHash" },
                 values: new object[] { 1, "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Avatars%2Favatar-1.png?alt=media&token=4fecc3bf-9511-4186-9c25-0347128c0181", "admin@novastream.api", "Admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" });
+
+            migrationBuilder.InsertData(
+                table: "Movies",
+                columns: new[] { "Name", "Age", "Description", "ImageUrl", "ProducerId", "SearchImageUrl", "TrailerImageUrl", "TrailerUrl", "VideoDescription", "VideoImageUrl", "VideoName", "VideoUrl", "Year" },
+                values: new object[] { "Interstellar", 13, "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival. Earth's future has been riddled by disasters, famines, and droughts. There is only one way to ensure mankind's survival: Interstellar travel.", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-image.jpg?alt=media&token=0015bcdb-c50b-4b4b-a86f-ee3c1a5efc8e", 2, "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-search-image.jpg?alt=media&token=5799d5f0-f87d-424c-9c62-b0ba5904f499", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-trailer-image.jpg?alt=media&token=1da9a664-0a92-4e35-90d9-7905fd33dfdf", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-trailer.mp4?alt=media&token=3e5984d4-5fb8-438b-aa9a-3778e3f52ba8", "With humanity teetering on the brink of extinction, a group of astronauts travels through a wormhole in search of another inhabitable planet.", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-video-image.jpg?alt=media&token=5a18e02b-3976-4116-a591-d6e334c50772", "Episode", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Movies%2FInterstellar%2Finterstellar-video.mp4?alt=media&token=aa6a5dca-7570-45de-87ed-22d35d25189b", 2014 });
+
+            migrationBuilder.InsertData(
+                table: "Serials",
+                columns: new[] { "Name", "Age", "Description", "ImageUrl", "ProducerId", "SearchImageUrl", "TrailerImageUrl", "TrailerUrl", "Year" },
+                values: new object[,]
+                {
+                    { "Peaky Blinders", 18, "A notorious gang in 1919 Birmingham, England, is led by the fierce Tommy Shelby, a crime boss set on moving up in the world no matter the cost.", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-image.jpg?alt=media&token=356b23bd-755e-4daf-822e-50a029c87f9c", 1, "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-search-image.jpg?alt=media&token=8ea5abb6-b969-4bf4-a20a-13ffcd3a07fd", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-trailer-image.jpg?alt=media&token=a99966d3-1793-4cac-97fc-80b9b75686f0", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FPeaky%20Blinders%2Fpeaky-blinders-trailer.mp4?alt=media&token=c5e7aef9-cfcf-4a31-8e77-8c678d95bd7b", 2013 },
+                    { "Wednesday", 14, "Follows Wednesday Addams' years as a student, when she attempts to master her emerging psychic ability, thwart and solve the mystery that embroiled her parents.", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-image.jpg?alt=media&token=54703ac5-97e4-48fb-929b-3b7c57759764", 3, "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-search-image.jpg?alt=media&token=ea516245-d4a0-4649-8c67-68bc39cbda9b", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-trailer-image.jpg?alt=media&token=6763d2c7-2994-46ff-9d61-45956081e0d4", "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Serials%2FWednesday%2Fwednesday-trailer.mp4?alt=media&token=cd22789d-43ef-477d-bf5d-442adee817f0", 2022 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SoonCategories",
+                columns: new[] { "CategoryId", "SoonName" },
+                values: new object[,]
+                {
+                    { 2, "John Wick: Chapter 4" },
+                    { 7, "John Wick: Chapter 4" },
+                    { 8, "John Wick: Chapter 4" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "MovieActors",
+                columns: new[] { "ActorId", "MovieName" },
+                values: new object[,]
+                {
+                    { 2, "Interstellar" },
+                    { 3, "Interstellar" }
+                });
 
             migrationBuilder.InsertData(
                 table: "MovieCategories",
@@ -330,6 +463,15 @@ namespace NovaStream.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "SerialActors",
+                columns: new[] { "ActorId", "SerialName" },
+                values: new object[,]
+                {
+                    { 1, "Peaky Blinders" },
+                    { 2, "Peaky Blinders" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "SerialCategories",
                 columns: new[] { "CategoryId", "SerialName" },
                 values: new object[,]
@@ -340,16 +482,6 @@ namespace NovaStream.Persistence.Migrations
                     { 9, "Wednesday" },
                     { 10, "Wednesday" },
                     { 11, "Wednesday" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "SoonCategories",
-                columns: new[] { "CategoryId", "SoonName" },
-                values: new object[,]
-                {
-                    { 2, "John Wick: Chapter 4" },
-                    { 7, "John Wick: Chapter 4" },
-                    { 8, "John Wick: Chapter 4" }
                 });
 
             migrationBuilder.InsertData(
@@ -370,6 +502,11 @@ namespace NovaStream.Persistence.Migrations
                 column: "SeasonId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MovieActors_ActorId",
+                table: "MovieActors",
+                column: "ActorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MovieCategories_CategoryId",
                 table: "MovieCategories",
                 column: "CategoryId");
@@ -380,9 +517,19 @@ namespace NovaStream.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Movies_ProducerId",
+                table: "Movies",
+                column: "ProducerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Seasons_SerialName",
                 table: "Seasons",
                 column: "SerialName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SerialActors_ActorId",
+                table: "SerialActors",
+                column: "ActorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SerialCategories_CategoryId",
@@ -393,6 +540,11 @@ namespace NovaStream.Persistence.Migrations
                 name: "IX_SerialMarks_UserId",
                 table: "SerialMarks",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Serials_ProducerId",
+                table: "Serials",
+                column: "ProducerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SoonCategories_CategoryId",
@@ -406,10 +558,16 @@ namespace NovaStream.Persistence.Migrations
                 name: "Episodes");
 
             migrationBuilder.DropTable(
+                name: "MovieActors");
+
+            migrationBuilder.DropTable(
                 name: "MovieCategories");
 
             migrationBuilder.DropTable(
                 name: "MovieMarks");
+
+            migrationBuilder.DropTable(
+                name: "SerialActors");
 
             migrationBuilder.DropTable(
                 name: "SerialCategories");
@@ -427,6 +585,9 @@ namespace NovaStream.Persistence.Migrations
                 name: "Movies");
 
             migrationBuilder.DropTable(
+                name: "Actors");
+
+            migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
@@ -437,6 +598,9 @@ namespace NovaStream.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Serials");
+
+            migrationBuilder.DropTable(
+                name: "Producers");
         }
     }
 }
