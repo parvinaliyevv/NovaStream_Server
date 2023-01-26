@@ -38,7 +38,7 @@ public class AccountController : ControllerBase
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var user = new User() { Email = dto.Email };
+        var user = dto.Adapt<User>();
 
         if (!await _userManager.ExistsAsync(user.Email))
         {
