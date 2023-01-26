@@ -4,12 +4,12 @@
     "C:\\Users\\HP\\source\\repos\\NovaStream\\Infrastructure\\NovaStream.Infrastructure\\NovaStream.Infrastructure.csproj": {}
   },
   "projects": {
-    "C:\\Users\\HP\\source\\repos\\NovaStream\\Core\\NovaStream.Applicaton\\NovaStream.Applicaton.csproj": {
+    "C:\\Users\\HP\\source\\repos\\NovaStream\\Core\\NovaStream.Applicaton\\NovaStream.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\source\\repos\\NovaStream\\Core\\NovaStream.Applicaton\\NovaStream.Applicaton.csproj",
-        "projectName": "NovaStream.Applicaton",
-        "projectPath": "C:\\Users\\HP\\source\\repos\\NovaStream\\Core\\NovaStream.Applicaton\\NovaStream.Applicaton.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\source\\repos\\NovaStream\\Core\\NovaStream.Applicaton\\NovaStream.Application.csproj",
+        "projectName": "NovaStream.Application",
+        "projectPath": "C:\\Users\\HP\\source\\repos\\NovaStream\\Core\\NovaStream.Applicaton\\NovaStream.Application.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\HP\\source\\repos\\NovaStream\\Core\\NovaStream.Applicaton\\obj\\",
         "projectStyle": "PackageReference",
@@ -48,6 +48,16 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.2.2, )"
+            },
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -157,8 +167,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\HP\\source\\repos\\NovaStream\\Core\\NovaStream.Applicaton\\NovaStream.Applicaton.csproj": {
-                "projectPath": "C:\\Users\\HP\\source\\repos\\NovaStream\\Core\\NovaStream.Applicaton\\NovaStream.Applicaton.csproj"
+              "C:\\Users\\HP\\source\\repos\\NovaStream\\Core\\NovaStream.Applicaton\\NovaStream.Application.csproj": {
+                "projectPath": "C:\\Users\\HP\\source\\repos\\NovaStream\\Core\\NovaStream.Applicaton\\NovaStream.Application.csproj"
               }
             }
           }
@@ -172,6 +182,20 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.Extensions.Configuration.Abstractions": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[6.25.1, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[6.25.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
