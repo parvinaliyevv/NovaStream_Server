@@ -15,6 +15,33 @@ public class MarkController : ControllerBase
     }
 
 
+    [HttpGet("[Action]")]
+    public async Task<IActionResult> GetMarkedVideos()
+    {
+        try
+        {
+            var user = await _userManager.ReturnUserFromContextAsync(HttpContext);
+
+            if (user is null) return Unauthorized();
+
+            var markedVideos = new List<MarkDto>();
+
+            markedVideos.AddRange(_dbContext.MovieMarks.Include(mm => mm.Movie).Where(mm => mm.UserEmail == user.Email).Select(mm => new MarkDto(mm.Movie.ImageUrl) { Name = mm.MovieName }));
+            markedVideos.AddRange(_dbContext.SerialMarks.Include(ms => ms.Serial).Where(ms => ms.UserEmail == user.Email).Select(ms => new MarkDto(ms.Serial.ImageUrl) { Name = ms.SerialName }));
+
+            markedVideos.Sort((a, b) => string.Compare(a.Name, b.Name));
+
+            var json = JsonConvert.SerializeObject(markedVideos, Formatting.Indented);
+
+            return Ok(json);
+        }
+        catch
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+
     [HttpPost("[Action]")]
     public async Task<IActionResult> MarkMovie([FromQuery] string name)
     {
@@ -53,6 +80,42 @@ public class MarkController : ControllerBase
     }
 
     [HttpPost("[Action]")]
+    public async Task<IActionResult> UnmarkMovie([FromQuery] string name)
+    {
+        try
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = _userManager.ReturnUserFromContext(HttpContext);
+
+            if (user is null) return Unauthorized();
+
+            var movie = _dbContext.Movies.FirstOrDefault(s => s.Name == name);
+
+            if (movie is null) return NotFound();
+
+            var movieMark = _dbContext.MovieMarks.FirstOrDefault(ms => ms.MovieName == movie.Name && ms.UserEmail == user.Email);
+
+            if (movieMark is null)
+            {
+                ModelState.AddModelError("Unmarked", "This movie is unmarked!");
+
+                return BadRequest(ModelState);
+            }
+
+            _dbContext.MovieMarks.Remove(movieMark);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
+        }
+        catch
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+
+    [HttpPost("[Action]")]
     public async Task<IActionResult> MarkSerial([FromQuery] string name)
     {
         try
@@ -89,25 +152,34 @@ public class MarkController : ControllerBase
         }
     }
 
-    [HttpGet("[Action]")]
-    public async Task<IActionResult> GetMarkedVideos()
+    [HttpPost("[Action]")]
+    public async Task<IActionResult> UnmarkSerial([FromQuery] string name)
     {
         try
         {
-            var user = await _userManager.ReturnUserFromContextAsync(HttpContext);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = _userManager.ReturnUserFromContext(HttpContext);
 
             if (user is null) return Unauthorized();
 
-            var markedVideos = new List<MarkDto>();
+            var serial = _dbContext.Serials.FirstOrDefault(s => s.Name == name);
 
-            markedVideos.AddRange(_dbContext.MovieMarks.Include(mm => mm.Movie).Where(mm => mm.UserEmail == user.Email).Select(mm => new MarkDto(mm.Movie.ImageUrl) { Name = mm.MovieName }));
-            markedVideos.AddRange(_dbContext.SerialMarks.Include(ms => ms.Serial).Where(ms => ms.UserEmail == user.Email).Select(ms => new MarkDto(ms.Serial.ImageUrl) { Name = ms.SerialName }));
+            if (serial is null) return NotFound();
 
-            markedVideos.Sort((a, b) => string.Compare(a.Name, b.Name));
+            var serialMark = _dbContext.SerialMarks.FirstOrDefault(ms => ms.SerialName == serial.Name && ms.UserEmail == user.Email);
 
-            var json = JsonConvert.SerializeObject(markedVideos, Formatting.Indented);
+            if (serialMark is null)
+            {
+                ModelState.AddModelError("Unmarked", "This serial is unmarked!");
 
-            return Ok(json);
+                return BadRequest(ModelState);
+            }
+
+            _dbContext.SerialMarks.Remove(serialMark);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
         }
         catch
         {
