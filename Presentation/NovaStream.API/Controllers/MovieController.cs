@@ -1,6 +1,6 @@
 ﻿namespace NovaStream.API.Controllers;
 
-[ApiController]
+[ApiController, Authorize]
 [Route("api/[controller]")]
 public class MovieController : ControllerBase
 {
@@ -33,8 +33,6 @@ public class MovieController : ControllerBase
     [HttpGet("[Action]")]
     public async Task<IActionResult> Details([FromQuery] string name)
     {
-        await Task.CompletedTask;
-
         try
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

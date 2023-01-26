@@ -11,6 +11,9 @@ public class AppDbContext: DbContext
 	public DbSet<Season> Seasons { get; set; }
 	public DbSet<Category> Categories { get; set; }
 
+	public DbSet<MovieMark> MovieMarks { get; set; }
+	public DbSet<SerialMark> SerialMarks { get; set; }
+
 
 	public AppDbContext(DbContextOptions options): base(options) { }
 
@@ -25,5 +28,8 @@ public class AppDbContext: DbContext
 		modelBuilder.ApplyConfiguration(new CategoryConfiguration());
 		modelBuilder.ApplyConfiguration(new SerialCategoryConfiguration());
 		modelBuilder.ApplyConfiguration(new MovieCategoryConfiguration());
+
+		modelBuilder.ApplyConfiguration(new MovieMarkConfiguration());
+		modelBuilder.ApplyConfiguration(new SerialMarkConfiguration());
 	}
 }

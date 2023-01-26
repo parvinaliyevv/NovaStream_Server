@@ -131,6 +131,54 @@ namespace NovaStream.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MovieMarks",
+                columns: table => new
+                {
+                    MovieName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserEmail = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MovieMarks", x => new { x.MovieName, x.UserEmail });
+                    table.ForeignKey(
+                        name: "FK_MovieMarks_Movies_MovieName",
+                        column: x => x.MovieName,
+                        principalTable: "Movies",
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MovieMarks_Users_UserEmail",
+                        column: x => x.UserEmail,
+                        principalTable: "Users",
+                        principalColumn: "Email",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SerialMarks",
+                columns: table => new
+                {
+                    SerialName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserEmail = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SerialMarks", x => new { x.SerialName, x.UserEmail });
+                    table.ForeignKey(
+                        name: "FK_SerialMarks_Serials_SerialName",
+                        column: x => x.SerialName,
+                        principalTable: "Serials",
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SerialMarks_Users_UserEmail",
+                        column: x => x.UserEmail,
+                        principalTable: "Users",
+                        principalColumn: "Email",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Episodes",
                 columns: table => new
                 {
@@ -233,6 +281,11 @@ namespace NovaStream.Persistence.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MovieMarks_UserEmail",
+                table: "MovieMarks",
+                column: "UserEmail");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Seasons_SerialName",
                 table: "Seasons",
                 column: "SerialName");
@@ -241,6 +294,11 @@ namespace NovaStream.Persistence.Migrations
                 name: "IX_SerialCategories_CategoryId",
                 table: "SerialCategories",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SerialMarks_UserEmail",
+                table: "SerialMarks",
+                column: "UserEmail");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -252,10 +310,13 @@ namespace NovaStream.Persistence.Migrations
                 name: "MovieCategories");
 
             migrationBuilder.DropTable(
+                name: "MovieMarks");
+
+            migrationBuilder.DropTable(
                 name: "SerialCategories");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "SerialMarks");
 
             migrationBuilder.DropTable(
                 name: "Seasons");
@@ -265,6 +326,9 @@ namespace NovaStream.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Serials");

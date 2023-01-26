@@ -11,7 +11,7 @@ using NovaStream.Persistence.Data.Contexts;
 namespace NovaStream.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230103100800_init")]
+    [Migration("20230104092142_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -213,6 +213,21 @@ namespace NovaStream.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.MovieMark", b =>
+                {
+                    b.Property<string>("MovieName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserEmail")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("MovieName", "UserEmail");
+
+                    b.HasIndex("UserEmail");
+
+                    b.ToTable("MovieMarks");
+                });
+
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Season", b =>
                 {
                     b.Property<int>("Id")
@@ -311,6 +326,21 @@ namespace NovaStream.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.SerialMark", b =>
+                {
+                    b.Property<string>("SerialName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserEmail")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("SerialName", "UserEmail");
+
+                    b.HasIndex("UserEmail");
+
+                    b.ToTable("SerialMarks");
+                });
+
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.User", b =>
                 {
                     b.Property<string>("Email")
@@ -355,6 +385,25 @@ namespace NovaStream.Persistence.Migrations
                     b.Navigation("Movie");
                 });
 
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.MovieMark", b =>
+                {
+                    b.HasOne("NovaStream.Domain.Entities.Concrete.Movie", "Movie")
+                        .WithMany("MovieMarks")
+                        .HasForeignKey("MovieName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NovaStream.Domain.Entities.Concrete.User", "User")
+                        .WithMany("MovieMarks")
+                        .HasForeignKey("UserEmail")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Season", b =>
                 {
                     b.HasOne("NovaStream.Domain.Entities.Concrete.Serial", "Serial")
@@ -385,6 +434,25 @@ namespace NovaStream.Persistence.Migrations
                     b.Navigation("Serial");
                 });
 
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.SerialMark", b =>
+                {
+                    b.HasOne("NovaStream.Domain.Entities.Concrete.Serial", "Serial")
+                        .WithMany("SerialMarks")
+                        .HasForeignKey("SerialName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NovaStream.Domain.Entities.Concrete.User", "User")
+                        .WithMany("SerialMarks")
+                        .HasForeignKey("UserEmail")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Serial");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Category", b =>
                 {
                     b.Navigation("MovieCategories");
@@ -395,6 +463,8 @@ namespace NovaStream.Persistence.Migrations
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Movie", b =>
                 {
                     b.Navigation("MovieCategories");
+
+                    b.Navigation("MovieMarks");
                 });
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Season", b =>
@@ -407,6 +477,15 @@ namespace NovaStream.Persistence.Migrations
                     b.Navigation("Seasons");
 
                     b.Navigation("SerialCategories");
+
+                    b.Navigation("SerialMarks");
+                });
+
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.User", b =>
+                {
+                    b.Navigation("MovieMarks");
+
+                    b.Navigation("SerialMarks");
                 });
 #pragma warning restore 612, 618
         }

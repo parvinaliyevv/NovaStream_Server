@@ -1,5 +1,6 @@
 ﻿global using System.Net;
 global using System.Text;
+global using System.Security.Claims;
 
 global using NovaStream.Application.Services;
 global using NovaStream.Persistence.Services;

@@ -25,7 +25,7 @@ public class HomeController: ControllerBase
             videos.AddRange(_dbContext.Movies.ProjectToType<MovieDto>());
             videos.AddRange(_dbContext.Serials.ProjectToType<SerialDto>());
 
-            // videos.Sort();
+            videos.Sort((a, b) => string.Compare(a.Name, b.Name));
 
             var json = $"\"videos\": {JsonConvert.SerializeObject(videos, Formatting.Indented)}";
 
