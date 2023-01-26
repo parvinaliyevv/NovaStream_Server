@@ -11,7 +11,7 @@ using NovaStream.Persistence.Data.Contexts;
 namespace NovaStream.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221230153158_init")]
+    [Migration("20221231100352_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,9 +31,20 @@ namespace NovaStream.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("EpisodeName")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
 
                     b.Property<int>("SeasonId")
                         .HasColumnType("int");
@@ -47,6 +58,38 @@ namespace NovaStream.Persistence.Migrations
                     b.HasIndex("SeasonId");
 
                     b.ToTable("Episodes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Baza",
+                            ImagePath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
+                            Name = "Episode 1",
+                            Number = 1,
+                            SeasonId = 1,
+                            VideoPath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FSerials%2FPeaky%20Blinders%2FSeason%201%2FPeaky-Blinders-S01E01.mp4?alt=media&token=728dbcd3-6215-4e76-ae69-6849ba9896f5"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Baza",
+                            ImagePath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
+                            Name = "Episode 2",
+                            Number = 2,
+                            SeasonId = 1,
+                            VideoPath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FSerials%2FPeaky%20Blinders%2FSeason%201%2FPeaky-Blinders-S01E02.mp4?alt=media&token=f2bcb626-2a22-4a69-bdb8-69fef93ca2c9"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Baza",
+                            ImagePath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
+                            Name = "Episode 3",
+                            Number = 1,
+                            SeasonId = 2,
+                            VideoPath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FSerials%2FPeaky%20Blinders%2FSeason%202%2FPeaky-Blinders-S02E01.mp4?alt=media&token=740e66cd-9759-4b7b-8592-8a93919a059b"
+                        });
                 });
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Movie", b =>
@@ -72,6 +115,16 @@ namespace NovaStream.Persistence.Migrations
                     b.HasKey("Name");
 
                     b.ToTable("Movies");
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "Interstellar",
+                            Description = "With humanity teetering on the brink of extinction, a group of astronauts travels through a wormhole in search of another inhabitable planet.",
+                            ImagePath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FInterstellar%2FInterstellar.png?alt=media&token=0a6c45f5-fc92-4b66-8d50-7222ae8815b8",
+                            VideoPath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FMovies%2FInterstellar%2FInterstellar.mp4?alt=media&token=0fbe924c-8746-4132-8440-f8331d5214f6",
+                            Year = 2014
+                        });
                 });
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Season", b =>
@@ -94,6 +147,20 @@ namespace NovaStream.Persistence.Migrations
                     b.HasIndex("SerialName");
 
                     b.ToTable("Seasons");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Number = 1,
+                            SerialName = "Peaky Blinders"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Number = 2,
+                            SerialName = "Peaky Blinders"
+                        });
                 });
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Serial", b =>
@@ -115,6 +182,15 @@ namespace NovaStream.Persistence.Migrations
                     b.HasKey("Name");
 
                     b.ToTable("Serials");
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "Peaky Blinders",
+                            Description = "A notorious gang in 1919 Birmingham, England, is led by the fierce Tommy Shelby, a crime boss set on moving up in the world no matter the cost.",
+                            ImagePath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders.jpg?alt=media&token=aef25bbd-482b-49df-b286-b5ba1a1740d0",
+                            Year = 2013
+                        });
                 });
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.User", b =>

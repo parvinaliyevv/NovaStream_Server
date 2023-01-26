@@ -14,12 +14,13 @@ public class MovieController : ControllerBase
 
 
     [HttpGet("[Action]")]
-    public IActionResult Read()
+    public async Task<IActionResult> Index()
     {
         try
         {
-            var videos = _dbContext.Movies.ProjectToType<MovieDto>();
-            var json = $"\"videos\":{JsonConvert.SerializeObject(videos)}";
+            var movies = await _dbContext.Movies.ProjectToType<MovieDto>().ToListAsync();
+
+            var json = $"\"movies\": {JsonConvert.SerializeObject(movies, Formatting.Indented)}";
 
             return Ok(json);
         }
@@ -30,23 +31,24 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("[Action]")]
-    public IActionResult Details([FromQuery] string name)
+    public async Task<IActionResult> Details([FromQuery] string name)
     {
+        await Task.CompletedTask;
+
         try
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var video = _dbContext.Movies?.FirstOrDefault(v => v.Name == name)?.Adapt<DetailsMovieDto>();
+            var movie = _dbContext.Movies.FirstOrDefault(m => m.Name == name)?.Adapt<MovieDetailsDto>();
 
-            if (video != null)
+            if (movie is not null)
             {
-                var json = JsonConvert.SerializeObject(video);
+                var json = JsonConvert.SerializeObject(movie, Formatting.Indented);
 
                 return Ok(json);
             }
-            else ModelState.AddModelError("Exists", "Movie with this name doesn't exist");
 
-            return BadRequest(ModelState);
+            return NotFound();
         }
         catch
         {
