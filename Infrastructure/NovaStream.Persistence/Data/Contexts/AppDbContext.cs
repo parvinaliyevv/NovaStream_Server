@@ -3,6 +3,7 @@
 public class AppDbContext: DbContext
 {
 	public DbSet<User> Users { get; set; }
+	public DbSet<Video> Videos { get; set; }
 
 
 	public AppDbContext(DbContextOptions options): base(options) { }
@@ -11,5 +12,6 @@ public class AppDbContext: DbContext
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.ApplyConfiguration(new UserConfiguration());
+		modelBuilder.ApplyConfiguration(new VideoConfiguration());
 	}
 }
