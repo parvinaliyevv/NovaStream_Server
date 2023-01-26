@@ -1,6 +1,6 @@
 ﻿namespace NovaStream.API.Controllers;
 
-[ApiController, Authorize]
+[ApiController]
 [Route("api/[controller]")]
 public class SerialController : ControllerBase
 {
@@ -45,7 +45,8 @@ public class SerialController : ControllerBase
 
                 serial.SeasonCount = _dbContext.Seasons.Count(s => s.SerialName == name);
                 serial.Episodes = await _dbContext.Episodes.Where(e => e.SeasonId == season.Id).ProjectToType<EpisodeDto>().ToListAsync();
-
+                serial.Categories = await _dbContext.SerialCategories.Include(sc => sc.Category).Where(sc => sc.SerialName == name).Select(sc => sc.Category).ProjectToType<CategoryDto>().ToListAsync();
+                
                 var json = JsonConvert.SerializeObject(serial, Formatting.Indented);
 
                 return Ok(json);

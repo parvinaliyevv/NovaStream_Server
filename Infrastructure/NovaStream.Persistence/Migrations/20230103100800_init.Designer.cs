@@ -11,7 +11,7 @@ using NovaStream.Persistence.Data.Contexts;
 namespace NovaStream.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221231100352_init")]
+    [Migration("20230103100800_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,6 +22,55 @@ namespace NovaStream.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Drama"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Crime"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Historical"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Adventure"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Science fiction"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Detective"
+                        });
+                });
 
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Episode", b =>
                 {
@@ -85,7 +134,7 @@ namespace NovaStream.Persistence.Migrations
                             Id = 3,
                             Description = "Baza",
                             ImagePath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
-                            Name = "Episode 3",
+                            Name = "Episode 1",
                             Number = 1,
                             SeasonId = 2,
                             VideoPath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FSerials%2FPeaky%20Blinders%2FSeason%202%2FPeaky-Blinders-S02E01.mp4?alt=media&token=740e66cd-9759-4b7b-8592-8a93919a059b"
@@ -124,6 +173,43 @@ namespace NovaStream.Persistence.Migrations
                             ImagePath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FInterstellar%2FInterstellar.png?alt=media&token=0a6c45f5-fc92-4b66-8d50-7222ae8815b8",
                             VideoPath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Videos%2FMovies%2FInterstellar%2FInterstellar.mp4?alt=media&token=0fbe924c-8746-4132-8440-f8331d5214f6",
                             Year = 2014
+                        });
+                });
+
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.MovieCategory", b =>
+                {
+                    b.Property<string>("MovieName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MovieName", "CategoryId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("MovieCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            MovieName = "Interstellar",
+                            CategoryId = 1
+                        },
+                        new
+                        {
+                            MovieName = "Interstellar",
+                            CategoryId = 4
+                        },
+                        new
+                        {
+                            MovieName = "Interstellar",
+                            CategoryId = 5
+                        },
+                        new
+                        {
+                            MovieName = "Interstellar",
+                            CategoryId = 6
                         });
                 });
 
@@ -188,8 +274,40 @@ namespace NovaStream.Persistence.Migrations
                         {
                             Name = "Peaky Blinders",
                             Description = "A notorious gang in 1919 Birmingham, England, is led by the fierce Tommy Shelby, a crime boss set on moving up in the world no matter the cost.",
-                            ImagePath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders.jpg?alt=media&token=aef25bbd-482b-49df-b286-b5ba1a1740d0",
+                            ImagePath = "https://firebasestorage.googleapis.com/v0/b/neftlixtestapi.appspot.com/o/Images%2FPeaky%20Blinders%2FPeaky%20Blinders.jpg?alt=media&token=872defbb-acbc-4e8f-8a02-f61a27ff3988",
                             Year = 2013
+                        });
+                });
+
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.SerialCategory", b =>
+                {
+                    b.Property<string>("SerialName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SerialName", "CategoryId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("SerialCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            SerialName = "Peaky Blinders",
+                            CategoryId = 1
+                        },
+                        new
+                        {
+                            SerialName = "Peaky Blinders",
+                            CategoryId = 2
+                        },
+                        new
+                        {
+                            SerialName = "Peaky Blinders",
+                            CategoryId = 3
                         });
                 });
 
@@ -218,6 +336,25 @@ namespace NovaStream.Persistence.Migrations
                     b.Navigation("Season");
                 });
 
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.MovieCategory", b =>
+                {
+                    b.HasOne("NovaStream.Domain.Entities.Concrete.Category", "Category")
+                        .WithMany("MovieCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NovaStream.Domain.Entities.Concrete.Movie", "Movie")
+                        .WithMany("MovieCategories")
+                        .HasForeignKey("MovieName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Movie");
+                });
+
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Season", b =>
                 {
                     b.HasOne("NovaStream.Domain.Entities.Concrete.Serial", "Serial")
@@ -229,6 +366,37 @@ namespace NovaStream.Persistence.Migrations
                     b.Navigation("Serial");
                 });
 
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.SerialCategory", b =>
+                {
+                    b.HasOne("NovaStream.Domain.Entities.Concrete.Category", "Category")
+                        .WithMany("SerialCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NovaStream.Domain.Entities.Concrete.Serial", "Serial")
+                        .WithMany("SerialCategories")
+                        .HasForeignKey("SerialName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Serial");
+                });
+
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Category", b =>
+                {
+                    b.Navigation("MovieCategories");
+
+                    b.Navigation("SerialCategories");
+                });
+
+            modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Movie", b =>
+                {
+                    b.Navigation("MovieCategories");
+                });
+
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Season", b =>
                 {
                     b.Navigation("Episodes");
@@ -237,6 +405,8 @@ namespace NovaStream.Persistence.Migrations
             modelBuilder.Entity("NovaStream.Domain.Entities.Concrete.Serial", b =>
                 {
                     b.Navigation("Seasons");
+
+                    b.Navigation("SerialCategories");
                 });
 #pragma warning restore 612, 618
         }

@@ -11,4 +11,5 @@ public abstract class VideoDetailsDto: BaseVideoDto
 {
     public int Year { get; set; }
     public string Description { get; set; }
+    public ICollection<CategoryDto> Categories { get; set; }
 }

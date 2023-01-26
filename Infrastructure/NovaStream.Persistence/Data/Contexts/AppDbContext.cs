@@ -4,9 +4,12 @@ public class AppDbContext: DbContext
 {
 	public DbSet<User> Users { get; set; }
 	public DbSet<Serial> Serials { get; set; }
+	public DbSet<SerialCategory> SerialCategories { get; set; } // 3rd class
 	public DbSet<Movie> Movies { get; set; }
+	public DbSet<MovieCategory> MovieCategories { get; set; } // 3rd class
 	public DbSet<Episode> Episodes { get; set; }
 	public DbSet<Season> Seasons { get; set; }
+	public DbSet<Category> Categories { get; set; }
 
 
 	public AppDbContext(DbContextOptions options): base(options) { }
@@ -19,5 +22,8 @@ public class AppDbContext: DbContext
 		modelBuilder.ApplyConfiguration(new MovieConfiguration());
 		modelBuilder.ApplyConfiguration(new SeasonConfiguration());
 		modelBuilder.ApplyConfiguration(new EpisodeConfiguration());
+		modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+		modelBuilder.ApplyConfiguration(new SerialCategoryConfiguration());
+		modelBuilder.ApplyConfiguration(new MovieCategoryConfiguration());
 	}
 }

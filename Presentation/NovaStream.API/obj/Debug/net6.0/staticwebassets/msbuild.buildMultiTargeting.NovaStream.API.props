@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\NovaStream.API.props" />
+</Project>

@@ -1,6 +1,6 @@
 ﻿namespace NovaStream.Domain.Entities.Abstract;
 
-public abstract class Video
+public class Video
 {
     public string Name { get; set; }
     public int Year { get; set; }

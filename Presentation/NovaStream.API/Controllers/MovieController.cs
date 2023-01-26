@@ -1,6 +1,6 @@
 ﻿namespace NovaStream.API.Controllers;
 
-[ApiController, Authorize]
+[ApiController]
 [Route("api/[controller]")]
 public class MovieController : ControllerBase
 {
@@ -43,6 +43,8 @@ public class MovieController : ControllerBase
 
             if (movie is not null)
             {
+                movie.Categories = await _dbContext.MovieCategories.Include(mc => mc.Category).Where(mc => mc.MovieName == name).Select(mc => mc.Category).ProjectToType<CategoryDto>().ToListAsync();
+                
                 var json = JsonConvert.SerializeObject(movie, Formatting.Indented);
 
                 return Ok(json);
