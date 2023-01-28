@@ -195,6 +195,10 @@
               "target": "Package",
               "version": "[3.7.101.58, )"
             },
+            "Azure.Storage.Blobs": {
+              "target": "Package",
+              "version": "[12.14.1, )"
+            },
             "Microsoft.Extensions.Configuration.Abstractions": {
               "target": "Package",
               "version": "[6.0.0, )"

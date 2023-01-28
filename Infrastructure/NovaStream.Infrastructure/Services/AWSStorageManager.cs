@@ -1,6 +1,6 @@
 ﻿namespace NovaStream.Infrastructure.Services;
 
-public class AWSStorageManager : IStorageManager
+public class AWSStorageManager : IAWSStorageManager
 {
     private readonly AmazonWebServicesOptions _storageOptions;
 

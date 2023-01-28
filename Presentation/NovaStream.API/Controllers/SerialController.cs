@@ -7,15 +7,15 @@ public class SerialController : ControllerBase
     private readonly AppDbContext _dbContext;
 
     private readonly IUserManager _userManager;
-    private readonly IStorageManager _storageManager;
+    private readonly IAWSStorageManager _awsStorageManager;
 
 
-    public SerialController(AppDbContext dbContext, IUserManager userManager, IStorageManager storageManager)
+    public SerialController(AppDbContext dbContext, IUserManager userManager, IAWSStorageManager awsStorageManager)
     {
         _dbContext = dbContext;
 
         _userManager = userManager;
-        _storageManager = storageManager;
+        _awsStorageManager = awsStorageManager;
     }
 
 
@@ -128,7 +128,7 @@ public class SerialController : ControllerBase
                 var episode = season.Episodes.FirstOrDefault(e => e.Number == episodeNumber);
 
                 if (episode is not null) 
-                    return Ok(_storageManager.GetSignedUrl(episode.VideoUrl, TimeSpan.FromHours(7)));
+                    return Ok(_awsStorageManager.GetSignedUrl(episode.VideoUrl, TimeSpan.FromHours(7)));
             }
 
             return NotFound();

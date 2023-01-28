@@ -6,6 +6,6 @@ public class EpisodeProfile
 	{
         TypeAdapterConfig<Episode, EpisodeDto>.NewConfig()
             .Map(dest => dest.VideoLength, src => Manufacturer.ManufactureTime(src.VideoLength))
-            .Map(dest => dest.ImageUrl, src => storageManager.GetSignedUrl(src.ImageUrl, TimeSpan.FromHours(1)));
+            .Map(dest => dest.ImageUrl, src => storageManager.GetSignedUrl(src.ImageUrl));
     }
 }
