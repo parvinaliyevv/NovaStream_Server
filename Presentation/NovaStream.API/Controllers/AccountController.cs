@@ -5,13 +5,15 @@
 public class AccountController : ControllerBase
 {
     private readonly IUserManager _userManager;
+    private readonly IMailManager _mailManager;
     private readonly ITokenGeneratorService _tokenGeneratorService;
 
 
-    public AccountController(ITokenGeneratorService tokenGeneratorService, IUserManager userManager)
+    public AccountController(ITokenGeneratorService tokenGeneratorService, IUserManager userManager, IMailManager mailManager)
     {
         _userManager = userManager;
         _tokenGeneratorService = tokenGeneratorService;
+        _mailManager = mailManager;
     }
 
 
@@ -155,6 +157,92 @@ public class AccountController : ControllerBase
             var result = await _userManager.DeleteUserAsync(user);
 
             return Ok(result);
+        }
+        catch
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpGet("[Action]")]
+    public async Task<IActionResult> SendConfirmationPIN([FromQuery] string mail)
+    {
+        try
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = await _userManager.FindUserByEmailAsync(mail);
+
+            if (user is not null)
+            {
+                var confirmPIN = MailManager.CreateConfirmationPIN(4);
+
+                await _mailManager.SendMailToAsync(confirmPIN, mail);
+
+                user.ConfirmationPIN = confirmPIN;
+
+                var result = await _userManager.UpdateUserAsync(user);
+
+                return Ok(result);
+            }
+
+            return NotFound();
+        }
+        catch
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpGet("[Action]")]
+    public async Task<IActionResult> CheckConfirmationPIN([FromQuery] string mail, [FromQuery] string pinCode)
+    {
+        try
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = await _userManager.FindUserByEmailAsync(mail);
+
+            if (user is not null)
+            {
+                bool result = user.ConfirmationPIN == pinCode;
+
+                if (result) 
+                {
+                    user.ConfirmationPIN = "";
+                    await _userManager.UpdateUserAsync(user);
+                }
+
+                return Ok(result);
+            }
+
+            return NotFound();
+        }
+        catch
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpGet("[Action]")]
+    public async Task<IActionResult> DeleteConfirmationPIN([FromQuery] string mail)
+    {
+        try
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = await _userManager.FindUserByEmailAsync(mail);
+
+            if (user is not null)
+            {
+                user.ConfirmationPIN = "";
+
+                var result = await _userManager.UpdateUserAsync(user);
+
+                return Ok(result);
+            }
+
+            return NotFound();
         }
         catch
         {
