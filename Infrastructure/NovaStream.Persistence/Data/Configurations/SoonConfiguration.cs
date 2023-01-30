@@ -12,8 +12,8 @@ public class SoonConfiguration : IEntityTypeConfiguration<Soon>
             {
                 Name = "John Wick: Chapter 4",
                 Description = "John Wick uncovers a path to defeating The High Table. But before he can earn his freedom, Wick must face off against a new enemy with powerful alliances across the globe and forces that turn old friends into foes.",
-                TrailerImageUrl = @"Soons/John Wick: Chapter 4/john-wick-chapter-4-trailer-image.jpg",
-                TrailerUrl = @"Soons/John Wick: Chapter 4/john-wick-chapter-4-trailer.mp4",
+                TrailerImageUrl = @"Soons/John Wick Chapter 4/john-wick-chapter-4-trailer-image.jpg",
+                TrailerUrl = @"Soons/John Wick Chapter 4/john-wick-chapter-4-trailer.mp4",
                 OutDate = DateTime.ParseExact("2023:03:24","yyyy:MM:dd", null)
             },
             new()
@@ -28,8 +28,8 @@ public class SoonConfiguration : IEntityTypeConfiguration<Soon>
             {
                 Name = "Transformers: Rise of the Beasts",
                 Description = "Plot unknown. Reportedly based on the 'Transformers' spinoff 'Beast Wars' which feature robots that transform into robotic animals.",
-                TrailerImageUrl = @"Soons/Transformers: Rise of the Beasts/transformers-rise-of-the-beasts-trailer-image.jpg",
-                TrailerUrl = @"Soons/Transformers: Rise of the Beasts/transformers-rise-of-the-beasts-trailer.mp4",
+                TrailerImageUrl = @"Soons/Transformers Rise of the Beasts/transformers-rise-of-the-beasts-trailer-image.jpg",
+                TrailerUrl = @"Soons/Transformers Rise of the Beasts/transformers-rise-of-the-beasts-trailer.mp4",
                 OutDate = DateTime.ParseExact("2023:06:09","yyyy:MM:dd", null)
             }
         };
