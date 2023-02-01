@@ -6,14 +6,16 @@ public class AccountController : ControllerBase
 {
     private readonly IUserManager _userManager;
     private readonly IMailManager _mailManager;
+    private readonly IEncryptorService _passwordEncryptorService;
     private readonly ITokenGeneratorService _tokenGeneratorService;
 
 
-    public AccountController(ITokenGeneratorService tokenGeneratorService, IUserManager userManager, IMailManager mailManager)
+    public AccountController(ITokenGeneratorService tokenGeneratorService, IUserManager userManager, IMailManager mailManager, IEncryptorService passwordEncryptorService)
     {
         _userManager = userManager;
         _tokenGeneratorService = tokenGeneratorService;
         _mailManager = mailManager;
+        _passwordEncryptorService = passwordEncryptorService;
     }
 
 
@@ -243,6 +245,33 @@ public class AccountController : ControllerBase
             }
 
             return NotFound();
+        }
+        catch
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpGet("[Action]")]
+    public async Task<IActionResult> ResetPassword([FromQuery] string mail, [FromQuery] string password)
+    {
+        try
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = await _userManager.ReturnUserFromContextAsync(HttpContext);
+
+            if (user is null) return Unauthorized();
+
+            else
+            {
+                user.PasswordHash = _passwordEncryptorService.EncryptPassword(password);
+                user.OldPasswordHash = user.PasswordHash;
+
+                var result = await _userManager.UpdateUserAsync(user);
+
+                return Ok(result);
+            }
         }
         catch
         {
