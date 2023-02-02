@@ -1,18 +1,31 @@
 ﻿global using System;
 global using System.IO;
+global using System.Linq;
 global using System.Windows;
+global using System.Threading;
 global using System.Windows.Input;
+global using System.ComponentModel;
+global using System.Threading.Tasks;
 global using System.Windows.Controls;
+global using System.Collections.Generic;
+global using System.Collections.ObjectModel;
+global using NovaStream.Application.Services;
+global using System.Runtime.CompilerServices;
 
 global using NovaStream.Admin.Views;
 global using NovaStream.Admin.Services;
 global using NovaStream.Admin.ViewModels;
 global using NovaStream.Persistence.Services;
 global using NovaStream.Infrastructure.Services;
+global using NovaStream.Domain.Entities.Concrete;
+global using NovaStream.Persistence.Data.Contexts;
+global using NovaStream.Admin.ViewModels.DialogHosts;
 
+global using Amazon.S3.Transfer;
 global using GalaSoft.MvvmLight;
+global using MaterialDesignThemes.Wpf;
 global using GalaSoft.MvvmLight.Command;
 global using GalaSoft.MvvmLight.Messaging;
+global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
-

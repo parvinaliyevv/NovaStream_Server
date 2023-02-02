@@ -23,8 +23,30 @@ public partial class App : System.Windows.Application
         Services.AddSingleton<INavigationService, NavigationService>();
 
         Services.AddSingleton<MainViewModel>();
+
         Services.AddSingleton<MovieViewModel>();
+        Services.AddSingleton<AddMovieViewModel>();
+
+        Services.AddSingleton<SoonViewModel>();
+        Services.AddSingleton<AddSoonViewModel>();
+
         Services.AddSingleton<SerialViewModel>();
+        Services.AddSingleton<AddSerialViewModel>();
+
+        Services.AddSingleton<SeasonViewModel>();
+        Services.AddSingleton<AddSeasonViewModel>();
+
+        Services.AddSingleton<EpisodeViewModel>();
+        Services.AddSingleton<AddEpisodeViewModel>();
+
+        Services.AddSingleton<ActorViewModel>();
+        Services.AddSingleton<AddActorViewModel>();
+
+        Services.AddSingleton<ProducerViewModel>();
+        Services.AddSingleton<AddProducerViewModel>();
+
+        Services.AddSingleton<GenreViewModel>();
+        Services.AddSingleton<AddGenreViewModel>();
 
         Services.PersistenceRegister(_Configuration);
         Services.InfrastructureRegister(_Configuration);

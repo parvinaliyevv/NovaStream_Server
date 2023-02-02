@@ -18,6 +18,8 @@
     <Import Project="$(NuGetPackageRoot)microsoft.entityframeworkcore.design\6.0.12\build\net6.0\Microsoft.EntityFrameworkCore.Design.props" Condition="Exists('$(NuGetPackageRoot)microsoft.entityframeworkcore.design\6.0.12\build\net6.0\Microsoft.EntityFrameworkCore.Design.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgAWSSDK_Core Condition=" '$(PkgAWSSDK_Core)' == '' ">C:\Users\HP\.nuget\packages\awssdk.core\3.7.103.20</PkgAWSSDK_Core>
+    <PkgAWSSDK_S3 Condition=" '$(PkgAWSSDK_S3)' == '' ">C:\Users\HP\.nuget\packages\awssdk.s3\3.7.101.58</PkgAWSSDK_S3>
     <PkgMicrosoft_EntityFrameworkCore_Tools Condition=" '$(PkgMicrosoft_EntityFrameworkCore_Tools)' == '' ">C:\Users\HP\.nuget\packages\microsoft.entityframeworkcore.tools\6.0.12</PkgMicrosoft_EntityFrameworkCore_Tools>
   </PropertyGroup>
 </Project>

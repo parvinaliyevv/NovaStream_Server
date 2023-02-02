@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Presentation\NovaStream.Admin\App.xaml
-41871489551
+11-198893127
 11413424753
-141752816486
-358-627361882
-Resources\AppResources.xaml;Views\MainView.xaml;Views\MovieView.xaml;Views\SerialView.xaml;
+35-1087988742
+368-1699033371
+Resources\AppResources.xaml;Resources\DialogHostResources.xaml;Views\ActorView.xaml;Views\EpisodeView.xaml;Views\GenreView.xaml;Views\MainView.xaml;Views\MovieView.xaml;Views\ProducerView.xaml;Views\SeasonView.xaml;Views\SerialView.xaml;Views\SoonView.xaml;
 
 True
 

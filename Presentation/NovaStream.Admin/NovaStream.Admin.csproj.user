@@ -2,10 +2,28 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
+    <Compile Update="Views\ActorView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\EpisodeView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\GenreView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\MovieView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\ProducerView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\SeasonView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\SerialView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\SoonView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -13,10 +31,31 @@
     <Page Update="Resources\AppResources.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Resources\DialogHostResources.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ActorView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\EpisodeView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\GenreView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\MovieView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\ProducerView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\SeasonView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\SerialView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\SoonView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

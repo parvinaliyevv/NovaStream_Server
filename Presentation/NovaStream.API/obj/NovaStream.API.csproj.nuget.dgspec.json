@@ -49,6 +49,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "AWSSDK.S3": {
+              "target": "Package",
+              "version": "[3.7.101.58, )"
+            },
             "FluentValidation.AspNetCore": {
               "target": "Package",
               "version": "[11.2.2, )"
@@ -190,10 +194,6 @@
             "AWSSDK.Core": {
               "target": "Package",
               "version": "[3.7.103.20, )"
-            },
-            "AWSSDK.S3": {
-              "target": "Package",
-              "version": "[3.7.101.58, )"
             },
             "Azure.Storage.Blobs": {
               "target": "Package",

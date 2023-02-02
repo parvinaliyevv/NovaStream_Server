@@ -1282,6 +1282,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
+          "AWSSDK.S3": "3.7.101.58",
           "FluentValidation.AspNetCore": "11.2.2",
           "Mapster": "7.3.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0",
@@ -1309,7 +1310,6 @@
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
           "AWSSDK.Core": "3.7.103.20",
-          "AWSSDK.S3": "3.7.101.58",
           "Azure.Storage.Blobs": "12.14.1",
           "Microsoft.Extensions.Configuration.Abstractions": "6.0.0",
           "Microsoft.IdentityModel.Tokens": "6.25.1",

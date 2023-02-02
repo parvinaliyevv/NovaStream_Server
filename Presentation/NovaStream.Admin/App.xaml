@@ -15,22 +15,47 @@
                 <view:MovieView></view:MovieView>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModel:SoonViewModel}">
+                <view:SoonView></view:SoonView>
+            </DataTemplate>
+            
             <DataTemplate DataType="{x:Type viewModel:SerialViewModel}">
                 <view:SerialView></view:SerialView>
             </DataTemplate>
-            
+
+            <DataTemplate DataType="{x:Type viewModel:SeasonViewModel}">
+                <view:SeasonView></view:SeasonView>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:EpisodeViewModel}">
+                <view:EpisodeView></view:EpisodeView>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:ActorViewModel}">
+                <view:ActorView></view:ActorView>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:ProducerViewModel}">
+                <view:ProducerView></view:ProducerView>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:GenreViewModel}">
+                <view:GenreView></view:GenreView>
+            </DataTemplate>
+
             <ResourceDictionary.MergedDictionaries>
-                
+
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
 
                 <ResourceDictionary Source="Resources/AppResources.xaml"/>
+                <ResourceDictionary Source="Resources/DialogHostResources.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>
     </Application.Resources>
-    
+
 </Application>
