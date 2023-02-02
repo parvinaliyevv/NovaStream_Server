@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Aliy_ql08\\Desktop\\New folder (2)\\NovaStream_Server\\Core\\NovaStream.Domain\\NovaStream.Domain.csproj": {}
+    "C:\\Users\\HP\\Desktop\\Новая папка\\NovaStream_Server\\Core\\NovaStream.Domain\\NovaStream.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Aliy_ql08\\Desktop\\New folder (2)\\NovaStream_Server\\Core\\NovaStream.Domain\\NovaStream.Domain.csproj": {
+    "C:\\Users\\HP\\Desktop\\Новая папка\\NovaStream_Server\\Core\\NovaStream.Domain\\NovaStream.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Aliy_ql08\\Desktop\\New folder (2)\\NovaStream_Server\\Core\\NovaStream.Domain\\NovaStream.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\Desktop\\Новая папка\\NovaStream_Server\\Core\\NovaStream.Domain\\NovaStream.Domain.csproj",
         "projectName": "NovaStream.Domain",
-        "projectPath": "C:\\Users\\Aliy_ql08\\Desktop\\New folder (2)\\NovaStream_Server\\Core\\NovaStream.Domain\\NovaStream.Domain.csproj",
-        "packagesPath": "C:\\Users\\Aliy_ql08\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Aliy_ql08\\Desktop\\New folder (2)\\NovaStream_Server\\Core\\NovaStream.Domain\\obj\\",
+        "projectPath": "C:\\Users\\HP\\Desktop\\Новая папка\\NovaStream_Server\\Core\\NovaStream.Domain\\NovaStream.Domain.csproj",
+        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HP\\Desktop\\Новая папка\\NovaStream_Server\\Core\\NovaStream.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Aliy_ql08\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

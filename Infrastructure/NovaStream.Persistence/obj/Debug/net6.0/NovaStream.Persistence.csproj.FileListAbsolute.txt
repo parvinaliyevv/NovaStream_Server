@@ -36,22 +36,3 @@ C:\Users\Aliy_ql08\Desktop\NovaStream\Infrastructure\NovaStream.Persistence\obj\
 C:\Users\Aliy_ql08\Desktop\NovaStream\Infrastructure\NovaStream.Persistence\obj\Debug\net6.0\NovaStream.Persistence.pdb
 C:\Users\Aliy_ql08\Desktop\NovaStream\Infrastructure\NovaStream.Persistence\obj\Debug\net6.0\NovaStream.Persistence.genruntimeconfig.cache
 C:\Users\Aliy_ql08\Desktop\NovaStream\Infrastructure\NovaStream.Persistence\obj\Debug\net6.0\ref\NovaStream.Persistence.dll
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\bin\Debug\net6.0\NovaStream.Persistence.deps.json
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\bin\Debug\net6.0\NovaStream.Persistence.runtimeconfig.json
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\bin\Debug\net6.0\NovaStream.Persistence.dll
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\bin\Debug\net6.0\NovaStream.Persistence.pdb
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\bin\Debug\net6.0\NovaStream.Application.dll
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\bin\Debug\net6.0\NovaStream.Domain.dll
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\bin\Debug\net6.0\NovaStream.Application.pdb
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\bin\Debug\net6.0\NovaStream.Domain.pdb
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\obj\Debug\net6.0\NovaStream.Persistence.csproj.AssemblyReference.cache
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\obj\Debug\net6.0\NovaStream.Persistence.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\obj\Debug\net6.0\NovaStream.Persistence.AssemblyInfoInputs.cache
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\obj\Debug\net6.0\NovaStream.Persistence.AssemblyInfo.cs
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\obj\Debug\net6.0\NovaStream.Persistence.csproj.CoreCompileInputs.cache
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\obj\Debug\net6.0\NovaStream.Persistence.csproj.CopyComplete
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\obj\Debug\net6.0\NovaStream.Persistence.dll
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\obj\Debug\net6.0\refint\NovaStream.Persistence.dll
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\obj\Debug\net6.0\NovaStream.Persistence.pdb
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\obj\Debug\net6.0\NovaStream.Persistence.genruntimeconfig.cache
-C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Infrastructure\NovaStream.Persistence\obj\Debug\net6.0\ref\NovaStream.Persistence.dll

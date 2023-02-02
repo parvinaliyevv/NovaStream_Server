@@ -1,0 +1,20 @@
+﻿NovaStream.Admin
+1.0.0.0
+
+winexe
+C#
+.cs
+C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Presentation\NovaStream.Admin\obj\Debug\net6.0-windows\
+NovaStream.Admin
+none
+false
+TRACE;DEBUG;NET;NET6_0;NETCOREAPP
+C:\Users\HP\Desktop\Новая папка\NovaStream_Server\Presentation\NovaStream.Admin\App.xaml
+41871489551
+11413424753
+141752816486
+358-627361882
+Resources\AppResources.xaml;Views\MainView.xaml;Views\MovieView.xaml;Views\SerialView.xaml;
+
+True
+
