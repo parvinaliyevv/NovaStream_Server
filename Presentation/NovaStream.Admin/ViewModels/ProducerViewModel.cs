@@ -3,6 +3,7 @@
 public class ProducerViewModel : ViewModelBase
 {
     private readonly AppDbContext _dbContext;
+    private readonly IStorageManager _storageManager;
 
     public ObservableCollection<Producer> Producers { get; set; }
 
@@ -11,9 +12,10 @@ public class ProducerViewModel : ViewModelBase
     public RelayCommand<Button> DeleteCommand { get; set; }
 
 
-    public ProducerViewModel(AppDbContext dbContext)
+    public ProducerViewModel(AppDbContext dbContext, IStorageManager storageManager)
     {
         _dbContext = dbContext;
+        _storageManager = storageManager;
 
         Initialize();
     }
@@ -39,16 +41,14 @@ public class ProducerViewModel : ViewModelBase
 
     private async Task OpenEditDialogHost(Button button)
     {
-        // var serial = button?.DataContext as Serial;
-        // 
-        // ArgumentNullException.ThrowIfNull(serial);
+        var producer = button?.DataContext as Producer;
+
+        ArgumentNullException.ThrowIfNull(producer);
 
         var model = App.ServiceProvider.GetService<AddProducerViewModel>();
 
-        // model.Serial = serial;
-        // model.Season = _dbContext.Seasons.FirstOrDefault(s => s.SerialName == serial.Name);
-        // model.Episode = _dbContext.Episodes.FirstOrDefault(e => e.SeasonId == model.Season.Id);
-        // 
+        model.Producer = producer;
+        
         await DialogHost.Show(model, "RootDialog");
     }
 
@@ -57,6 +57,8 @@ public class ProducerViewModel : ViewModelBase
         var producer = button?.DataContext as Producer;
 
         ArgumentNullException.ThrowIfNull(producer);
+
+        await _storageManager.DeleteFileAsync(producer.ImageUrl);
 
         _dbContext.Producers.Remove(producer);
         await _dbContext.SaveChangesAsync();

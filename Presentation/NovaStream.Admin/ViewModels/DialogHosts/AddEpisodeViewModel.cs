@@ -1,6 +1,4 @@
-﻿using NovaStream.Domain.Entities.Concrete;
-
-namespace NovaStream.Admin.ViewModels.DialogHosts;
+﻿namespace NovaStream.Admin.ViewModels.DialogHosts;
 
 public class AddEpisodeViewModel : DependencyObject
 {
@@ -8,12 +6,42 @@ public class AddEpisodeViewModel : DependencyObject
     private readonly IStorageManager _storageManager;
     private readonly IAWSStorageManager _awsStorageManager;
 
+    public Serial Serial { get; set; }
     public Episode Episode { get; set; }
+
+    public List<Serial> Serials { get; set; }
+
+
+    public int Number
+    {
+        get { return (int)GetValue(NumberProperty); }
+        set { SetValue(NumberProperty, value); }
+    }
+    public static readonly DependencyProperty NumberProperty =
+        DependencyProperty.Register("Number", typeof(int), typeof(AddEpisodeViewModel));
+
+    public Season Season
+    {
+        get { return (Season)GetValue(SeasonProperty); }
+        set { SetValue(SeasonProperty, value); }
+    }
+    public static readonly DependencyProperty SeasonProperty =
+        DependencyProperty.Register("Season", typeof(Season), typeof(AddEpisodeViewModel));
+
+    public List<Season> Seasons
+    {
+        get { return (List<Season>)GetValue(SeasonsProperty); }
+        set { SetValue(SeasonsProperty, value); }
+    }
+    public static readonly DependencyProperty SeasonsProperty =
+        DependencyProperty.Register("Seasons", typeof(List<Season>), typeof(AddEpisodeViewModel));
 
     public RelayCommand SaveCommand { get; set; }
     public RelayCommand CancelCommand { get; set; }
     public RelayCommand OpenVideoDialogCommand { get; set; }
     public RelayCommand OpenVideoImageDialogCommand { get; set; }
+    public RelayCommand SelectedSerialChangedCommand { get; set; }
+    public RelayCommand SelectedSeasonChangedCommand { get; set; }
 
 
     public List<Task> UploadTasks { get; set; }
@@ -47,6 +75,12 @@ public class AddEpisodeViewModel : DependencyObject
 
         Episode = new Episode();
 
+        Serials = _dbContext.Serials.ToList();
+        Serial = Serials.FirstOrDefault();
+
+        Seasons = _dbContext.Seasons.Where(s => s.SerialName == Serial.Name).ToList();
+        Season = Seasons.FirstOrDefault();
+
         UploadTasks = new();
         UploadTaskTokens = new();
 
@@ -56,6 +90,8 @@ public class AddEpisodeViewModel : DependencyObject
         OpenVideoDialogCommand = new RelayCommand(() => OpenVideoDialog());
         OpenVideoImageDialogCommand = new RelayCommand(() => OpenVideoImageDialog());
 
+        SelectedSerialChangedCommand = new RelayCommand(() => SelectedSerialChanged());
+        SelectedSeasonChangedCommand = new RelayCommand(() => SelectedSeasonChanged());
     }
 
 
@@ -81,6 +117,8 @@ public class AddEpisodeViewModel : DependencyObject
         UploadTaskTokens.Add(videoToken);
 
         videoUploadTask.ContinueWith(_ => VideoProgressCompleted = true);
+
+        Episode.Number = Number; // number auto dusur tut bil Parvin
     }
 
     private async Task Cancel()
@@ -120,6 +158,22 @@ public class AddEpisodeViewModel : DependencyObject
         if (fileDialog.ShowDialog() is false) return;
 
         Episode.ImageUrl = fileDialog.FileName;
+    }
+
+    private void SelectedSerialChanged()
+    {
+        Seasons = _dbContext.Seasons.Where(s => s.SerialName == Serial.Name).ToList();
+        Season = Seasons.FirstOrDefault();
+    }
+
+    private void SelectedSeasonChanged() // Bug method!
+    {
+        //if (Season is null) Season = Seasons.FirstOrDefault(); 
+
+        //var lastEpisodeNumber = _dbContext.Episodes.Where(e => e.SeasonId == Season.Id)
+        //    .OrderBy(e => e.Number).Last().Number;
+
+        //Number = lastEpisodeNumber + 1;
     }
 
     private void VideoProgressEvent(object sender, UploadProgressArgs e)

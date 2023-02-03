@@ -56,7 +56,7 @@ public class AddProducerViewModel : DependencyObject
         if (dbProducer is null || dbProducer is not null && dbProducer.ImageUrl != Producer.ImageUrl)
         {
             var imageStream = new FileStream(Producer.ImageUrl, FileMode.Open, FileAccess.Read);
-            Producer.ImageUrl = string.Format("Images/Actors/{0}-image{1}".Replace(' ', '-'), Producer.Name, Path.GetExtension(Producer.ImageUrl));
+            Producer.ImageUrl = string.Format("Images/Producers/{0}-image{1}".Replace(' ', '-'), Producer.Name, Path.GetExtension(Producer.ImageUrl));
 
             ImageProgress = new BlobStorageUploadProgress(imageStream.Length);
 

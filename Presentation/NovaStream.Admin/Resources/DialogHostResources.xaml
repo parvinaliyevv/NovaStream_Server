@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:viewModel="clr-namespace:NovaStream.Admin.ViewModels.DialogHosts">
 
@@ -177,7 +178,6 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
-                    <RowDefinition/>
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
 
@@ -186,25 +186,89 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Grid.Row="0" Text="{Binding Season.Id}" materialDesign:HintAssist.Hint="Id"/>
-                <TextBox Grid.Row="2" Text="{Binding Season.Number}" materialDesign:HintAssist.Hint="Season Number"/>
+                <TextBox Grid.Row="2" Text="{Binding Number}" IsReadOnly="True" materialDesign:HintAssist.Hint="Season Number"/>
 
-                <ComboBox Grid.Row="4" ItemsSource="{Binding Serials}"  SelectedItem="{Binding Season.Serial, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox Grid.Row="3" ItemsSource="{Binding Serials}"  SelectedItem="{Binding Season.Serial, UpdateSourceTrigger=PropertyChanged}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
+
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding SelectedSerialChangedCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </ComboBox>
 
-                <Button Grid.Row="10" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
+                <Button Grid.Row="9" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
 
             </Grid>
         </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddEpisodeViewModel}">
+        <Border Height="700" Width="1100" CornerRadius="25" Padding="20" Background="#f7f6f4">
+            <Grid >
 
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <ComboBox ItemsSource="{Binding Serials}" SelectedItem="{Binding Serial, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding SelectedSerialChangedCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
+
+                <ComboBox Grid.Column="1" ItemsSource="{Binding Seasons}" SelectedItem="{Binding Season, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Number}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding SelectedSeasonChangedCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
+
+                <TextBox Grid.Row="1" Text="{Binding Number}" IsReadOnly="True" materialDesign:HintAssist.Hint="Name"/>
+                <TextBox Grid.Row="2" Text="{Binding Episode.Name}" materialDesign:HintAssist.Hint="Name"/>
+                <TextBox Grid.Row="3" Text="{Binding Episode.Description}" materialDesign:HintAssist.Hint="Year"/>
+                <TextBox Grid.Row="4" Text="{Binding Episode.VideoLength}" materialDesign:HintAssist.Hint="Age"/>
+
+                <Button Grid.Row="5" Command="{Binding OpenVideoDialogCommand}">SearchImageUrl</Button>
+                <ProgressBar Grid.Row="5" Grid.Column="1" Height="30" Margin="5" Value="{Binding VideoProgress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+
+                <Button Grid.Row="6" Command="{Binding OpenVideoImageDialogCommand}">SearchImageUrl</Button>
+                <ProgressBar Grid.Row="7" Grid.Column="1" Height="30" Margin="5" Value="{Binding VideoImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+
+                <Button Grid.Row="7" VerticalAlignment="Top" Command="{Binding CancelCommand}">Cancel</Button>
+                <Button Grid.Row="7" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
+
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddActorViewModel}">
@@ -229,7 +293,6 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Grid.Row="0" Text="{Binding Actor.Id}" materialDesign:HintAssist.Hint="Id"/>
                 <TextBox Grid.Row="1" Text="{Binding Actor.Name}" materialDesign:HintAssist.Hint="Name"/>
                 <TextBox Grid.Row="2" Text="{Binding Actor.Surname}" materialDesign:HintAssist.Hint="Surname"/>
                 <TextBox Grid.Row="3" Text="{Binding Actor.About}" materialDesign:HintAssist.Hint="About"/>
@@ -266,7 +329,6 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Grid.Row="0" Text="{Binding Producer.Id}" materialDesign:HintAssist.Hint="Id"/>
                 <TextBox Grid.Row="1" Text="{Binding Producer.Name}" materialDesign:HintAssist.Hint="Name"/>
                 <TextBox Grid.Row="2" Text="{Binding Producer.Surname}" materialDesign:HintAssist.Hint="Surname"/>
                 <TextBox Grid.Row="3" Text="{Binding Producer.About}" materialDesign:HintAssist.Hint="About"/>
@@ -303,7 +365,6 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Grid.Row="0" Text="{Binding Genre.Id}" materialDesign:HintAssist.Hint="Id"/>
                 <TextBox Grid.Row="1" Text="{Binding Genre.Name}" materialDesign:HintAssist.Hint="Name"/>
 
                 <Button Grid.Row="8" Command="{Binding OpenImageDialogCommand}">ImageUrl</Button>

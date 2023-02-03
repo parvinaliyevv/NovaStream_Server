@@ -9,7 +9,10 @@ public partial class MainView : Window
     {
         InitializeComponent();
 
-        DataContext = App.ServiceProvider.GetService<MainViewModel>();
+        var context = App.ServiceProvider.GetService<MainViewModel>();
+        context.CurrentViewModel = App.ServiceProvider.GetService<MovieViewModel>();
+
+        DataContext = context;
     }
 
 

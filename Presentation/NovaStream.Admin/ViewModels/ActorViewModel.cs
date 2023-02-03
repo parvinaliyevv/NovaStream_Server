@@ -3,6 +3,7 @@
 public class ActorViewModel : ViewModelBase
 {
     private readonly AppDbContext _dbContext;
+    private readonly IStorageManager _storageManager;
 
     public ObservableCollection<Actor> Actors { get; set; }
 
@@ -11,9 +12,10 @@ public class ActorViewModel : ViewModelBase
     public RelayCommand<Button> DeleteCommand { get; set; }
 
 
-    public ActorViewModel(AppDbContext dbContext)
+    public ActorViewModel(AppDbContext dbContext, IStorageManager storageManager)
     {
         _dbContext = dbContext;
+        _storageManager = storageManager;
 
         Initialize();
     }
@@ -39,16 +41,14 @@ public class ActorViewModel : ViewModelBase
 
     private async Task OpenEditDialogHost(Button button)
     {
-        // var serial = button?.DataContext as Serial;
-        // 
-        // ArgumentNullException.ThrowIfNull(serial);
+        var actor = button?.DataContext as Actor;
+
+        ArgumentNullException.ThrowIfNull(actor);
 
         var model = App.ServiceProvider.GetService<AddActorViewModel>();
 
-        // model.Serial = serial;
-        // model.Season = _dbContext.Seasons.FirstOrDefault(s => s.SerialName == serial.Name);
-        // model.Episode = _dbContext.Episodes.FirstOrDefault(e => e.SeasonId == model.Season.Id);
-        // 
+        model.Actor = actor;
+
         await DialogHost.Show(model, "RootDialog");
     }
 
@@ -57,6 +57,8 @@ public class ActorViewModel : ViewModelBase
         var actor = button?.DataContext as Actor;
 
         ArgumentNullException.ThrowIfNull(actor);
+
+        await _storageManager.DeleteFileAsync(actor.ImageUrl);
 
         _dbContext.Actors.Remove(actor);
         await _dbContext.SaveChangesAsync();

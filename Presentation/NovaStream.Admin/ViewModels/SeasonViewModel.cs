@@ -39,16 +39,14 @@ public class SeasonViewModel : ViewModelBase
 
     private async Task OpenEditDialogHost(Button button)
     {
-        // var serial = button?.DataContext as Serial;
-        // 
-        // ArgumentNullException.ThrowIfNull(serial);
+        var season = button?.DataContext as Season;
+
+        ArgumentNullException.ThrowIfNull(season);
 
         var model = App.ServiceProvider.GetService<AddSeasonViewModel>();
 
-        // model.Serial = serial;
-        // model.Season = _dbContext.Seasons.FirstOrDefault(s => s.SerialName == serial.Name);
-        // model.Episode = _dbContext.Episodes.FirstOrDefault(e => e.SeasonId == model.Season.Id);
-        // 
+        model.Season = season;
+
         await DialogHost.Show(model, "RootDialog");
     }
 
@@ -57,7 +55,7 @@ public class SeasonViewModel : ViewModelBase
         var season = button?.DataContext as Season;
 
         ArgumentNullException.ThrowIfNull(season);
-
+        
         _dbContext.Seasons.Remove(season);
         await _dbContext.SaveChangesAsync();
 

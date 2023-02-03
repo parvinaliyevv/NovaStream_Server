@@ -129,7 +129,7 @@ public class AddMovieViewModel : DependencyObject
             VideoImageProgress = new BlobStorageUploadProgress(videoImageStream.Length);
 
             var videoImageToken = new CancellationTokenSource();
-            var videoImageUploadTask = _storageManager.UploadFileAsync(videoImageStream, Movie.ImageUrl, VideoImageProgress, videoImageToken.Token);
+            var videoImageUploadTask = _storageManager.UploadFileAsync(videoImageStream, Movie.VideoImageUrl, VideoImageProgress, videoImageToken.Token);
 
             UploadTasks.Add(videoImageUploadTask);
             UploadTaskTokens.Add(videoImageToken);

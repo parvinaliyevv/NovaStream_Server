@@ -3,6 +3,8 @@
 public class EpisodeViewModel : ViewModelBase
 {
     private readonly AppDbContext _dbContext;
+    private readonly IStorageManager _storageManager;
+    private readonly IAWSStorageManager _awsStorageManager;
 
     public ObservableCollection<Episode> Episodes { get; set; }
 
@@ -11,9 +13,11 @@ public class EpisodeViewModel : ViewModelBase
     public RelayCommand<Button> DeleteCommand { get; set; }
 
 
-    public EpisodeViewModel(AppDbContext dbContext)
+    public EpisodeViewModel(AppDbContext dbContext, IStorageManager storageManager, IAWSStorageManager awsStorageManager)
     {
         _dbContext = dbContext;
+        _storageManager = storageManager;
+        _awsStorageManager = awsStorageManager;
 
         Initialize();
     }
@@ -39,16 +43,14 @@ public class EpisodeViewModel : ViewModelBase
 
     private async Task OpenEditDialogHost(Button button)
     {
-        // var serial = button?.DataContext as Serial;
-        // 
-        // ArgumentNullException.ThrowIfNull(serial);
+        var episode = button?.DataContext as Episode;
+
+        ArgumentNullException.ThrowIfNull(episode);
 
         var model = App.ServiceProvider.GetService<AddEpisodeViewModel>();
 
-        // model.Serial = serial;
-        // model.Season = _dbContext.Seasons.FirstOrDefault(s => s.SerialName == serial.Name);
-        // model.Episode = _dbContext.Episodes.FirstOrDefault(e => e.SeasonId == model.Season.Id);
-        // 
+        model.Episode = episode;
+
         await DialogHost.Show(model, "RootDialog");
     }
 
@@ -57,6 +59,9 @@ public class EpisodeViewModel : ViewModelBase
         var episode = button?.DataContext as Episode;
 
         ArgumentNullException.ThrowIfNull(episode);
+
+        await _awsStorageManager.DeleteFileAsync(episode.VideoUrl);
+        await _storageManager.DeleteFileAsync(episode.ImageUrl);
 
         _dbContext.Episodes.Remove(episode);
         await _dbContext.SaveChangesAsync();

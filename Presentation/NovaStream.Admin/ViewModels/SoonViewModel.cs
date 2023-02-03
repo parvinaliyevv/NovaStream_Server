@@ -3,6 +3,7 @@
 public class SoonViewModel : ViewModelBase
 {
     private readonly AppDbContext _dbContext;
+    private readonly IStorageManager _storageManager;
 
     public ObservableCollection<Soon> Soons { get; set; }
 
@@ -11,9 +12,10 @@ public class SoonViewModel : ViewModelBase
     public RelayCommand<Button> DeleteCommand { get; set; }
 
 
-    public SoonViewModel(AppDbContext dbContext)
+    public SoonViewModel(AppDbContext dbContext, IStorageManager storageManager)
     {
         _dbContext = dbContext;
+        _storageManager = storageManager;
 
         Initialize();
     }
@@ -39,16 +41,14 @@ public class SoonViewModel : ViewModelBase
 
     private async Task OpenEditDialogHost(Button button)
     {
-        // var serial = button?.DataContext as Serial;
-        // 
-        // ArgumentNullException.ThrowIfNull(serial);
+        var soon = button?.DataContext as Soon;
+
+        ArgumentNullException.ThrowIfNull(soon);
 
         var model = App.ServiceProvider.GetService<AddSoonViewModel>();
 
-        // model.Serial = serial;
-        // model.Season = _dbContext.Seasons.FirstOrDefault(s => s.SerialName == serial.Name);
-        // model.Episode = _dbContext.Episodes.FirstOrDefault(e => e.SeasonId == model.Season.Id);
-        // 
+        model.Soon = soon;
+        
         await DialogHost.Show(model, "RootDialog");
     }
 
@@ -57,6 +57,9 @@ public class SoonViewModel : ViewModelBase
         var soon = button?.DataContext as Soon;
 
         ArgumentNullException.ThrowIfNull(soon);
+
+        await _storageManager.DeleteFileAsync(soon.TrailerUrl);
+        await _storageManager.DeleteFileAsync(soon.TrailerImageUrl);
 
         _dbContext.Soons.Remove(soon);
         await _dbContext.SaveChangesAsync();

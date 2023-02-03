@@ -3,6 +3,8 @@
 public class MovieViewModel : ViewModelBase
 {
     private readonly AppDbContext _dbContext;
+    private readonly IStorageManager _storageManager;
+    private readonly IAWSStorageManager _awsStorageManager;
 
     public ObservableCollection<Movie> Movies { get; set; }
 
@@ -11,9 +13,11 @@ public class MovieViewModel : ViewModelBase
     public RelayCommand<Button> DeleteCommand { get; set; }
 
 
-    public MovieViewModel(AppDbContext dbContext)
+    public MovieViewModel(AppDbContext dbContext, IStorageManager storageManager, IAWSStorageManager awsStorageManager)
     {
         _dbContext = dbContext;
+        _storageManager = storageManager;
+        _awsStorageManager = awsStorageManager;
 
         Initialize();
     }
@@ -39,16 +43,14 @@ public class MovieViewModel : ViewModelBase
 
     private async Task OpenEditDialogHost(Button button)
     {
-        // var serial = button?.DataContext as Serial;
-        // 
-        // ArgumentNullException.ThrowIfNull(serial);
+        var movie = button?.DataContext as Movie;
+
+        ArgumentNullException.ThrowIfNull(movie);
 
         var model = App.ServiceProvider.GetService<AddMovieViewModel>();
 
-        // model.Serial = serial;
-        // model.Season = _dbContext.Seasons.FirstOrDefault(s => s.SerialName == serial.Name);
-        // model.Episode = _dbContext.Episodes.FirstOrDefault(e => e.SeasonId == model.Season.Id);
-        // 
+        model.Movie = movie;
+
         await DialogHost.Show(model, "RootDialog");
     }
 
@@ -57,6 +59,12 @@ public class MovieViewModel : ViewModelBase
         var movie = button?.DataContext as Movie;
 
         ArgumentNullException.ThrowIfNull(movie);
+
+        await _awsStorageManager.DeleteFileAsync(movie.VideoUrl);
+        await _storageManager.DeleteFileAsync(movie.VideoImageUrl);
+        await _storageManager.DeleteFileAsync(movie.TrailerUrl);
+        await _storageManager.DeleteFileAsync(movie.ImageUrl);
+        await _storageManager.DeleteFileAsync(movie.SearchImageUrl);
 
         _dbContext.Movies.Remove(movie);
         await _dbContext.SaveChangesAsync();

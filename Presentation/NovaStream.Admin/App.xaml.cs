@@ -25,28 +25,28 @@ public partial class App : System.Windows.Application
         Services.AddSingleton<MainViewModel>();
 
         Services.AddSingleton<MovieViewModel>();
-        Services.AddSingleton<AddMovieViewModel>();
+        Services.AddTransient<AddMovieViewModel>();
 
         Services.AddSingleton<SoonViewModel>();
-        Services.AddSingleton<AddSoonViewModel>();
+        Services.AddTransient<AddSoonViewModel>();
 
         Services.AddSingleton<SerialViewModel>();
-        Services.AddSingleton<AddSerialViewModel>();
+        Services.AddTransient<AddSerialViewModel>();
 
         Services.AddSingleton<SeasonViewModel>();
-        Services.AddSingleton<AddSeasonViewModel>();
+        Services.AddTransient<AddSeasonViewModel>();
 
         Services.AddSingleton<EpisodeViewModel>();
-        Services.AddSingleton<AddEpisodeViewModel>();
+        Services.AddTransient<AddEpisodeViewModel>();
 
         Services.AddSingleton<ActorViewModel>();
-        Services.AddSingleton<AddActorViewModel>();
+        Services.AddTransient<AddActorViewModel>();
 
         Services.AddSingleton<ProducerViewModel>();
-        Services.AddSingleton<AddProducerViewModel>();
+        Services.AddTransient<AddProducerViewModel>();
 
         Services.AddSingleton<GenreViewModel>();
-        Services.AddSingleton<AddGenreViewModel>();
+        Services.AddTransient<AddGenreViewModel>();
 
         Services.PersistenceRegister(_Configuration);
         Services.InfrastructureRegister(_Configuration);

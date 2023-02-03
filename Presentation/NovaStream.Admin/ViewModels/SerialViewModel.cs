@@ -3,6 +3,8 @@
 public class SerialViewModel : ViewModelBase
 {
 	private readonly AppDbContext _dbContext;
+	private readonly IStorageManager _storageManager;
+	private readonly IAWSStorageManager _awsStorageManager;
 
     public ObservableCollection<Serial> Serials { get; set; }
 
@@ -11,9 +13,11 @@ public class SerialViewModel : ViewModelBase
 	public RelayCommand<Button> DeleteCommand { get; set; }
 
 
-	public SerialViewModel(AppDbContext dbContext)
+	public SerialViewModel(AppDbContext dbContext, IStorageManager storageManager, IAWSStorageManager awsStorageManager)
 	{
 		_dbContext = dbContext;
+        _storageManager = storageManager;
+        _awsStorageManager = awsStorageManager;
 
 		Initialize();
 	}
@@ -46,8 +50,13 @@ public class SerialViewModel : ViewModelBase
         var model = App.ServiceProvider.GetService<AddSerialViewModel>();
 
         model.Serial = serial;
-        model.Season = _dbContext.Seasons.FirstOrDefault(s => s.SerialName == serial.Name);
-        model.Episode = _dbContext.Episodes.FirstOrDefault(e => e.SeasonId == model.Season.Id);
+
+        if (serial is not null)
+        {
+            model.Season = await _dbContext.Seasons.FirstOrDefaultAsync(s => s.SerialName == serial.Name);
+
+            if (model.Season is not null)  model.Episode = await _dbContext.Episodes.FirstOrDefaultAsync(e => e.SeasonId == model.Season.Id);
+        }
         
         await DialogHost.Show(model, "RootDialog");
     }
@@ -57,6 +66,19 @@ public class SerialViewModel : ViewModelBase
 		var serial = button?.DataContext as Serial;
 
 		ArgumentNullException.ThrowIfNull(serial);
+
+        var episodes = _dbContext.Episodes.Include(e => e.Season)
+            .Where(e => e.Season.SerialName == serial.Name);
+
+        foreach (var episode in episodes)
+        {
+            await _storageManager.DeleteFileAsync(episode.ImageUrl);
+            await _awsStorageManager.DeleteFileAsync(episode.VideoUrl);
+        }
+
+        await _storageManager.DeleteFileAsync(serial.TrailerUrl);
+        await _storageManager.DeleteFileAsync(serial.ImageUrl);
+        await _storageManager.DeleteFileAsync(serial.SearchImageUrl);
 
 		_dbContext.Serials.Remove(serial);
 		await _dbContext.SaveChangesAsync();
