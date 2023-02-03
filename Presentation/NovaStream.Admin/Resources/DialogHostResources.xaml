@@ -65,15 +65,142 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddMovieViewModel}">
-        
+        <Border Height="700" Width="1100" CornerRadius="25" Padding="20" Background="#f7f6f4">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Row="0" Text="{Binding Movie.Name}" materialDesign:HintAssist.Hint="Name"/>
+                <TextBox Grid.Row="1" Text="{Binding Movie.Year}" materialDesign:HintAssist.Hint="Year"/>
+                <TextBox Grid.Row="2" Text="{Binding Movie.Age}" materialDesign:HintAssist.Hint="Age"/>
+                <TextBox Grid.Row="3" Text="{Binding Movie.Description}" materialDesign:HintAssist.Hint="Description"/>
+
+                <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding Movie.VideoName}" materialDesign:HintAssist.Hint="Video Name"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding Movie.VideoLength}" materialDesign:HintAssist.Hint="Video Length"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Text="{Binding Movie.VideoDescription}" materialDesign:HintAssist.Hint="Video Description"/>
+
+                <ComboBox Grid.Row="4" ItemsSource="{Binding Producers}"  SelectedItem="{Binding Movie.Producer, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <Button Grid.Row="5" Command="{Binding OpenVideoDialogCommand}">VideoUrl</Button>
+                <ProgressBar Grid.Row="5" Grid.Column="1" Height="30" Margin="5" Value="{Binding VideoProgress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+
+                <Button Grid.Row="6" Command="{Binding OpenVideoImageDialogCommand}">VideoImageUrl</Button>
+                <ProgressBar Grid.Row="6" Grid.Column="1" Height="30" Margin="5" Value="{Binding VideoImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+
+                <Button Grid.Row="7" Command="{Binding OpenTrailerDialogCommand}">TrailerUrl</Button>
+                <ProgressBar Grid.Row="7" Grid.Column="1" Height="30" Margin="5" Value="{Binding TrailerProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+
+                <Button Grid.Row="8" Command="{Binding OpenImageDialogCommand}">ImageUrl</Button>
+                <ProgressBar Grid.Row="8" Grid.Column="1" Height="30" Margin="5" Value="{Binding ImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+
+                <Button Grid.Row="9" Command="{Binding OpenSearchImageDialogCommand}">SearchImageUrl</Button>
+                <ProgressBar Grid.Row="9" Grid.Column="1" Height="30" Margin="5" Value="{Binding SearchImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+
+                <Button Grid.Row="10" VerticalAlignment="Top" Command="{Binding CancelCommand}">Cancel</Button>
+                <Button Grid.Row="10" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
+
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddSoonViewModel}">
+        <Border Height="700" Width="1100" CornerRadius="25" Padding="20" Background="#f7f6f4">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Row="0" Text="{Binding Soon.Name}" materialDesign:HintAssist.Hint="Name"/>
+                <TextBox Grid.Row="1" Text="{Binding Soon.OutDate}" materialDesign:HintAssist.Hint="Out Date"/>
+                <TextBox Grid.Row="2" Text="{Binding Soon.Description}" materialDesign:HintAssist.Hint="Description"/>
+
+                <Button Grid.Row="7" Command="{Binding OpenTrailerDialogCommand}">TrailerUrl</Button>
+                <ProgressBar Grid.Row="7" Grid.Column="1" Height="30" Margin="5" Value="{Binding TrailerProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+
+                <Button Grid.Row="8" Command="{Binding OpenTrailerImageDialogCommand}">TrailerImageUrl</Button>
+                <ProgressBar Grid.Row="8" Grid.Column="1" Height="30" Margin="5" Value="{Binding TrailerImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+
+                <Button Grid.Row="10" VerticalAlignment="Top" Command="{Binding CancelCommand}">Cancel</Button>
+                <Button Grid.Row="10" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
+
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddSeasonViewModel}">
+        <Border Height="300" Width="500" CornerRadius="25" Padding="20" Background="#f7f6f4">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Row="0" Text="{Binding Season.Id}" materialDesign:HintAssist.Hint="Id"/>
+                <TextBox Grid.Row="2" Text="{Binding Season.Number}" materialDesign:HintAssist.Hint="Season Number"/>
+
+                <ComboBox Grid.Row="4" ItemsSource="{Binding Serials}"  SelectedItem="{Binding Season.Serial, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <Button Grid.Row="10" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
+
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddEpisodeViewModel}">
@@ -81,15 +208,112 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddActorViewModel}">
+        <Border Height="500" Width="700" CornerRadius="25" Padding="20" Background="#f7f6f4">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Row="0" Text="{Binding Actor.Id}" materialDesign:HintAssist.Hint="Id"/>
+                <TextBox Grid.Row="1" Text="{Binding Actor.Name}" materialDesign:HintAssist.Hint="Name"/>
+                <TextBox Grid.Row="2" Text="{Binding Actor.Surname}" materialDesign:HintAssist.Hint="Surname"/>
+                <TextBox Grid.Row="3" Text="{Binding Actor.About}" materialDesign:HintAssist.Hint="About"/>
+
+                <Button Grid.Row="8" Command="{Binding OpenImageDialogCommand}">ImageUrl</Button>
+                <ProgressBar Grid.Row="8" Grid.Column="1" Height="30" Margin="5" Value="{Binding ImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+
+                <Button Grid.Row="10" VerticalAlignment="Top" Command="{Binding CancelCommand}">Cancel</Button>
+                <Button Grid.Row="10" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
+
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddProducerViewModel}">
+        <Border Height="500" Width="700" CornerRadius="25" Padding="20" Background="#f7f6f4">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Row="0" Text="{Binding Producer.Id}" materialDesign:HintAssist.Hint="Id"/>
+                <TextBox Grid.Row="1" Text="{Binding Producer.Name}" materialDesign:HintAssist.Hint="Name"/>
+                <TextBox Grid.Row="2" Text="{Binding Producer.Surname}" materialDesign:HintAssist.Hint="Surname"/>
+                <TextBox Grid.Row="3" Text="{Binding Producer.About}" materialDesign:HintAssist.Hint="About"/>
+
+                <Button Grid.Row="8" Command="{Binding OpenImageDialogCommand}">ImageUrl</Button>
+                <ProgressBar Grid.Row="8" Grid.Column="1" Height="30" Margin="5" Value="{Binding ImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+
+                <Button Grid.Row="10" VerticalAlignment="Top" Command="{Binding CancelCommand}">Cancel</Button>
+                <Button Grid.Row="10" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
+
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddGenreViewModel}">
+        <Border Height="500" Width="700" CornerRadius="25" Padding="20" Background="#f7f6f4">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Row="0" Text="{Binding Genre.Id}" materialDesign:HintAssist.Hint="Id"/>
+                <TextBox Grid.Row="1" Text="{Binding Genre.Name}" materialDesign:HintAssist.Hint="Name"/>
+
+                <Button Grid.Row="8" Command="{Binding OpenImageDialogCommand}">ImageUrl</Button>
+                <ProgressBar Grid.Row="8" Grid.Column="1" Height="30" Margin="5" Value="{Binding ImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+
+                <Button Grid.Row="10" VerticalAlignment="Top" Command="{Binding CancelCommand}">Cancel</Button>
+                <Button Grid.Row="10" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
+
+            </Grid>
+        </Border>
     </DataTemplate>
 
 </ResourceDictionary>

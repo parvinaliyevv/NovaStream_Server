@@ -788,8 +788,8 @@ namespace NovaStream.Persistence.Migrations
                             Name = "John Wick: Chapter 4",
                             Description = "John Wick uncovers a path to defeating The High Table. But before he can earn his freedom, Wick must face off against a new enemy with powerful alliances across the globe and forces that turn old friends into foes.",
                             OutDate = new DateTime(2023, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TrailerImageUrl = "Soons/John Wick: Chapter 4/john-wick-chapter-4-trailer-image.jpg",
-                            TrailerUrl = "Soons/John Wick: Chapter 4/john-wick-chapter-4-trailer.mp4"
+                            TrailerImageUrl = "Soons/John Wick Chapter 4/john-wick-chapter-4-trailer-image.jpg",
+                            TrailerUrl = "Soons/John Wick Chapter 4/john-wick-chapter-4-trailer.mp4"
                         },
                         new
                         {
@@ -804,8 +804,8 @@ namespace NovaStream.Persistence.Migrations
                             Name = "Transformers: Rise of the Beasts",
                             Description = "Plot unknown. Reportedly based on the 'Transformers' spinoff 'Beast Wars' which feature robots that transform into robotic animals.",
                             OutDate = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TrailerImageUrl = "Soons/Transformers: Rise of the Beasts/transformers-rise-of-the-beasts-trailer-image.jpg",
-                            TrailerUrl = "Soons/Transformers: Rise of the Beasts/transformers-rise-of-the-beasts-trailer.mp4"
+                            TrailerImageUrl = "Soons/Transformers Rise of the Beasts/transformers-rise-of-the-beasts-trailer-image.jpg",
+                            TrailerUrl = "Soons/Transformers Rise of the Beasts/transformers-rise-of-the-beasts-trailer.mp4"
                         });
                 });
 
@@ -853,16 +853,6 @@ namespace NovaStream.Persistence.Migrations
                             ConfirmationPIN = "",
                             Email = "admin@novastream.api",
                             Nickname = "Admin",
-                            OldPasswordHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
-                            PasswordHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AvatarUrl = "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Avatars%2Favatar-1.png?alt=media&token=4fecc3bf-9511-4186-9c25-0347128c0181",
-                            ConfirmationPIN = "",
-                            Email = "novastream.tester@gmail.com",
-                            Nickname = "tyler",
                             OldPasswordHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
                             PasswordHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
                         });

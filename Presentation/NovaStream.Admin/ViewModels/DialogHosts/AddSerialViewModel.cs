@@ -126,7 +126,7 @@ public class AddSerialViewModel : DependencyObject
         // Episode VideoUrl
         if (dbEpisode is null || dbEpisode is not null && dbEpisode.VideoUrl != Episode.VideoUrl)
         {
-            using var videoStream = new FileStream(Episode.VideoUrl, FileMode.Open, FileAccess.Read);
+            var videoStream = new FileStream(Episode.VideoUrl, FileMode.Open, FileAccess.Read);
             Episode.VideoUrl = string.Format("Serials/{0}/Season 1/Episode 1/{1}-video{2}", Serial.Name, Path.GetFileNameWithoutExtension(Episode.VideoUrl), Path.GetExtension(Episode.VideoUrl));
 
             var videoToken = new CancellationTokenSource();
@@ -139,10 +139,10 @@ public class AddSerialViewModel : DependencyObject
         }
         else VideoProgressCompleted = true;
 
-        // Serial TrailerUrl
+        // Episode ImageUrl
         if (dbEpisode is null || dbEpisode is not null && dbEpisode.ImageUrl != Episode.ImageUrl)
         {
-            using var videoImageStream = new FileStream(Episode.ImageUrl, FileMode.Open, FileAccess.Read);
+            var videoImageStream = new FileStream(Episode.ImageUrl, FileMode.Open, FileAccess.Read);
             Episode.ImageUrl = string.Format("Serials/{0}/Season 1/Episode 1/{1}-video-image{2}", Serial.Name, Path.GetFileNameWithoutExtension(Episode.ImageUrl), Path.GetExtension(Episode.ImageUrl));
 
             VideoImageProgress = new BlobStorageUploadProgress(videoImageStream.Length);
@@ -157,10 +157,10 @@ public class AddSerialViewModel : DependencyObject
         }
         else VideoImageProgressCompleted = true;
 
-        // Episode ImageUrl
+        // Serial TrailerUrl
         if (dbSerial is null || dbSerial is not null && dbSerial.TrailerUrl != Serial.TrailerUrl)
         {
-            using var trailerStream = new FileStream(Serial.TrailerUrl, FileMode.Open, FileAccess.Read);
+            var trailerStream = new FileStream(Serial.TrailerUrl, FileMode.Open, FileAccess.Read);
             Serial.TrailerUrl = string.Format("Serials/{0}/{1}-trailer{2}", Serial.Name, Path.GetFileNameWithoutExtension(Serial.TrailerUrl), Path.GetExtension(Serial.TrailerUrl));
 
             TrailerProgress = new BlobStorageUploadProgress(trailerStream.Length);
@@ -178,7 +178,7 @@ public class AddSerialViewModel : DependencyObject
         // Serial ImageUrl
         if (dbSerial is null || dbSerial is not null && dbSerial.ImageUrl != Serial.ImageUrl)
         {
-            using var imageStream = new FileStream(Serial.ImageUrl, FileMode.Open, FileAccess.Read);
+            var imageStream = new FileStream(Serial.ImageUrl, FileMode.Open, FileAccess.Read);
             Serial.ImageUrl = string.Format("Serials/{0}/{1}-image{2}", Serial.Name, Path.GetFileNameWithoutExtension(Serial.ImageUrl), Path.GetExtension(Serial.ImageUrl));
 
             ImageProgress = new BlobStorageUploadProgress(imageStream.Length);
@@ -196,7 +196,7 @@ public class AddSerialViewModel : DependencyObject
         // Serial SearchImageUrl
         if (dbSerial is null || dbSerial is not null && dbSerial.SearchImageUrl != Serial.SearchImageUrl)
         {
-            using var searchImageStream = new FileStream(Serial.SearchImageUrl, FileMode.Open, FileAccess.Read);
+            var searchImageStream = new FileStream(Serial.SearchImageUrl, FileMode.Open, FileAccess.Read);
             Serial.SearchImageUrl = string.Format("Serials/{0}/{1}-search-image{2}", Serial.Name, Path.GetFileNameWithoutExtension(Serial.SearchImageUrl), Path.GetExtension(Serial.SearchImageUrl));
 
             SearchImageProgress = new BlobStorageUploadProgress(searchImageStream.Length);
