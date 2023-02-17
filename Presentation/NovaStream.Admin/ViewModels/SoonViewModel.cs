@@ -5,11 +5,20 @@ public class SoonViewModel : ViewModelBase
     private readonly AppDbContext _dbContext;
     private readonly IStorageManager _storageManager;
 
+    private int _soonCount;
+    public int SoonCount
+    {
+        get => _soonCount;
+        set { _soonCount = value; RaisePropertyChanged(); }
+    }
+
     public ObservableCollection<Soon> Soons { get; set; }
 
+    public RelayCommand SearchCommand { get; set; }
+    public RelayCommand DeleteCommand { get; set; }
+
     public RelayCommand OpenAddDialogHostCommand { get; set; }
-    public RelayCommand<Button> OpenEditDialogHostCommand { get; set; }
-    public RelayCommand<Button> DeleteCommand { get; set; }
+    public RelayCommand OpenEditDialogHostCommand { get; set; }
 
 
     public SoonViewModel(AppDbContext dbContext, IStorageManager storageManager)
@@ -26,34 +35,36 @@ public class SoonViewModel : ViewModelBase
         await Task.CompletedTask;
 
         Soons = new ObservableCollection<Soon>(_dbContext.Soons);
+        SoonCount = Soons.Count;
 
-        OpenAddDialogHostCommand = new RelayCommand(() => OpenAddDialogHost());
-        OpenEditDialogHostCommand = new RelayCommand<Button>(button => OpenEditDialogHost(button));
-        DeleteCommand = new RelayCommand<Button>(button => Delete(button));
+        Soons.CollectionChanged += SoonCountChanged;
+
+        SearchCommand = new RelayCommand(sender => Search(sender));
+        DeleteCommand = new RelayCommand(sender => Delete(sender));
+
+        OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
+        OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
     }
 
-    private async Task OpenAddDialogHost()
+    private async Task Search(object sender)
     {
-        var model = App.ServiceProvider.GetService<AddSoonViewModel>();
+        await Task.CompletedTask;
 
-        await DialogHost.Show(model, "RootDialog");
+        var pattern = sender.ToString();
+
+        var soons = string.IsNullOrWhiteSpace(pattern)
+            ? _dbContext.Soons.ToList() : _dbContext.Soons.Where(s => s.Name.Contains(pattern)).ToList();
+
+        if (Soons.Count == soons.Count) return;
+
+        Soons.Clear();
+
+        soons.ForEach(s => Soons.Add(s));
     }
 
-    private async Task OpenEditDialogHost(Button button)
+    private async Task Delete(object sender)
     {
-        var soon = button?.DataContext as Soon;
-
-        ArgumentNullException.ThrowIfNull(soon);
-
-        var model = App.ServiceProvider.GetService<AddSoonViewModel>();
-
-        model.Soon = soon;
-        
-        await DialogHost.Show(model, "RootDialog");
-    }
-
-    private async Task Delete(Button button)
-    {
+        var button = sender as Button;
         var soon = button?.DataContext as Soon;
 
         ArgumentNullException.ThrowIfNull(soon);
@@ -66,4 +77,27 @@ public class SoonViewModel : ViewModelBase
 
         Soons.Remove(soon);
     }
+
+    private async Task OpenAddDialogHost()
+    {
+        var model = App.ServiceProvider.GetService<AddSoonViewModel>();
+
+        await DialogHost.Show(model, "RootDialog");
+    }
+
+    private async Task OpenEditDialogHost(object sender)
+    {
+        var button = sender as Button;
+        var soon = button?.DataContext as Soon;
+
+        ArgumentNullException.ThrowIfNull(soon);
+
+        var model = App.ServiceProvider.GetService<AddSoonViewModel>();
+
+        model.Soon = soon.Adapt<UploadSoonModel>();
+        
+        await DialogHost.Show(model, "RootDialog");
+    }
+
+    private void SoonCountChanged(object? sender, NotifyCollectionChangedEventArgs e) => SoonCount = Soons.Count;
 }

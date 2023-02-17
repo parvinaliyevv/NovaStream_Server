@@ -9703,11 +9703,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\HP\\Desktop\\Новая папка\\NovaStream_Server\\Presentation\\NovaStream.Admin\\NovaStream.Admin.csproj",
+      "projectUniqueName": "C:\\Users\\HP\\Desktop\\NovaStream_Server\\Presentation\\NovaStream.Admin\\NovaStream.Admin.csproj",
       "projectName": "NovaStream.Admin",
-      "projectPath": "C:\\Users\\HP\\Desktop\\Новая папка\\NovaStream_Server\\Presentation\\NovaStream.Admin\\NovaStream.Admin.csproj",
+      "projectPath": "C:\\Users\\HP\\Desktop\\NovaStream_Server\\Presentation\\NovaStream.Admin\\NovaStream.Admin.csproj",
       "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\HP\\Desktop\\Новая папка\\NovaStream_Server\\Presentation\\NovaStream.Admin\\obj\\",
+      "outputPath": "C:\\Users\\HP\\Desktop\\NovaStream_Server\\Presentation\\NovaStream.Admin\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -9729,11 +9729,11 @@
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
           "projectReferences": {
-            "C:\\Users\\HP\\Desktop\\Новая папка\\NovaStream_Server\\Infrastructure\\NovaStream.Infrastructure\\NovaStream.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\HP\\Desktop\\Новая папка\\NovaStream_Server\\Infrastructure\\NovaStream.Infrastructure\\NovaStream.Infrastructure.csproj"
+            "C:\\Users\\HP\\Desktop\\NovaStream_Server\\Infrastructure\\NovaStream.Infrastructure\\NovaStream.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\HP\\Desktop\\NovaStream_Server\\Infrastructure\\NovaStream.Infrastructure\\NovaStream.Infrastructure.csproj"
             },
-            "C:\\Users\\HP\\Desktop\\Новая папка\\NovaStream_Server\\Infrastructure\\NovaStream.Persistence\\NovaStream.Persistence.csproj": {
-              "projectPath": "C:\\Users\\HP\\Desktop\\Новая папка\\NovaStream_Server\\Infrastructure\\NovaStream.Persistence\\NovaStream.Persistence.csproj"
+            "C:\\Users\\HP\\Desktop\\NovaStream_Server\\Infrastructure\\NovaStream.Persistence\\NovaStream.Persistence.csproj": {
+              "projectPath": "C:\\Users\\HP\\Desktop\\NovaStream_Server\\Infrastructure\\NovaStream.Persistence\\NovaStream.Persistence.csproj"
             }
           }
         }

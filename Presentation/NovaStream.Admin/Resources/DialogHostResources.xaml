@@ -4,377 +4,629 @@
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:viewModel="clr-namespace:NovaStream.Admin.ViewModels.DialogHosts">
 
-    <DataTemplate DataType="{x:Type viewModel:AddSerialViewModel}">
-        <Border Height="700" Width="1100" CornerRadius="25" Padding="20" Background="#f7f6f4">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBox Grid.Row="0" Text="{Binding Serial.Name}" materialDesign:HintAssist.Hint="Name"/>
-                <TextBox Grid.Row="1" Text="{Binding Serial.Year}" materialDesign:HintAssist.Hint="Year"/>
-                <TextBox Grid.Row="2" Text="{Binding Serial.Age}" materialDesign:HintAssist.Hint="Age"/>
-                <TextBox Grid.Row="3" Text="{Binding Serial.Description}" materialDesign:HintAssist.Hint="Description"/>
-
-                <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding Episode.Name}" materialDesign:HintAssist.Hint="Video Name"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding Episode.VideoLength}" materialDesign:HintAssist.Hint="Video Length"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Text="{Binding Episode.Description}" materialDesign:HintAssist.Hint="Video Description"/>
-                
-                <ComboBox Grid.Row="4" ItemsSource="{Binding Producers}"  SelectedItem="{Binding Serial.Producer, UpdateSourceTrigger=PropertyChanged}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-
-                <Button Grid.Row="5" Command="{Binding OpenVideoDialogCommand}">VideoUrl</Button>
-                <ProgressBar Grid.Row="5" Grid.Column="1" Height="30" Margin="5" Value="{Binding VideoProgress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
-
-                <Button Grid.Row="6" Command="{Binding OpenVideoImageDialogCommand}">VideoImageUrl</Button>
-                <ProgressBar Grid.Row="6" Grid.Column="1" Height="30" Margin="5" Value="{Binding VideoImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
-
-                <Button Grid.Row="7" Command="{Binding OpenTrailerDialogCommand}">TrailerUrl</Button>
-                <ProgressBar Grid.Row="7" Grid.Column="1" Height="30" Margin="5" Value="{Binding TrailerProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
-
-                <Button Grid.Row="8" Command="{Binding OpenImageDialogCommand}">ImageUrl</Button>
-                <ProgressBar Grid.Row="8" Grid.Column="1" Height="30" Margin="5" Value="{Binding ImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
-
-                <Button Grid.Row="9" Command="{Binding OpenSearchImageDialogCommand}">SearchImageUrl</Button>
-                <ProgressBar Grid.Row="9" Grid.Column="1" Height="30" Margin="5" Value="{Binding SearchImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
-                
-                <Button Grid.Row="10" VerticalAlignment="Top" Command="{Binding CancelCommand}">Cancel</Button>
-                <Button Grid.Row="10" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
-                
-            </Grid>
-        </Border>
-    </DataTemplate>
-
     <DataTemplate DataType="{x:Type viewModel:AddMovieViewModel}">
-        <Border Height="700" Width="1100" CornerRadius="25" Padding="20" Background="#f7f6f4">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
+        <Grid Background="#f7f6f4" Height="600" Width="1100">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
-                <TextBox Grid.Row="0" Text="{Binding Movie.Name}" materialDesign:HintAssist.Hint="Name"/>
-                <TextBox Grid.Row="1" Text="{Binding Movie.Year}" materialDesign:HintAssist.Hint="Year"/>
-                <TextBox Grid.Row="2" Text="{Binding Movie.Age}" materialDesign:HintAssist.Hint="Age"/>
-                <TextBox Grid.Row="3" Text="{Binding Movie.Description}" materialDesign:HintAssist.Hint="Description"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-                <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding Movie.VideoName}" materialDesign:HintAssist.Hint="Video Name"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding Movie.VideoLength}" materialDesign:HintAssist.Hint="Video Length"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Text="{Binding Movie.VideoDescription}" materialDesign:HintAssist.Hint="Video Description"/>
+            <Border Background="#fff" CornerRadius="7" Margin="30" Grid.Column="0">
+                <Grid>
 
-                <ComboBox Grid.Row="4" ItemsSource="{Binding Producers}"  SelectedItem="{Binding Movie.Producer, UpdateSourceTrigger=PropertyChanged}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                <Button Grid.Row="5" Command="{Binding OpenVideoDialogCommand}">VideoUrl</Button>
-                <ProgressBar Grid.Row="5" Grid.Column="1" Height="30" Margin="5" Value="{Binding VideoProgress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
 
-                <Button Grid.Row="6" Command="{Binding OpenVideoImageDialogCommand}">VideoImageUrl</Button>
-                <ProgressBar Grid.Row="6" Grid.Column="1" Height="30" Margin="5" Value="{Binding VideoImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+                    <TextBox Text="{Binding Movie.Name}" materialDesign:HintAssist.Hint="Name" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
 
-                <Button Grid.Row="7" Command="{Binding OpenTrailerDialogCommand}">TrailerUrl</Button>
-                <ProgressBar Grid.Row="7" Grid.Column="1" Height="30" Margin="5" Value="{Binding TrailerProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+                    <TextBox Text="{Binding Movie.Year}" materialDesign:HintAssist.Hint="Year" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
 
-                <Button Grid.Row="8" Command="{Binding OpenImageDialogCommand}">ImageUrl</Button>
-                <ProgressBar Grid.Row="8" Grid.Column="1" Height="30" Margin="5" Value="{Binding ImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+                    <ComboBox Text="{Binding Movie.Age}" materialDesign:HintAssist.Hint="Age" Style="{StaticResource InputComboBox}" Grid.Column="2">
+                        <ComboBox.Items>
+                            <ComboBoxItem>3</ComboBoxItem>
+                            <ComboBoxItem>6</ComboBoxItem>
+                            <ComboBoxItem>8</ComboBoxItem>
+                            <ComboBoxItem>12</ComboBoxItem>
+                            <ComboBoxItem>14</ComboBoxItem>
+                            <ComboBoxItem>16</ComboBoxItem>
+                            <ComboBoxItem>18</ComboBoxItem>
+                        </ComboBox.Items>
+                    </ComboBox>
 
-                <Button Grid.Row="9" Command="{Binding OpenSearchImageDialogCommand}">SearchImageUrl</Button>
-                <ProgressBar Grid.Row="9" Grid.Column="1" Height="30" Margin="5" Value="{Binding SearchImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+                    <TextBox Text="{Binding Movie.Description}" materialDesign:HintAssist.Hint="Description" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="3"/>
 
-                <Button Grid.Row="10" VerticalAlignment="Top" Command="{Binding CancelCommand}">Cancel</Button>
-                <Button Grid.Row="10" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
+                    <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="3">
+                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenTrailerDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                            <ProgressBar Value="{Binding Movie.TrailerProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                        </materialDesign:Card>
+                        <TextBox Text="{Binding Movie.TrailerUrl}" materialDesign:HintAssist.Hint="Trailer Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                    </DockPanel>
 
-            </Grid>
-        </Border>
+                    <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="3">
+                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                            <ProgressBar Value="{Binding Movie.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                        </materialDesign:Card>
+                        <TextBox Text="{Binding Movie.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                    </DockPanel>
+
+                    <DockPanel Margin="10" Grid.Row="4" Grid.ColumnSpan="3">
+                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenSearchImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                            <ProgressBar Value="{Binding Movie.SearchImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                        </materialDesign:Card>
+                        <TextBox Text="{Binding Movie.SearchImageUrl}" materialDesign:HintAssist.Hint="Search Image Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                    </DockPanel>
+
+                </Grid>
+            </Border>
+
+            <Border Margin="0 30 30 30" Grid.Column="1">
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Border Background="#fff" CornerRadius="7" Margin="0 0 0 10" Grid.Row="0">
+                        <ComboBox ItemsSource="{Binding Producers}" SelectedItem="{Binding Movie.Producer, UpdateSourceTrigger=PropertyChanged}" Margin="15 3"
+                              materialDesign:HintAssist.Hint="Producer" Style="{StaticResource InputComboBox}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Border>
+
+                    <Border Background="#fff" CornerRadius="7" Grid.Row="1">
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="1.5*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Text="{Binding Movie.VideoName}" materialDesign:HintAssist.Hint="Video Name" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
+
+                            <TextBox Text="{Binding Movie.VideoLength}" materialDesign:HintAssist.Hint="Video Length" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
+
+                            <TextBox Text="{Binding Movie.VideoDescription}" materialDesign:HintAssist.Hint="Video Description" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+                            <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
+                                <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                                <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                    <ProgressBar Value="{Binding Movie.VideoProgress}" Style="{StaticResource CircularProgressBar}"/>
+                                </materialDesign:Card>
+                                <TextBox Text="{Binding Movie.VideoUrl}" materialDesign:HintAssist.Hint="Video Path" IsReadOnly="True" Margin="0 0 10 0"  Style="{StaticResource InputTextBox}"/>
+                            </DockPanel>
+
+                            <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="2">
+                                <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                                <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                    <ProgressBar Value="{Binding Movie.VideoImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                                </materialDesign:Card>
+                                <TextBox Text="{Binding Movie.VideoImageUrl}" materialDesign:HintAssist.Hint="Video Image Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                            </DockPanel>
+
+                        </Grid>
+                    </Border>
+
+                </Grid>
+            </Border>
+
+            <Border Background="#fff" CornerRadius="7" Margin="20 0 30 20" Grid.Row="1" Grid.ColumnSpan="2">
+                <UniformGrid Columns="2" VerticalAlignment="Center">
+                    <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SaveCancelButton}"/>
+                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
+                </UniformGrid>
+            </Border>
+
+        </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddSoonViewModel}">
-        <Border Height="700" Width="1100" CornerRadius="25" Padding="20" Background="#f7f6f4">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
+        <Grid Background="#f7f6f4" Height="600" Width="1100">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
-                <TextBox Grid.Row="0" Text="{Binding Soon.Name}" materialDesign:HintAssist.Hint="Name"/>
-                <TextBox Grid.Row="1" Text="{Binding Soon.OutDate}" materialDesign:HintAssist.Hint="Out Date"/>
-                <TextBox Grid.Row="2" Text="{Binding Soon.Description}" materialDesign:HintAssist.Hint="Description"/>
+            <Border Background="#fff" CornerRadius="7" Margin="30">
+                <Grid>
 
-                <Button Grid.Row="7" Command="{Binding OpenTrailerDialogCommand}">TrailerUrl</Button>
-                <ProgressBar Grid.Row="7" Grid.Column="1" Height="30" Margin="5" Value="{Binding TrailerProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                <Button Grid.Row="8" Command="{Binding OpenTrailerImageDialogCommand}">TrailerImageUrl</Button>
-                <ProgressBar Grid.Row="8" Grid.Column="1" Height="30" Margin="5" Value="{Binding TrailerImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
 
-                <Button Grid.Row="10" VerticalAlignment="Top" Command="{Binding CancelCommand}">Cancel</Button>
-                <Button Grid.Row="10" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
+                    <TextBox Text="{Binding Soon.Name}" materialDesign:HintAssist.Hint="Name" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
 
-            </Grid>
-        </Border>
+                    <DatePicker SelectedDate="{Binding Soon.OutDate}" materialDesign:HintAssist.Hint="OutDate" Style="{StaticResource InputDatePicker}" Grid.Column="1"/>
+
+                    <TextBox Text="{Binding Soon.Description}" materialDesign:HintAssist.Hint="Description" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+                    <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
+                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenTrailerDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                            <ProgressBar Value="{Binding Soon.TrailerProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                        </materialDesign:Card>
+                        <TextBox Text="{Binding Soon.TrailerUrl}" materialDesign:HintAssist.Hint="Trailer Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                    </DockPanel>
+
+                    <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="2">
+                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenTrailerImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                            <ProgressBar Value="{Binding Soon.TrailerImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                        </materialDesign:Card>
+                        <TextBox Text="{Binding Soon.TrailerImageUrl}" materialDesign:HintAssist.Hint="Trailer Image Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                    </DockPanel>
+
+                </Grid>
+            </Border>
+
+            <Border Background="#fff" CornerRadius="7" Margin="20 0 30 20" Grid.Row="1">
+                <UniformGrid Columns="2" VerticalAlignment="Center">
+                    <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SaveCancelButton}"/>
+                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
+                </UniformGrid>
+            </Border>
+
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModel:AddSerialViewModel}">
+        <Grid Background="#f7f6f4" Height="600" Width="1100">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Border Background="#fff" CornerRadius="7" Margin="30" Grid.Column="0">
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Text="{Binding Serial.Name}" materialDesign:HintAssist.Hint="Name" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
+
+                    <TextBox Text="{Binding Serial.Year}" materialDesign:HintAssist.Hint="Year" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
+
+                    <ComboBox Text="{Binding Serial.Age}" materialDesign:HintAssist.Hint="Age" Style="{StaticResource InputComboBox}"  Grid.Column="2">
+                        <ComboBox.Items>
+                            <ComboBoxItem>3</ComboBoxItem>
+                            <ComboBoxItem>6</ComboBoxItem>
+                            <ComboBoxItem>8</ComboBoxItem>
+                            <ComboBoxItem>12</ComboBoxItem>
+                            <ComboBoxItem>14</ComboBoxItem>
+                            <ComboBoxItem>16</ComboBoxItem>
+                            <ComboBoxItem>18</ComboBoxItem>
+                        </ComboBox.Items>
+                    </ComboBox>
+
+                    <TextBox Text="{Binding Serial.Description}" materialDesign:HintAssist.Hint="Description" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="3"/>
+
+                    <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="3">
+                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenTrailerDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                            <ProgressBar Value="{Binding Serial.TrailerProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                        </materialDesign:Card>
+                        <TextBox Text="{Binding Serial.TrailerUrl}" materialDesign:HintAssist.Hint="Trailer Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                    </DockPanel>
+
+                    <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="3">
+                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                            <ProgressBar Value="{Binding Serial.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                        </materialDesign:Card>
+                        <TextBox Text="{Binding Serial.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                    </DockPanel>
+
+                    <DockPanel Margin="10" Grid.Row="4" Grid.ColumnSpan="3">
+                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenSearchImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                            <ProgressBar Value="{Binding Serial.SearchImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                        </materialDesign:Card>
+                        <TextBox Text="{Binding Serial.SearchImageUrl}" materialDesign:HintAssist.Hint="Search Image Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                    </DockPanel>
+
+                </Grid>
+            </Border>
+
+            <Border Margin="0 30 30 30" Grid.Column="1">
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Border Background="#fff" CornerRadius="7" Margin="0 0 0 10" Grid.Row="0">
+                        <ComboBox ItemsSource="{Binding Producers}" SelectedItem="{Binding Serial.Producer, UpdateSourceTrigger=PropertyChanged}" Margin="15 3"
+                              materialDesign:HintAssist.Hint="Producer" Style="{StaticResource InputComboBox}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Border>
+
+                    <Border Background="#fff" CornerRadius="7" Grid.Row="1">
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="1.5*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Text="{Binding Episode.Name}" materialDesign:HintAssist.Hint="Video Name" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
+
+                            <TextBox Text="{Binding Episode.VideoLength}" materialDesign:HintAssist.Hint="Video Length" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
+
+                            <TextBox Text="{Binding Episode.Description}" materialDesign:HintAssist.Hint="Video Description" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+                            <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
+                                <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                                <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                    <ProgressBar Value="{Binding Episode.VideoProgress}" Style="{StaticResource CircularProgressBar}"/>
+                                </materialDesign:Card>
+                                <TextBox Text="{Binding Episode.VideoUrl}" materialDesign:HintAssist.Hint="Video Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                            </DockPanel>
+
+                            <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="2">
+                                <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                                <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                    <ProgressBar Value="{Binding Episode.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                                </materialDesign:Card>
+                                <TextBox Text="{Binding Episode.ImageUrl}" materialDesign:HintAssist.Hint="Video Image Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                            </DockPanel>
+
+                        </Grid>
+                    </Border>
+                
+                </Grid>
+            </Border>
+
+            <Border Background="#fff" CornerRadius="7" Margin="20 0 30 20" Grid.Row="1" Grid.ColumnSpan="2">
+                <UniformGrid Columns="2" VerticalAlignment="Center">
+                    <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SaveCancelButton}"/>
+                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
+                </UniformGrid>
+            </Border>
+
+        </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddSeasonViewModel}">
-        <Border Height="300" Width="500" CornerRadius="25" Padding="20" Background="#f7f6f4">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
+        <Grid Background="#f7f6f4" Height="600" Width="1100">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
-                <TextBox Grid.Row="2" Text="{Binding Number}" IsReadOnly="True" materialDesign:HintAssist.Hint="Season Number"/>
+            <Border Background="#fff" CornerRadius="7" Margin="30">
+                <Grid>
 
-                <ComboBox Grid.Row="3" ItemsSource="{Binding Serials}"  SelectedItem="{Binding Season.Serial, UpdateSourceTrigger=PropertyChanged}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectedSerialChangedCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ComboBox>
+                    <TextBox Text="{Binding Season.Number}" materialDesign:HintAssist.Hint="Number" IsReadOnly="True" Style="{StaticResource InputTextBox}"/>
 
-                <Button Grid.Row="9" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
+                    <ComboBox ItemsSource="{Binding Serials}" SelectedItem="{Binding Season.Serial, UpdateSourceTrigger=PropertyChanged}"
+                              materialDesign:HintAssist.Hint="Serial" Style="{StaticResource InputComboBox}" Grid.Row="1">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
 
-            </Grid>
-        </Border>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding SelectedSerialChangedCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
+
+                </Grid>
+            </Border>
+
+            <Border Background="#fff" CornerRadius="7" Margin="20 0 30 20" Grid.Row="1">
+                <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
+            </Border>
+
+        </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddEpisodeViewModel}">
-        <Border Height="700" Width="1100" CornerRadius="25" Padding="20" Background="#f7f6f4">
-            <Grid >
+        <Grid Background="#f7f6f4" Height="600" Width="1100">
 
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
+            <Border Background="#fff" CornerRadius="7" Margin="30">
+                <Grid>
 
-                <ComboBox ItemsSource="{Binding Serials}" SelectedItem="{Binding Serial, UpdateSourceTrigger=PropertyChanged}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectedSerialChangedCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ComboBox>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
 
-                <ComboBox Grid.Column="1" ItemsSource="{Binding Seasons}" SelectedItem="{Binding Season, UpdateSourceTrigger=PropertyChanged}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Number}"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
+                    <UniformGrid Columns="2" Margin="10" Grid.ColumnSpan="3">
+                        <ComboBox ItemsSource="{Binding Serials}" SelectedItem="{Binding Episode.Serial, UpdateSourceTrigger=PropertyChanged}"
+                              materialDesign:HintAssist.Hint="Serial" Style="{StaticResource InputComboBox}" Margin="0 0 5 0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
 
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectedSeasonChangedCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ComboBox>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding SelectedSerialChangedCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+                        <ComboBox ItemsSource="{Binding Seasons}" SelectedItem="{Binding Episode.Season, UpdateSourceTrigger=PropertyChanged}"
+                              materialDesign:HintAssist.Hint="Season" Style="{StaticResource InputComboBox}" Margin="5 0 0 0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Number}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
 
-                <TextBox Grid.Row="1" Text="{Binding Number}" IsReadOnly="True" materialDesign:HintAssist.Hint="Name"/>
-                <TextBox Grid.Row="2" Text="{Binding Episode.Name}" materialDesign:HintAssist.Hint="Name"/>
-                <TextBox Grid.Row="3" Text="{Binding Episode.Description}" materialDesign:HintAssist.Hint="Year"/>
-                <TextBox Grid.Row="4" Text="{Binding Episode.VideoLength}" materialDesign:HintAssist.Hint="Age"/>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding SelectedSeasonChangedCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+                    </UniformGrid>
 
-                <Button Grid.Row="5" Command="{Binding OpenVideoDialogCommand}">SearchImageUrl</Button>
-                <ProgressBar Grid.Row="5" Grid.Column="1" Height="30" Margin="5" Value="{Binding VideoProgress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+                    <TextBox Text="{Binding Episode.Number}" materialDesign:HintAssist.Hint="Number" Style="{StaticResource InputTextBox}" Grid.Row="1" Grid.Column="0"/>
 
-                <Button Grid.Row="6" Command="{Binding OpenVideoImageDialogCommand}">SearchImageUrl</Button>
-                <ProgressBar Grid.Row="7" Grid.Column="1" Height="30" Margin="5" Value="{Binding VideoImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+                    <TextBox Text="{Binding Episode.Name}" materialDesign:HintAssist.Hint="Name" Style="{StaticResource InputTextBox}" Grid.Row="1" Grid.Column="1"/>
 
-                <Button Grid.Row="7" VerticalAlignment="Top" Command="{Binding CancelCommand}">Cancel</Button>
-                <Button Grid.Row="7" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
+                    <TextBox Text="{Binding Episode.VideoLength}" materialDesign:HintAssist.Hint="Video Length" Style="{StaticResource InputTextBox}" Grid.Row="1" Grid.Column="2"/>
 
-            </Grid>
-        </Border>
+                    <TextBox Text="{Binding Episode.Description}" materialDesign:HintAssist.Hint="Description" Style="{StaticResource InputTextArea}" Grid.Row="2" Grid.ColumnSpan="3"/>
+
+                    <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="3">
+                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                            <ProgressBar Value="{Binding Episode.VideoProgress}" Style="{StaticResource CircularProgressBar}"/>
+                        </materialDesign:Card>
+                        <TextBox Text="{Binding Episode.VideoUrl}" materialDesign:HintAssist.Hint="Video Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                    </DockPanel>
+
+                    <DockPanel Margin="10" Grid.Row="4" Grid.ColumnSpan="3">
+                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                            <ProgressBar Value="{Binding Episode.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                        </materialDesign:Card>
+                        <TextBox Text="{Binding Episode.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                    </DockPanel>
+
+                </Grid>
+            </Border>
+
+            <Border Background="#fff" CornerRadius="7" Margin="20 0 30 20" Grid.Row="1">
+                <UniformGrid Columns="2" VerticalAlignment="Center">
+                    <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SaveCancelButton}"/>
+                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
+                </UniformGrid>
+            </Border>
+
+        </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddActorViewModel}">
-        <Border Height="500" Width="700" CornerRadius="25" Padding="20" Background="#f7f6f4">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
+        <Grid Background="#f7f6f4" Height="600" Width="1100">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
-                <TextBox Grid.Row="1" Text="{Binding Actor.Name}" materialDesign:HintAssist.Hint="Name"/>
-                <TextBox Grid.Row="2" Text="{Binding Actor.Surname}" materialDesign:HintAssist.Hint="Surname"/>
-                <TextBox Grid.Row="3" Text="{Binding Actor.About}" materialDesign:HintAssist.Hint="About"/>
+            <Border Background="#fff" CornerRadius="7" Margin="30">
+                <Grid>
 
-                <Button Grid.Row="8" Command="{Binding OpenImageDialogCommand}">ImageUrl</Button>
-                <ProgressBar Grid.Row="8" Grid.Column="1" Height="30" Margin="5" Value="{Binding ImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                <Button Grid.Row="10" VerticalAlignment="Top" Command="{Binding CancelCommand}">Cancel</Button>
-                <Button Grid.Row="10" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
 
-            </Grid>
-        </Border>
+                    <TextBox Text="{Binding Actor.Name}" materialDesign:HintAssist.Hint="Name" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
+
+                    <TextBox Text="{Binding Actor.Surname}" materialDesign:HintAssist.Hint="Surname" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
+
+                    <TextBox Text="{Binding Actor.About}" materialDesign:HintAssist.Hint="About" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+                    <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
+                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                            <ProgressBar Value="{Binding Actor.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                        </materialDesign:Card>
+                        <TextBox Text="{Binding Actor.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                    </DockPanel>
+
+                </Grid>
+            </Border>
+
+            <Border Background="#fff" CornerRadius="7" Margin="20 0 30 20" Grid.Row="1">
+                <UniformGrid Columns="2" VerticalAlignment="Center">
+                    <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SaveCancelButton}"/>
+                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
+                </UniformGrid>
+            </Border>
+
+        </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddProducerViewModel}">
-        <Border Height="500" Width="700" CornerRadius="25" Padding="20" Background="#f7f6f4">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
+        <Grid Background="#f7f6f4" Height="600" Width="1100">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
-                <TextBox Grid.Row="1" Text="{Binding Producer.Name}" materialDesign:HintAssist.Hint="Name"/>
-                <TextBox Grid.Row="2" Text="{Binding Producer.Surname}" materialDesign:HintAssist.Hint="Surname"/>
-                <TextBox Grid.Row="3" Text="{Binding Producer.About}" materialDesign:HintAssist.Hint="About"/>
+            <Border Background="#fff" CornerRadius="7" Margin="30">
+                <Grid>
 
-                <Button Grid.Row="8" Command="{Binding OpenImageDialogCommand}">ImageUrl</Button>
-                <ProgressBar Grid.Row="8" Grid.Column="1" Height="30" Margin="5" Value="{Binding ImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                <Button Grid.Row="10" VerticalAlignment="Top" Command="{Binding CancelCommand}">Cancel</Button>
-                <Button Grid.Row="10" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
 
-            </Grid>
-        </Border>
+                    <TextBox Text="{Binding Producer.Name}" materialDesign:HintAssist.Hint="Name" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
+
+                    <TextBox Text="{Binding Producer.Surname}" materialDesign:HintAssist.Hint="Surname"  Style="{StaticResource InputTextBox}" Grid.Column="1"/>
+
+                    <TextBox Text="{Binding Producer.About}" materialDesign:HintAssist.Hint="About" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+                    <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
+                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                            <ProgressBar Value="{Binding Producer.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                        </materialDesign:Card>
+                        <TextBox Text="{Binding Producer.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                    </DockPanel>
+
+                </Grid>
+            </Border>
+
+            <Border Background="#fff" CornerRadius="7" Margin="20 0 30 20" Grid.Row="1">
+                <UniformGrid Columns="2" VerticalAlignment="Center">
+                    <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SaveCancelButton}"/>
+                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
+                </UniformGrid>
+            </Border>
+
+        </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddGenreViewModel}">
-        <Border Height="500" Width="700" CornerRadius="25" Padding="20" Background="#f7f6f4">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
+        <Grid Background="#f7f6f4" Height="600" Width="1100">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
-                <TextBox Grid.Row="1" Text="{Binding Genre.Name}" materialDesign:HintAssist.Hint="Name"/>
+            <Border Background="#fff" CornerRadius="7" Margin="30">
+                <Grid>
 
-                <Button Grid.Row="8" Command="{Binding OpenImageDialogCommand}">ImageUrl</Button>
-                <ProgressBar Grid.Row="8" Grid.Column="1" Height="30" Margin="5" Value="{Binding ImageProgress.Progress, Mode=TwoWay}" Minimum="0" Maximum="100"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                <Button Grid.Row="10" VerticalAlignment="Top" Command="{Binding CancelCommand}">Cancel</Button>
-                <Button Grid.Row="10" Grid.Column="1" VerticalAlignment="Top" Command="{Binding SaveCommand}">Save</Button>
+                    <TextBox Text="{Binding Genre.Name}" materialDesign:HintAssist.Hint="Name" Style="{StaticResource InputTextBox}"/>
 
-            </Grid>
-        </Border>
+                    <DockPanel Margin="10" Grid.Row="1">
+                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                            <ProgressBar Value="{Binding Genre.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                        </materialDesign:Card>
+                        <TextBox Text="{Binding Genre.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                    </DockPanel>
+
+                </Grid>
+            </Border>
+
+            <Border Background="#fff" CornerRadius="7" Margin="20 0 30 20" Grid.Row="1">
+                <UniformGrid Columns="2" VerticalAlignment="Center">
+                    <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SaveCancelButton}"/>
+                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
+                </UniformGrid>
+            </Border>
+
+        </Grid>
     </DataTemplate>
 
 </ResourceDictionary>

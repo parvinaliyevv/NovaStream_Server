@@ -6,70 +6,23 @@ public class AddSerialViewModel : DependencyObject
     private readonly IStorageManager _storageManager;
     private readonly IAWSStorageManager _awsStorageManager;
 
-
-    public Serial Serial { get; set; }
-    public Season Season { get; set; }
-    public Episode Episode { get; set; }
+    public UploadSerialModel Serial { get; set; }
+    public UploadSeasonModel Season { get; set; }
+    public UploadEpisodeModel Episode { get; set; }
     public List<Producer> Producers { get; set; }
 
+    public bool ProcessStarted { get; set; }
+    public List<Task> UploadTasks { get; set; }
+    public List<CancellationTokenSource> UploadTaskTokens { get; set; }
 
     public RelayCommand SaveCommand { get; set; }
     public RelayCommand CancelCommand { get; set; }
+
     public RelayCommand OpenVideoDialogCommand { get; set; }
     public RelayCommand OpenVideoImageDialogCommand { get; set; }
     public RelayCommand OpenTrailerDialogCommand { get; set; }
     public RelayCommand OpenImageDialogCommand { get; set; }
     public RelayCommand OpenSearchImageDialogCommand { get; set; }
-
-
-    public List<Task> UploadTasks { get; set; }
-    public List<CancellationTokenSource> UploadTaskTokens { get; set; }
-
-
-    public bool VideoProgressCompleted { get; set; }
-    public int VideoProgress
-    {
-        get { return (int)GetValue(VideoProgressProperty); }
-        set { SetValue(VideoProgressProperty, value); }
-    }
-    public static readonly DependencyProperty VideoProgressProperty =
-        DependencyProperty.Register("VideoProgress", typeof(int), typeof(AddSerialViewModel));
-
-    public bool TrailerProgressCompleted { get; set; }
-    public BlobStorageUploadProgress TrailerProgress
-    {
-        get { return (BlobStorageUploadProgress)GetValue(TrailerProgressProperty); }
-        set { SetValue(TrailerProgressProperty, value); }
-    }
-    public static readonly DependencyProperty TrailerProgressProperty =
-        DependencyProperty.Register("TrailerProgress", typeof(BlobStorageUploadProgress), typeof(AddSerialViewModel));
-
-    public bool VideoImageProgressCompleted { get; set; }
-    public BlobStorageUploadProgress VideoImageProgress
-    {
-        get { return (BlobStorageUploadProgress)GetValue(VideoImageProgressProperty); }
-        set { SetValue(VideoImageProgressProperty, value); }
-    }
-    public static readonly DependencyProperty VideoImageProgressProperty =
-        DependencyProperty.Register("VideoImageProgress", typeof(BlobStorageUploadProgress), typeof(AddSerialViewModel));
-
-    public bool ImageProgressCompleted { get; set; }
-    public BlobStorageUploadProgress ImageProgress
-    {
-        get { return (BlobStorageUploadProgress)GetValue(ImageProgressProperty); }
-        set { SetValue(ImageProgressProperty, value); }
-    }
-    public static readonly DependencyProperty ImageProgressProperty =
-        DependencyProperty.Register("ImageProgress", typeof(BlobStorageUploadProgress), typeof(AddSerialViewModel));
-
-    public bool SearchImageProgressCompleted { get; set; }
-    public BlobStorageUploadProgress SearchImageProgress
-    {
-        get { return (BlobStorageUploadProgress)GetValue(SearchImageProgressProperty); }
-        set { SetValue(SearchImageProgressProperty, value); }
-    }
-    public static readonly DependencyProperty SearchImageProgressProperty =
-        DependencyProperty.Register("SearchImageProgress", typeof(BlobStorageUploadProgress), typeof(AddSerialViewModel));
 
 
     public AddSerialViewModel(AppDbContext dbContext, IStorageManager storageManager, IAWSStorageManager awsStorageManager)
@@ -78,28 +31,41 @@ public class AddSerialViewModel : DependencyObject
         _storageManager = storageManager;
         _awsStorageManager = awsStorageManager;
 
-        Serial = new Serial();
-        Season = new Season();
-        Episode = new Episode();
         Producers = dbContext.Producers.ToList();
 
+        Serial = new();
+        Season = new();
+        Episode = new();
+
+        ProcessStarted = false;
         UploadTasks = new();
         UploadTaskTokens = new();
 
-        SaveCommand = new RelayCommand(() => Save());
-        CancelCommand = new RelayCommand(() => Cancel());
+        SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
+        CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
         
-        OpenVideoDialogCommand = new RelayCommand(() => OpenVideoDialog());
-        OpenVideoImageDialogCommand = new RelayCommand(() => OpenVideoImageDialog());
-        OpenTrailerDialogCommand = new RelayCommand(() => OpenTrailerDialog());
-        OpenImageDialogCommand = new RelayCommand(() => OpenImageDialog());
-        OpenSearchImageDialogCommand = new RelayCommand(() => OpenSearchImageDialog());
+        OpenVideoDialogCommand = new RelayCommand(_ => Episode.VideoUrl = FileDialogService.OpenVideoFile(), _ => !ProcessStarted);
+        OpenVideoImageDialogCommand = new RelayCommand(_ => Episode.ImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
+        OpenTrailerDialogCommand = new RelayCommand(_ => Serial.TrailerUrl = FileDialogService.OpenVideoFile(), _ => !ProcessStarted);
+        OpenImageDialogCommand = new RelayCommand(_ => Serial.ImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
+        OpenSearchImageDialogCommand = new RelayCommand(_ => Serial.SearchImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
     }
 
 
     private async Task Save()
     {
         await Task.CompletedTask;
+
+        Serial.Verify();
+        Episode.Verify();
+
+        if (Serial.HasErrors || Episode.HasErrors) return;
+
+        ProcessStarted = true;
+
+        var serial = Serial.Adapt<Serial>();
+        var season = Season.Adapt<Season>();
+        var episode = Episode.Adapt<Episode>();
 
         Serial? dbSerial = _dbContext.Serials.FirstOrDefault(s => s.Name == Serial.Name);
         Season? dbSeason = null;
@@ -116,219 +82,151 @@ public class AddSerialViewModel : DependencyObject
         UploadTasks.Clear();
         UploadTaskTokens.Clear();
 
-        VideoProgressCompleted = false;
-        VideoImageProgressCompleted = false;
-        TrailerProgressCompleted = false;
-        ImageProgressCompleted = false;
-        SearchImageProgressCompleted = false;
+        Episode.VideoUploadSuccess = false;
+        Episode.ImageUploadSuccess = false;
 
+        Serial.TrailerUploadSuccess = false;
+        Serial.ImageUploadSuccess = false;
+        Serial.SearchImageUploadSuccess = false;
 
         // Episode VideoUrl
         if (dbEpisode is null || dbEpisode is not null && dbEpisode.VideoUrl != Episode.VideoUrl)
         {
             var videoStream = new FileStream(Episode.VideoUrl, FileMode.Open, FileAccess.Read);
-            Episode.VideoUrl = string.Format("Serials/{0}/Season 1/Episode 1/{1}-video{2}", Serial.Name, Path.GetFileNameWithoutExtension(Episode.VideoUrl), Path.GetExtension(Episode.VideoUrl));
+            var filename = string.Format("{0}-S01E01-video{1}", Path.GetFileNameWithoutExtension(Serial.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Episode.VideoUrl));
+            episode.VideoUrl = string.Format("Serials/{0}/Season 1/Episode 1/{1}", Serial.Name, filename);
 
             var videoToken = new CancellationTokenSource();
-            var videoUploadTask = _awsStorageManager.UploadFileAsync(videoStream, Episode.VideoUrl, VideoProgressEvent, videoToken.Token);
+            var videoUploadTask = _awsStorageManager.UploadFileAsync(videoStream, episode.VideoUrl, Episode.VideoProgressEvent, videoToken.Token);
 
             UploadTasks.Add(videoUploadTask);
             UploadTaskTokens.Add(videoToken);
 
-            videoUploadTask.ContinueWith(_ => VideoProgressCompleted = true);
+            videoUploadTask.ContinueWith(_ => Episode.VideoUploadSuccess = true);
         }
-        else VideoProgressCompleted = true;
+        else Episode.VideoUploadSuccess = true;
 
         // Episode ImageUrl
         if (dbEpisode is null || dbEpisode is not null && dbEpisode.ImageUrl != Episode.ImageUrl)
         {
             var videoImageStream = new FileStream(Episode.ImageUrl, FileMode.Open, FileAccess.Read);
-            Episode.ImageUrl = string.Format("Serials/{0}/Season 1/Episode 1/{1}-video-image{2}", Serial.Name, Path.GetFileNameWithoutExtension(Episode.ImageUrl), Path.GetExtension(Episode.ImageUrl));
+            var filename = string.Format("{0}-S01E01-video-image{1}", Path.GetFileNameWithoutExtension(Serial.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Episode.ImageUrl));
+            episode.ImageUrl = string.Format("Serials/{0}/Season 1/Episode 1/{1}", Serial.Name, filename);
 
-            VideoImageProgress = new BlobStorageUploadProgress(videoImageStream.Length);
+            Episode.ImageProgress = new BlobStorageUploadProgress(videoImageStream.Length);
 
-            var videoImageToken = new CancellationTokenSource();
-            var videoImageUploadTask = _storageManager.UploadFileAsync(videoImageStream, Episode.ImageUrl, VideoImageProgress, videoImageToken.Token);
+            var imageToken = new CancellationTokenSource();
+            var imageUploadTask = _storageManager.UploadFileAsync(videoImageStream, episode.ImageUrl, Episode.ImageProgress, imageToken.Token);
 
-            UploadTasks.Add(videoImageUploadTask);
-            UploadTaskTokens.Add(videoImageToken);
+            UploadTasks.Add(imageUploadTask);
+            UploadTaskTokens.Add(imageToken);
 
-            videoImageUploadTask.ContinueWith(_ => VideoImageProgressCompleted = true);
+            imageUploadTask.ContinueWith(_ => Episode.ImageUploadSuccess = true);
         }
-        else VideoImageProgressCompleted = true;
+        else Episode.ImageUploadSuccess = true;
 
         // Serial TrailerUrl
         if (dbSerial is null || dbSerial is not null && dbSerial.TrailerUrl != Serial.TrailerUrl)
         {
             var trailerStream = new FileStream(Serial.TrailerUrl, FileMode.Open, FileAccess.Read);
-            Serial.TrailerUrl = string.Format("Serials/{0}/{1}-trailer{2}", Serial.Name, Path.GetFileNameWithoutExtension(Serial.TrailerUrl), Path.GetExtension(Serial.TrailerUrl));
+            var filename = string.Format("{0}-trailer{1}", Path.GetFileNameWithoutExtension(Serial.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Serial.TrailerUrl));
+            serial.TrailerUrl = string.Format("Serials/{0}/{1}", Serial.Name, filename);
 
-            TrailerProgress = new BlobStorageUploadProgress(trailerStream.Length);
+            Serial.TrailerProgress = new BlobStorageUploadProgress(trailerStream.Length);
 
             var trailerToken = new CancellationTokenSource();
-            var trailerUploadTask = _storageManager.UploadFileAsync(trailerStream, Serial.TrailerUrl, TrailerProgress, trailerToken.Token);
+            var trailerUploadTask = _storageManager.UploadFileAsync(trailerStream, serial.TrailerUrl, Serial.TrailerProgress, trailerToken.Token);
 
             UploadTasks.Add(trailerUploadTask);
             UploadTaskTokens.Add(trailerToken);
 
-            trailerUploadTask.ContinueWith(_ => TrailerProgressCompleted = true);
+            trailerUploadTask.ContinueWith(_ => Serial.TrailerUploadSuccess = true);
         }
-        else TrailerProgressCompleted = true;
+        else Serial.TrailerUploadSuccess = true;
 
         // Serial ImageUrl
         if (dbSerial is null || dbSerial is not null && dbSerial.ImageUrl != Serial.ImageUrl)
         {
             var imageStream = new FileStream(Serial.ImageUrl, FileMode.Open, FileAccess.Read);
-            Serial.ImageUrl = string.Format("Serials/{0}/{1}-image{2}", Serial.Name, Path.GetFileNameWithoutExtension(Serial.ImageUrl), Path.GetExtension(Serial.ImageUrl));
+            var filename = string.Format("{0}-image{1}", Path.GetFileNameWithoutExtension(Serial.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Serial.ImageUrl));
+            serial.ImageUrl = string.Format("Serials/{0}/{1}", Serial.Name, filename);
 
-            ImageProgress = new BlobStorageUploadProgress(imageStream.Length);
+            Serial.ImageProgress = new BlobStorageUploadProgress(imageStream.Length);
 
             var imageToken = new CancellationTokenSource();
-            var imageUploadTask = _storageManager.UploadFileAsync(imageStream, Serial.ImageUrl, ImageProgress, imageToken.Token);
+            var imageUploadTask = _storageManager.UploadFileAsync(imageStream, serial.ImageUrl, Serial.ImageProgress, imageToken.Token);
 
             UploadTasks.Add(imageUploadTask);
             UploadTaskTokens.Add(imageToken);
 
-            imageUploadTask.ContinueWith(_ => ImageProgressCompleted = true);
+            imageUploadTask.ContinueWith(_ => Serial.ImageUploadSuccess = true);
         }
-        else ImageProgressCompleted = true;
+        else Serial.ImageUploadSuccess = true;
 
         // Serial SearchImageUrl
         if (dbSerial is null || dbSerial is not null && dbSerial.SearchImageUrl != Serial.SearchImageUrl)
         {
             var searchImageStream = new FileStream(Serial.SearchImageUrl, FileMode.Open, FileAccess.Read);
-            Serial.SearchImageUrl = string.Format("Serials/{0}/{1}-search-image{2}", Serial.Name, Path.GetFileNameWithoutExtension(Serial.SearchImageUrl), Path.GetExtension(Serial.SearchImageUrl));
+            var filename = string.Format("{0}-search-image{1}", Path.GetFileNameWithoutExtension(Serial.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Serial.SearchImageUrl));
+            serial.SearchImageUrl = string.Format("Serials/{0}/{1}", Serial.Name, filename);
 
-            SearchImageProgress = new BlobStorageUploadProgress(searchImageStream.Length);
+            Serial.SearchImageProgress = new BlobStorageUploadProgress(searchImageStream.Length);
 
             var searchImageToken = new CancellationTokenSource();
-            var searchImageUploadTask = _storageManager.UploadFileAsync(searchImageStream, Serial.SearchImageUrl, SearchImageProgress, searchImageToken.Token);
+            var searchImageUploadTask = _storageManager.UploadFileAsync(searchImageStream, serial.SearchImageUrl, Serial.SearchImageProgress, searchImageToken.Token);
 
             UploadTasks.Add(searchImageUploadTask);
             UploadTaskTokens.Add(searchImageToken);
 
-            searchImageUploadTask.ContinueWith(_ => SearchImageProgressCompleted = true);
+            searchImageUploadTask.ContinueWith(_ => Serial.SearchImageUploadSuccess = true);
         }
-        else SearchImageProgressCompleted = true;
-
+        else Serial.SearchImageUploadSuccess = true;
 
         if (UploadTasks.Count > 0) await Task.WhenAll(UploadTasks);
 
         if (dbSerial is not null) _dbContext.Serials.Remove(dbSerial);
 
-        _dbContext.Serials.Add(Serial);
+        _dbContext.Serials.Add(serial);
         await _dbContext.SaveChangesAsync();
 
-        Season.Number = 1;
-        Season.SerialName = Serial.Name;
+        season.Number = 1;
+        season.SerialName = Serial.Name;
 
-        _dbContext.Seasons.Add(Season);
+        _dbContext.Seasons.Add(season);
         await _dbContext.SaveChangesAsync();
 
-        Episode.Number = 1;
-        Episode.SeasonId = Season.Id;
+        episode.Number = 1;
+        episode.SeasonId = season.Id;
 
-        _dbContext.Episodes.Add(Episode);
+        _dbContext.Episodes.Add(episode);
         await _dbContext.SaveChangesAsync();
+
+        App.ServiceProvider.GetService<SerialViewModel>().Serials.Add(serial);
+        App.ServiceProvider.GetService<SeasonViewModel>().Seasons.Add(season);
+        App.ServiceProvider.GetService<EpisodeViewModel>().Episodes.Add(episode);
+
+        ProcessStarted = false;
     }
 
     private async Task Cancel()
     {
+        ProcessStarted = false;
+        
         UploadTaskTokens.ForEach(ts => ts.Cancel());
 
-        System.Windows.Application.Current.Dispatcher.Invoke(() => VideoProgress = 0);
-        if (VideoProgressCompleted) await _awsStorageManager.DeleteFileAsync(Episode.VideoUrl);
+        System.Windows.Application.Current.Dispatcher.Invoke(() => Episode.VideoProgress = 0);
+        if (Episode.VideoUploadSuccess) await _awsStorageManager.DeleteFileAsync(Episode.VideoUrl);
 
-        VideoImageProgress.Progress = 0;
-        if (VideoImageProgressCompleted) await _storageManager.DeleteFileAsync(Episode.ImageUrl);
+        Episode.ImageProgress.Progress = 0;
+        if (Episode.ImageUploadSuccess) await _storageManager.DeleteFileAsync(Episode.ImageUrl);
 
-        TrailerProgress.Progress = 0;
-        if (VideoProgressCompleted) await _storageManager.DeleteFileAsync(Serial.TrailerUrl);
+        Serial.TrailerProgress.Progress = 0;
+        if (Serial.TrailerUploadSuccess) await _storageManager.DeleteFileAsync(Serial.TrailerUrl);
 
-        ImageProgress.Progress = 0;
-        if (VideoProgressCompleted) await _storageManager.DeleteFileAsync(Serial.ImageUrl);
+        Serial.ImageProgress.Progress = 0;
+        if (Serial.ImageUploadSuccess) await _storageManager.DeleteFileAsync(Serial.ImageUrl);
 
-        SearchImageProgress.Progress = 0;
-        if (VideoProgressCompleted) await _storageManager.DeleteFileAsync(Serial.SearchImageUrl);
-    }
-
-    private void OpenVideoDialog()
-    {
-        var fileDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
-
-        fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-
-        fileDialog.Filter = "MP4 Files(*.mp4)|*.mp4|AVI Files(*.avi)|*.avi|MOV Files(*.mov)|*.mov";
-        fileDialog.FilterIndex = 1;
-
-        if (fileDialog.ShowDialog() is false) return;
-
-        Episode.VideoUrl = fileDialog.FileName;
-    }
-
-    private void OpenVideoImageDialog()
-    {
-        var fileDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
-
-        fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-
-        fileDialog.Filter = "PNG Files(*.png)|*.png|JPEG Files(*.jpeg)|*.jpeg|JPG Files(*.jpg)|*.jpg";
-        fileDialog.FilterIndex = 3;
-
-        if (fileDialog.ShowDialog() is false) return;
-
-        Episode.ImageUrl = fileDialog.FileName;
-    }
-
-    private void OpenTrailerDialog()
-    {
-        var fileDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
-
-        fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-
-        fileDialog.Filter = "MP4 Files(*.mp4)|*.mp4|AVI Files(*.avi)|*.avi|MOV Files(*.mov)|*.mov";
-        fileDialog.FilterIndex = 1;
-
-        if (fileDialog.ShowDialog() is false) return;
-
-        Serial.TrailerUrl = fileDialog.FileName;
-    }
-
-    private void OpenImageDialog()
-    {
-        var fileDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
-
-        fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-
-        fileDialog.Filter = "PNG Files(*.png)|*.png|JPEG Files(*.jpeg)|*.jpeg|JPG Files(*.jpg)|*.jpg";
-        fileDialog.FilterIndex = 3;
-
-        if (fileDialog.ShowDialog() is false) return;
-
-        Serial.ImageUrl = fileDialog.FileName;
-    }
-
-    private void OpenSearchImageDialog()
-    {
-        var fileDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
-
-        fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-
-        fileDialog.Filter = "PNG Files(*.png)|*.png|JPEG Files(*.jpeg)|*.jpeg|JPG Files(*.jpg)|*.jpg";
-        fileDialog.FilterIndex = 3;
-
-        if (fileDialog.ShowDialog() is false) return;
-
-        Serial.SearchImageUrl = fileDialog.FileName;
-    }
-
-    private void VideoProgressEvent(object sender, UploadProgressArgs e)
-    {
-        var progress = (int)(e.TransferredBytes * 100 / e.TotalBytes);
-
-        System.Windows.Application.Current.Dispatcher.Invoke(() =>
-        {
-            VideoProgress = progress;
-        });
+        Serial.SearchImageProgress.Progress = 0;
+        if (Serial.SearchImageUploadSuccess) await _storageManager.DeleteFileAsync(Serial.SearchImageUrl);
     }
 }

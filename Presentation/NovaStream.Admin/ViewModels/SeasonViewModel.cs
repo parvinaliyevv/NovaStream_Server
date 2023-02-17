@@ -4,11 +4,20 @@ public class SeasonViewModel : ViewModelBase
 {
     private readonly AppDbContext _dbContext;
 
+    private int _seasonCount;
+    public int SeasonCount
+    {
+        get => _seasonCount;
+        set { _seasonCount = value; RaisePropertyChanged(); }
+    }
+
     public ObservableCollection<Season> Seasons { get; set; }
 
+    public RelayCommand SearchCommand { get; set; }
+    public RelayCommand DeleteCommand { get; set; }
+
     public RelayCommand OpenAddDialogHostCommand { get; set; }
-    public RelayCommand<Button> OpenEditDialogHostCommand { get; set; }
-    public RelayCommand<Button> DeleteCommand { get; set; }
+    public RelayCommand OpenEditDialogHostCommand { get; set; }
 
 
     public SeasonViewModel(AppDbContext dbContext)
@@ -24,34 +33,36 @@ public class SeasonViewModel : ViewModelBase
         await Task.CompletedTask;
 
         Seasons = new ObservableCollection<Season>(_dbContext.Seasons);
+        SeasonCount = Seasons.Count;
 
-        OpenAddDialogHostCommand = new RelayCommand(() => OpenAddDialogHost());
-        OpenEditDialogHostCommand = new RelayCommand<Button>(button => OpenEditDialogHost(button));
-        DeleteCommand = new RelayCommand<Button>(button => Delete(button));
+        Seasons.CollectionChanged += SeasonCountChanged;
+
+        SearchCommand = new RelayCommand(sender => Search(sender));
+        DeleteCommand = new RelayCommand(sender => Delete(sender));
+
+        OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
+        OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
     }
 
-    private async Task OpenAddDialogHost()
+    private async Task Search(object sender)
     {
-        var model = App.ServiceProvider.GetService<AddSeasonViewModel>();
+        await Task.CompletedTask;
 
-        await DialogHost.Show(model, "RootDialog");
+        var pattern = sender.ToString();
+
+        var seasons = string.IsNullOrWhiteSpace(pattern)
+            ? _dbContext.Seasons.ToList() : _dbContext.Seasons.Where(s => s.SerialName.Contains(pattern)).ToList();
+
+        if (Seasons.Count == seasons.Count) return;
+
+        Seasons.Clear();
+
+        seasons.ForEach(s => Seasons.Add(s));
     }
 
-    private async Task OpenEditDialogHost(Button button)
+    private async Task Delete(object sender)
     {
-        var season = button?.DataContext as Season;
-
-        ArgumentNullException.ThrowIfNull(season);
-
-        var model = App.ServiceProvider.GetService<AddSeasonViewModel>();
-
-        model.Season = season;
-
-        await DialogHost.Show(model, "RootDialog");
-    }
-
-    private async Task Delete(Button button)
-    {
+        var button = sender as Button;
         var season = button?.DataContext as Season;
 
         ArgumentNullException.ThrowIfNull(season);
@@ -61,4 +72,27 @@ public class SeasonViewModel : ViewModelBase
 
         Seasons.Remove(season);
     }
+
+    private async Task OpenAddDialogHost()
+    {
+        var model = App.ServiceProvider.GetService<AddSeasonViewModel>();
+
+        await DialogHost.Show(model, "RootDialog");
+    }
+
+    private async Task OpenEditDialogHost(object sender)
+    {
+        var button = sender as Button;
+        var season = button?.DataContext as Season;
+
+        ArgumentNullException.ThrowIfNull(season);
+
+        var model = App.ServiceProvider.GetService<AddSeasonViewModel>();
+
+        model.Season = season.Adapt<UploadSeasonModel>();
+
+        await DialogHost.Show(model, "RootDialog");
+    }
+
+    private void SeasonCountChanged(object? sender, NotifyCollectionChangedEventArgs e) => SeasonCount = Seasons.Count;
 }

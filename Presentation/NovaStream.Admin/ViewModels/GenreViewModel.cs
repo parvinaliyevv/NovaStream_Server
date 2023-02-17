@@ -5,11 +5,20 @@ public class GenreViewModel : ViewModelBase
     private readonly AppDbContext _dbContext;
     private readonly IStorageManager _storageManager;
 
+    private int _genreCount;
+    public int GenreCount
+    {
+        get => _genreCount;
+        set { _genreCount = value; RaisePropertyChanged(); }
+    }
+
     public ObservableCollection<Genre> Genres { get; set; }
 
+    public RelayCommand SearchCommand { get; set; }
+    public RelayCommand DeleteCommand { get; set; }
+
     public RelayCommand OpenAddDialogHostCommand { get; set; }
-    public RelayCommand<Button> OpenEditDialogHostCommand { get; set; }
-    public RelayCommand<Button> DeleteCommand { get; set; }
+    public RelayCommand OpenEditDialogHostCommand { get; set; }
 
 
     public GenreViewModel(AppDbContext dbContext, IStorageManager storageManager)
@@ -26,34 +35,36 @@ public class GenreViewModel : ViewModelBase
         await Task.CompletedTask;
 
         Genres = new ObservableCollection<Genre>(_dbContext.Genres);
+        GenreCount = Genres.Count;
 
-        OpenAddDialogHostCommand = new RelayCommand(() => OpenAddDialogHost());
-        OpenEditDialogHostCommand = new RelayCommand<Button>(button => OpenEditDialogHost(button));
-        DeleteCommand = new RelayCommand<Button>(button => Delete(button));
+        Genres.CollectionChanged += GenreCountChanged;
+
+        SearchCommand = new RelayCommand(sender => Search(sender));
+        DeleteCommand = new RelayCommand(sender => Delete(sender));
+
+        OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
+        OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
     }
 
-    private async Task OpenAddDialogHost()
+    private async Task Search(object sender)
     {
-        var model = App.ServiceProvider.GetService<AddGenreViewModel>();
+        await Task.CompletedTask;
 
-        await DialogHost.Show(model, "RootDialog");
+        var pattern = sender.ToString();
+
+        var genres = string.IsNullOrWhiteSpace(pattern)
+            ? _dbContext.Genres.ToList() : _dbContext.Genres.Where(g => g.Name.Contains(pattern)).ToList();
+
+        if (Genres.Count == genres.Count) return;
+
+        Genres.Clear();
+
+        genres.ForEach(g => Genres.Add(g));
     }
 
-    private async Task OpenEditDialogHost(Button button)
+    private async Task Delete(object sender)
     {
-        var genre = button?.DataContext as Genre;
-
-        ArgumentNullException.ThrowIfNull(genre);
-
-        var model = App.ServiceProvider.GetService<AddGenreViewModel>();
-
-        model.Genre = genre;
-
-        await DialogHost.Show(model, "RootDialog");
-    }
-
-    private async Task Delete(Button button)
-    {
+        var button = sender as Button;
         var genre = button?.DataContext as Genre;
 
         ArgumentNullException.ThrowIfNull(genre);
@@ -65,4 +76,27 @@ public class GenreViewModel : ViewModelBase
 
         Genres.Remove(genre);
     }
+
+    private async Task OpenAddDialogHost()
+    {
+        var model = App.ServiceProvider.GetService<AddGenreViewModel>();
+
+        await DialogHost.Show(model, "RootDialog");
+    }
+
+    private async Task OpenEditDialogHost(object sender)
+    {
+        var button = sender as Button;
+        var genre = button?.DataContext as Genre;
+
+        ArgumentNullException.ThrowIfNull(genre);
+
+        var model = App.ServiceProvider.GetService<AddGenreViewModel>();
+
+        model.Genre = genre.Adapt<UploadGenreModel>();
+
+        await DialogHost.Show(model, "RootDialog");
+    }
+
+    private void GenreCountChanged(object? sender, NotifyCollectionChangedEventArgs e) => GenreCount = Genres.Count;
 }

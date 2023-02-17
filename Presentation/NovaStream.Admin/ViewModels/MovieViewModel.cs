@@ -6,11 +6,20 @@ public class MovieViewModel : ViewModelBase
     private readonly IStorageManager _storageManager;
     private readonly IAWSStorageManager _awsStorageManager;
 
+    private int _movieCount;
+    public int MovieCount
+    {
+        get => _movieCount;
+        set { _movieCount = value; RaisePropertyChanged(); }
+    }
+    
     public ObservableCollection<Movie> Movies { get; set; }
 
+    public RelayCommand SearchCommand { get; set; }
+    public RelayCommand DeleteCommand { get; set; }
+
     public RelayCommand OpenAddDialogHostCommand { get; set; }
-    public RelayCommand<Button> OpenEditDialogHostCommand { get; set; }
-    public RelayCommand<Button> DeleteCommand { get; set; }
+    public RelayCommand OpenEditDialogHostCommand { get; set; }
 
 
     public MovieViewModel(AppDbContext dbContext, IStorageManager storageManager, IAWSStorageManager awsStorageManager)
@@ -28,34 +37,36 @@ public class MovieViewModel : ViewModelBase
         await Task.CompletedTask;
 
         Movies = new ObservableCollection<Movie>(_dbContext.Movies.Include(s => s.Producer));
+        MovieCount = Movies.Count;
 
-        OpenAddDialogHostCommand = new RelayCommand(() => OpenAddDialogHost());
-        OpenEditDialogHostCommand = new RelayCommand<Button>(button => OpenEditDialogHost(button));
-        DeleteCommand = new RelayCommand<Button>(button => Delete(button));
+        Movies.CollectionChanged += MovieCountChanged;
+
+        SearchCommand = new RelayCommand(sender => Search(sender));
+        DeleteCommand = new RelayCommand(sender => Delete(sender));
+
+        OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
+        OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
     }
 
-    private async Task OpenAddDialogHost()
+    private async Task Search(object sender)
     {
-        var model = App.ServiceProvider.GetService<AddMovieViewModel>();
+        await Task.CompletedTask;
 
-        await DialogHost.Show(model, "RootDialog");
+        var pattern = sender.ToString();
+
+        var movies = string.IsNullOrWhiteSpace(pattern)
+            ? _dbContext.Movies.ToList() : _dbContext.Movies.Where(m => m.Name.Contains(pattern)).ToList();
+
+        if (Movies.Count == movies.Count) return;
+
+        Movies.Clear();
+
+        movies.ForEach(m => Movies.Add(m));
     }
 
-    private async Task OpenEditDialogHost(Button button)
+    private async Task Delete(object sender)
     {
-        var movie = button?.DataContext as Movie;
-
-        ArgumentNullException.ThrowIfNull(movie);
-
-        var model = App.ServiceProvider.GetService<AddMovieViewModel>();
-
-        model.Movie = movie;
-
-        await DialogHost.Show(model, "RootDialog");
-    }
-
-    private async Task Delete(Button button)
-    {
+        var button = sender as Button;
         var movie = button?.DataContext as Movie;
 
         ArgumentNullException.ThrowIfNull(movie);
@@ -71,4 +82,28 @@ public class MovieViewModel : ViewModelBase
 
         Movies.Remove(movie);
     }
+
+    private async Task OpenAddDialogHost()
+    {
+        var model = App.ServiceProvider.GetService<AddMovieViewModel>();
+
+        await DialogHost.Show(model, "RootDialog");
+    }
+
+    private async Task OpenEditDialogHost(object sender)
+    {
+        var button = sender as Button;
+        var movie = button?.DataContext as Movie;
+
+        ArgumentNullException.ThrowIfNull(movie);
+
+        var model = App.ServiceProvider.GetService<AddMovieViewModel>();
+        
+        model.Movie = movie.Adapt<UploadMovieModel>();
+        model.Movie.Producer = movie.Producer;
+
+        await DialogHost.Show(model, "RootDialog");
+    }
+
+    private void MovieCountChanged(object? sender, NotifyCollectionChangedEventArgs e) => MovieCount = Movies.Count;
 }

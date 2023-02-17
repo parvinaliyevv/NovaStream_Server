@@ -51,7 +51,41 @@ public partial class App : System.Windows.Application
         Services.PersistenceRegister(_Configuration);
         Services.InfrastructureRegister(_Configuration);
 
+        Mapster();
+
         ServiceProvider = Services.BuildServiceProvider();
+    }
+
+    private void Mapster()
+    {
+        TypeAdapterConfig<UploadMovieModel, Movie>.NewConfig()
+            .Map(dest => dest.ProducerId, src => src.Producer.Id)
+            .Ignore(dest => dest.Producer);
+
+        TypeAdapterConfig<Movie, UploadMovieModel>.NewConfig()
+            .Ignore(dest => dest.Producer);
+
+        TypeAdapterConfig<UploadSerialModel, Serial>.NewConfig()
+            .Map(dest => dest.ProducerId, src => src.Producer.Id)
+            .Ignore(dest => dest.Producer);
+
+        TypeAdapterConfig<Serial, UploadSerialModel>.NewConfig()
+            .Ignore(dest => dest.Producer);
+
+        TypeAdapterConfig<UploadSeasonModel, Season>.NewConfig()
+            .Map(dest => dest.SerialName, src => src.Serial.Name)
+            .Ignore(dest => dest.Serial);
+
+        TypeAdapterConfig<Season, UploadSeasonModel>.NewConfig()
+            .Ignore(dest => dest.Serial);
+
+        TypeAdapterConfig<UploadEpisodeModel, Episode>.NewConfig()
+            .Map(dest => dest.SeasonId, src => src.Season.Id)
+            .Ignore(dest => dest.Season);
+
+        TypeAdapterConfig<Episode, UploadEpisodeModel>.NewConfig()
+            .Ignore(dest => dest.Serial)
+            .Ignore(dest => dest.Season);
     }
 
     protected override void OnStartup(StartupEventArgs e)

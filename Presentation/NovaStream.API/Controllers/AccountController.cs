@@ -152,7 +152,7 @@ public class AccountController : ControllerBase
 
             var user = await _userManager.ReturnUserFromContextAsync(HttpContext);
 
-            if (user is null) return Unauthorized();
+            if (user is null || !_userManager.CheckPassword(user, password)) return Unauthorized();
 
             var result = await _userManager.DeleteUserAsync(user);
 

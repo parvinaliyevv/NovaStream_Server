@@ -6,11 +6,20 @@ public class EpisodeViewModel : ViewModelBase
     private readonly IStorageManager _storageManager;
     private readonly IAWSStorageManager _awsStorageManager;
 
+    private int _episodeCount;
+    public int EpisodeCount
+    {
+        get => _episodeCount;
+        set { _episodeCount = value; RaisePropertyChanged(); }
+    }
+
     public ObservableCollection<Episode> Episodes { get; set; }
 
+    public RelayCommand SearchCommand { get; set; }
+    public RelayCommand DeleteCommand { get; set; }
+
     public RelayCommand OpenAddDialogHostCommand { get; set; }
-    public RelayCommand<Button> OpenEditDialogHostCommand { get; set; }
-    public RelayCommand<Button> DeleteCommand { get; set; }
+    public RelayCommand OpenEditDialogHostCommand { get; set; }
 
 
     public EpisodeViewModel(AppDbContext dbContext, IStorageManager storageManager, IAWSStorageManager awsStorageManager)
@@ -28,34 +37,36 @@ public class EpisodeViewModel : ViewModelBase
         await Task.CompletedTask;
 
         Episodes = new ObservableCollection<Episode>(_dbContext.Episodes.Include(e => e.Season));
+        EpisodeCount = Episodes.Count;
 
-        OpenAddDialogHostCommand = new RelayCommand(() => OpenAddDialogHost());
-        OpenEditDialogHostCommand = new RelayCommand<Button>(button => OpenEditDialogHost(button));
-        DeleteCommand = new RelayCommand<Button>(button => Delete(button));
+        Episodes.CollectionChanged += EpisodeCountChanged;
+
+        SearchCommand = new RelayCommand(sender => Search(sender));
+        DeleteCommand = new RelayCommand(sender => Delete(sender));
+        
+        OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
+        OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
     }
 
-    private async Task OpenAddDialogHost()
+    private async Task Search(object sender)
     {
-        var model = App.ServiceProvider.GetService<AddEpisodeViewModel>();
+        await Task.CompletedTask;
 
-        await DialogHost.Show(model, "RootDialog");
+        var pattern = sender.ToString();
+
+        var episodes = string.IsNullOrWhiteSpace(pattern)
+            ? _dbContext.Episodes.ToList() : _dbContext.Episodes.Where(e => e.Name.Contains(pattern)).ToList();
+
+        if (Episodes.Count == episodes.Count) return;
+        
+        Episodes.Clear();
+
+        episodes.ForEach(e => Episodes.Add(e));
     }
-
-    private async Task OpenEditDialogHost(Button button)
+    
+    private async Task Delete(object sender)
     {
-        var episode = button?.DataContext as Episode;
-
-        ArgumentNullException.ThrowIfNull(episode);
-
-        var model = App.ServiceProvider.GetService<AddEpisodeViewModel>();
-
-        model.Episode = episode;
-
-        await DialogHost.Show(model, "RootDialog");
-    }
-
-    private async Task Delete(Button button)
-    {
+        var button = sender as Button;
         var episode = button?.DataContext as Episode;
 
         ArgumentNullException.ThrowIfNull(episode);
@@ -68,4 +79,27 @@ public class EpisodeViewModel : ViewModelBase
 
         Episodes.Remove(episode);
     }
+
+    private async Task OpenAddDialogHost()
+    {
+        var model = App.ServiceProvider.GetService<AddEpisodeViewModel>();
+
+        await DialogHost.Show(model, "RootDialog");
+    }
+
+    private async Task OpenEditDialogHost(object sender)
+    {
+        var button = sender as Button;
+        var episode = button?.DataContext as Episode;
+
+        ArgumentNullException.ThrowIfNull(episode);
+
+        var model = App.ServiceProvider.GetService<AddEpisodeViewModel>();
+
+        model.Episode = episode.Adapt<UploadEpisodeModel>();
+
+        await DialogHost.Show(model, "RootDialog");
+    }
+
+    private void EpisodeCountChanged(object? sender, NotifyCollectionChangedEventArgs e) => EpisodeCount = Episodes.Count;
 }

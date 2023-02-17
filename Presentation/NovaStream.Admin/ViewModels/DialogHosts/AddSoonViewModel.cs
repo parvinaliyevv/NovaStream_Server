@@ -5,40 +5,17 @@ public class AddSoonViewModel : DependencyObject
     private readonly AppDbContext _dbContext;
     private readonly IStorageManager _storageManager;
 
+    public UploadSoonModel Soon { get; set; }
 
-    public Soon Soon { get; set; }
-
-
-    public RelayCommand SaveCommand { get; set; }
-    public RelayCommand CancelCommand { get; set; }
-    public RelayCommand OpenTrailerDialogCommand { get; set; }
-    public RelayCommand OpenTrailerImageDialogCommand { get; set; }
-
-
+    public bool ProcessStarted { get; set; }
     public List<Task> UploadTasks { get; set; }
     public List<CancellationTokenSource> UploadTaskTokens { get; set; }
 
+    public RelayCommand SaveCommand { get; set; }
+    public RelayCommand CancelCommand { get; set; }
 
-    public bool ProgressCompleted { get; set; }
-
-
-    public bool TrailerProgressCompleted { get; set; }
-    public BlobStorageUploadProgress TrailerProgress
-    {
-        get { return (BlobStorageUploadProgress)GetValue(TrailerProgressProperty); }
-        set { SetValue(TrailerProgressProperty, value); }
-    }
-    public static readonly DependencyProperty TrailerProgressProperty =
-        DependencyProperty.Register("TrailerProgress", typeof(BlobStorageUploadProgress), typeof(AddSoonViewModel));
-
-    public bool TrailerImageProgressCompleted { get; set; }
-    public BlobStorageUploadProgress TrailerImageProgress
-    {
-        get { return (BlobStorageUploadProgress)GetValue(TrailerImageProgressProperty); }
-        set { SetValue(TrailerImageProgressProperty, value); }
-    }
-    public static readonly DependencyProperty TrailerImageProgressProperty =
-        DependencyProperty.Register("TrailerImageProgress", typeof(BlobStorageUploadProgress), typeof(AddSoonViewModel));
+    public RelayCommand OpenTrailerDialogCommand { get; set; }
+    public RelayCommand OpenTrailerImageDialogCommand { get; set; }
 
 
     public AddSoonViewModel(AppDbContext dbContext, IStorageManager storageManager)
@@ -46,110 +23,100 @@ public class AddSoonViewModel : DependencyObject
         _dbContext = dbContext;
         _storageManager = storageManager;
 
-        Soon = new Soon();
+        Soon = new();
 
+        ProcessStarted = false;
         UploadTasks = new();
         UploadTaskTokens = new();
 
-        SaveCommand = new RelayCommand(() => Save());
-        CancelCommand = new RelayCommand(() => Cancel());
+        SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
+        CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
 
-        OpenTrailerDialogCommand = new RelayCommand(() => OpenTrailerDialog());
-        OpenTrailerImageDialogCommand = new RelayCommand(() => OpenTrailerImageDialog());
+        OpenTrailerDialogCommand = new RelayCommand(_ => Soon.TrailerUrl = FileDialogService.OpenVideoFile(), _ => !ProcessStarted);
+        OpenTrailerImageDialogCommand = new RelayCommand(_ => Soon.TrailerImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
     }
 
 
     private async Task Save()
     {
-        Soon? dbSoon = _dbContext.Soons.FirstOrDefault(s => s.Name == Soon.Name);
+        await Task.CompletedTask;
+
+        Soon.Verify();
+
+        if (Soon.HasErrors) return;
+
+        ProcessStarted = true;
+
+        var soon = Soon.Adapt<Soon>();
+
+        var dbSoon = _dbContext.Soons.FirstOrDefault(s => s.Name == Soon.Name);
 
         UploadTasks.Clear();
         UploadTaskTokens.Clear();
 
-        TrailerProgressCompleted = false;
-        TrailerImageProgressCompleted = false;
+        Soon.TrailerUploadSuccess = false;
+        Soon.TrailerImageUploadSuccess = false;
 
         // Soon TrailerUrl
         if (dbSoon is null || dbSoon is not null && dbSoon.TrailerUrl != Soon.TrailerUrl)
         {
             var trailerStream = new FileStream(Soon.TrailerUrl, FileMode.Open, FileAccess.Read);
-            Soon.TrailerUrl = string.Format("Soons/{0}/{1}-trailer{2}", Soon.Name, Path.GetFileNameWithoutExtension(Soon.TrailerUrl), Path.GetExtension(Soon.TrailerUrl));
+            var filename = string.Format("{0}-trailer{1}", Path.GetFileNameWithoutExtension(Soon.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Soon.TrailerUrl));
+            soon.TrailerUrl = string.Format("Soons/{0}/{1}", Soon.Name, filename);
 
-            TrailerProgress = new BlobStorageUploadProgress(trailerStream.Length);
+            Soon.TrailerProgress = new BlobStorageUploadProgress(trailerStream.Length);
 
             var trailerToken = new CancellationTokenSource();
-            var trailerUploadTask = _storageManager.UploadFileAsync(trailerStream, Soon.TrailerUrl, TrailerProgress, trailerToken.Token);
+            var trailerUploadTask = _storageManager.UploadFileAsync(trailerStream, soon.TrailerUrl, Soon.TrailerProgress, trailerToken.Token);
 
             UploadTasks.Add(trailerUploadTask);
             UploadTaskTokens.Add(trailerToken);
 
-            trailerUploadTask.ContinueWith(_ => TrailerProgressCompleted = true);
+            trailerUploadTask.ContinueWith(_ => Soon.TrailerUploadSuccess = true);
         }
-        else TrailerProgressCompleted = true;
+        else Soon.TrailerUploadSuccess = true;
 
         // Soon TrailerImageUrl
         if (dbSoon is null || dbSoon is not null && dbSoon.TrailerImageUrl != Soon.TrailerImageUrl)
         {
             var imageStream = new FileStream(Soon.TrailerImageUrl, FileMode.Open, FileAccess.Read);
-            Soon.TrailerImageUrl = string.Format("Soons/{0}/{1}-image{2}", Soon.Name, Path.GetFileNameWithoutExtension(Soon.TrailerImageUrl), Path.GetExtension(Soon.TrailerImageUrl));
+            var filename = string.Format("{0}-trailer-image{1}", Path.GetFileNameWithoutExtension(Soon.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Soon.TrailerImageUrl));
+            Soon.TrailerImageUrl = string.Format("Soons/{0}/{1}", Soon.Name, filename);
 
-            TrailerImageProgress = new BlobStorageUploadProgress(imageStream.Length);
+            Soon.TrailerImageProgress = new BlobStorageUploadProgress(imageStream.Length);
 
             var imageToken = new CancellationTokenSource();
-            var imageUploadTask = _storageManager.UploadFileAsync(imageStream, Soon.TrailerImageUrl, TrailerImageProgress, imageToken.Token);
+            var imageUploadTask = _storageManager.UploadFileAsync(imageStream, soon.TrailerImageUrl, Soon.TrailerImageProgress, imageToken.Token);
 
             UploadTasks.Add(imageUploadTask);
             UploadTaskTokens.Add(imageToken);
 
-            imageUploadTask.ContinueWith(_ => TrailerImageProgressCompleted = true);
+            imageUploadTask.ContinueWith(_ => Soon.TrailerImageUploadSuccess = true);
         }
-        else TrailerImageProgressCompleted = true;
-
+        else Soon.TrailerImageUploadSuccess = true;
 
         if (UploadTasks.Count > 0) await Task.WhenAll(UploadTasks);
 
         if (dbSoon is not null) _dbContext.Soons.Remove(dbSoon);
 
-        _dbContext.Soons.Add(Soon);
+        _dbContext.Soons.Add(soon);
         await _dbContext.SaveChangesAsync();
+
+        App.ServiceProvider.GetService<SoonViewModel>().Soons.Add(soon);
+
+        ProcessStarted = false;
     }
 
     private async Task Cancel()
     {
+        ProcessStarted = false;
+
         UploadTaskTokens.ForEach(ts => ts.Cancel());
 
-        TrailerProgress.Progress = 0;
-        if (ProgressCompleted) await _storageManager.DeleteFileAsync(Soon.TrailerUrl);
+        Soon.TrailerProgress.Progress = 0;
+        if (Soon.TrailerUploadSuccess) await _storageManager.DeleteFileAsync(Soon.TrailerUrl);
 
-        TrailerImageProgress.Progress = 0;
-        if (ProgressCompleted) await _storageManager.DeleteFileAsync(Soon.TrailerImageUrl);
-    }
-
-    private void OpenTrailerDialog()
-    {
-        var fileDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
-
-        fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-
-        fileDialog.Filter = "MP4 Files(*.mp4)|*.mp4|AVI Files(*.avi)|*.avi|MOV Files(*.mov)|*.mov";
-        fileDialog.FilterIndex = 1;
-
-        if (fileDialog.ShowDialog() is false) return;
-
-        Soon.TrailerUrl = fileDialog.FileName;
-    }
-
-    private void OpenTrailerImageDialog()
-    {
-        var fileDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
-
-        fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-
-        fileDialog.Filter = "PNG Files(*.png)|*.png|JPEG Files(*.jpeg)|*.jpeg|JPG Files(*.jpg)|*.jpg";
-        fileDialog.FilterIndex = 3;
-
-        if (fileDialog.ShowDialog() is false) return;
-
-        Soon.TrailerImageUrl = fileDialog.FileName;
+        Soon.TrailerImageProgress.Progress = 0;
+        if (Soon.TrailerImageUploadSuccess) await _storageManager.DeleteFileAsync(Soon.TrailerImageUrl);
     }
 }

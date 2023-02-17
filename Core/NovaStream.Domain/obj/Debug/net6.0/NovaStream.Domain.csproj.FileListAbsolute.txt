@@ -1,15 +1,3 @@
-C:\Users\Aliy_ql08\Desktop\NovaStream_Server\Core\NovaStream.Domain\bin\Debug\net6.0\NovaStream.Domain.deps.json
-C:\Users\Aliy_ql08\Desktop\NovaStream_Server\Core\NovaStream.Domain\bin\Debug\net6.0\NovaStream.Domain.dll
-C:\Users\Aliy_ql08\Desktop\NovaStream_Server\Core\NovaStream.Domain\bin\Debug\net6.0\NovaStream.Domain.pdb
-C:\Users\Aliy_ql08\Desktop\NovaStream_Server\Core\NovaStream.Domain\obj\Debug\net6.0\NovaStream.Domain.csproj.AssemblyReference.cache
-C:\Users\Aliy_ql08\Desktop\NovaStream_Server\Core\NovaStream.Domain\obj\Debug\net6.0\NovaStream.Domain.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Aliy_ql08\Desktop\NovaStream_Server\Core\NovaStream.Domain\obj\Debug\net6.0\NovaStream.Domain.AssemblyInfoInputs.cache
-C:\Users\Aliy_ql08\Desktop\NovaStream_Server\Core\NovaStream.Domain\obj\Debug\net6.0\NovaStream.Domain.AssemblyInfo.cs
-C:\Users\Aliy_ql08\Desktop\NovaStream_Server\Core\NovaStream.Domain\obj\Debug\net6.0\NovaStream.Domain.csproj.CoreCompileInputs.cache
-C:\Users\Aliy_ql08\Desktop\NovaStream_Server\Core\NovaStream.Domain\obj\Debug\net6.0\NovaStream.Domain.dll
-C:\Users\Aliy_ql08\Desktop\NovaStream_Server\Core\NovaStream.Domain\obj\Debug\net6.0\refint\NovaStream.Domain.dll
-C:\Users\Aliy_ql08\Desktop\NovaStream_Server\Core\NovaStream.Domain\obj\Debug\net6.0\NovaStream.Domain.pdb
-C:\Users\Aliy_ql08\Desktop\NovaStream_Server\Core\NovaStream.Domain\obj\Debug\net6.0\ref\NovaStream.Domain.dll
 C:\Users\Aliy_ql08\Desktop\NovaStream\Core\NovaStream.Domain\bin\Debug\net6.0\NovaStream.Domain.deps.json
 C:\Users\Aliy_ql08\Desktop\NovaStream\Core\NovaStream.Domain\bin\Debug\net6.0\NovaStream.Domain.dll
 C:\Users\Aliy_ql08\Desktop\NovaStream\Core\NovaStream.Domain\bin\Debug\net6.0\NovaStream.Domain.pdb

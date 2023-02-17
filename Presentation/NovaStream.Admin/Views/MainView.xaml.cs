@@ -31,8 +31,8 @@ public partial class MainView : Window
             if (_isMaximized)
             {
                 WindowState = WindowState.Normal;
-                Width = 1280;
-                Height = 780;
+                Width = 1200;
+                Height = 700;
 
                 _isMaximized = false;
             }
@@ -44,4 +44,6 @@ public partial class MainView : Window
             }
         }
     }
+
+    private void CloseApp_ButtonClicked(object sender, RoutedEventArgs e) => Close();
 }

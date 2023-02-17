@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="NovaStream.Admin.Views.MovieView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -13,7 +14,6 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock Text="Movies" FontSize="32" FontWeight="SemiBold" Margin="0 20 0 0"
@@ -30,11 +30,11 @@
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 10 0 0">
             <Button Content="Movies" Style="{StaticResource TabButton}" BorderBrush="#fb8757"/>
-            <Button Content="Producers" Style="{StaticResource TabButton}"/>
             <Button Content="Actors" Style="{StaticResource TabButton}"/>
+            <Button Content="Genres" Style="{StaticResource TabButton}"/>
         </StackPanel>
 
-        <TextBlock Text="2 Movie" Grid.Row="3" FontSize="18" FontWeight="SemiBold"
+        <TextBlock Text="{Binding MovieCount, StringFormat={}{0} Movies}" Grid.Row="3" FontSize="18" FontWeight="SemiBold"
                    Foreground="#121518" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
         <TextBlock Text="Filter by" Grid.Row="3" FontSize="13" FontWeight="SemiBold" Margin="0 0 215 0"
@@ -45,15 +45,22 @@
                        Panel.ZIndex="1" Text="Search in Movies..."
                        Visibility="{Binding ElementName=txtSearch, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-            <TextBox x:Name="txtSearch" Style="{StaticResource TextboxFilter}"/>
+            <TextBox x:Name="txtSearch" Style="{StaticResource TextboxFilter}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=txtSearch, Path=Text}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
         </Grid>
 
         <DataGrid x:Name="ItemsDataGrid" ItemsSource="{Binding Movies}" Style="{StaticResource DataGridStyle1}" CellStyle="{StaticResource DataGridCellStyle1}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle1}" RowStyle="{StaticResource DataGridRowStyle1}" Grid.Row="4">
             <DataGrid.Columns>
 
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" Width="*"/>
-                <DataGridTextColumn Header="ProducerName" Binding="{Binding Producer.Name}" IsReadOnly="True" Width="*"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" Width="auto"/>
+                <DataGridTextColumn Header="Producer Name" Binding="{Binding Producer.Name}" IsReadOnly="True" Width="auto"/>
                 <DataGridTextColumn Header="Year" Binding="{Binding Year}" IsReadOnly="True" Width="auto"/>
+                <DataGridTextColumn Header="Age" Binding="{Binding Age, StringFormat={}{0}+}" IsReadOnly="True" Width="auto"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" IsReadOnly="True" Width="*"/>
 
                 <DataGridTemplateColumn Header="Operations" IsReadOnly="True" Width="auto">
@@ -73,37 +80,7 @@
 
             </DataGrid.Columns>
         </DataGrid>
-
-        <Border HorizontalAlignment="Right" BorderBrush="#dee4ec" BorderThickness="1" CornerRadius="5"
-                Padding="5" Background="White" Margin="0 10 10 10" Grid.Row="5">
-
-            <StackPanel Orientation="Horizontal">
-
-                <Button Style="{StaticResource PagingButton}">
-                    <ContentControl Content="{materialDesign:PackIcon Kind=ChevronLeft, Size=10}" VerticalAlignment="Center"/>
-                </Button>
-
-                <Rectangle Width="1" Fill="#dee4ec" Margin="3 7"/>
-
-                <Button Style="{StaticResource PagingButton}" Content="1" Background="#fb8757" Foreground="#f7f6f4"/>
-                <Button Style="{StaticResource PagingButton}" Content="2"/>
-                <Button Style="{StaticResource PagingButton}" Content="3"/>
-
-                <TextBlock Text="..." Foreground="#6c7682" VerticalAlignment="Center" FontSize="15" Margin="10 0"/>
-
-                <Button Style="{StaticResource PagingButton}" Content="7"/>
-                <Button Style="{StaticResource PagingButton}" Content="8"/>
-                <Button Style="{StaticResource PagingButton}" Content="9"/>
-
-                <Rectangle Width="1" Fill="#dee4ec" Margin="3 7"/>
-
-                <Button Style="{StaticResource PagingButton}">
-                    <ContentControl Content="{materialDesign:PackIcon Kind=ChevronRight, Size=10}" VerticalAlignment="Center"/>
-                </Button>
-
-            </StackPanel>
-        </Border>
-
+        
     </Grid>
 
 </UserControl>

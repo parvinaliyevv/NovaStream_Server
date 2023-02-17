@@ -6,13 +6,16 @@ public class AddMovieViewModel : DependencyObject
     private readonly IStorageManager _storageManager;
     private readonly IAWSStorageManager _awsStorageManager;
 
-
-    public Movie Movie { get; set; }
+    public UploadMovieModel Movie { get; set; }
     public List<Producer> Producers { get; set; }
 
+    public bool ProcessStarted { get; set; }
+    public List<Task> UploadTasks { get; set; }
+    public List<CancellationTokenSource> UploadTaskTokens { get; set; }
 
     public RelayCommand SaveCommand { get; set; }
     public RelayCommand CancelCommand { get; set; }
+
     public RelayCommand OpenVideoDialogCommand { get; set; }
     public RelayCommand OpenVideoImageDialogCommand { get; set; }
     public RelayCommand OpenTrailerDialogCommand { get; set; }
@@ -20,284 +23,178 @@ public class AddMovieViewModel : DependencyObject
     public RelayCommand OpenSearchImageDialogCommand { get; set; }
 
 
-    public List<Task> UploadTasks { get; set; }
-    public List<CancellationTokenSource> UploadTaskTokens { get; set; }
-
-
-    public bool VideoProgressCompleted { get; set; }
-    public int VideoProgress
-    {
-        get { return (int)GetValue(VideoProgressProperty); }
-        set { SetValue(VideoProgressProperty, value); }
-    }
-    public static readonly DependencyProperty VideoProgressProperty =
-        DependencyProperty.Register("VideoProgress", typeof(int), typeof(AddMovieViewModel));
-
-    public bool TrailerProgressCompleted { get; set; }
-    public BlobStorageUploadProgress TrailerProgress
-    {
-        get { return (BlobStorageUploadProgress)GetValue(TrailerProgressProperty); }
-        set { SetValue(TrailerProgressProperty, value); }
-    }
-    public static readonly DependencyProperty TrailerProgressProperty =
-        DependencyProperty.Register("TrailerProgress", typeof(BlobStorageUploadProgress), typeof(AddMovieViewModel));
-
-    public bool VideoImageProgressCompleted { get; set; }
-    public BlobStorageUploadProgress VideoImageProgress
-    {
-        get { return (BlobStorageUploadProgress)GetValue(VideoImageProgressProperty); }
-        set { SetValue(VideoImageProgressProperty, value); }
-    }
-    public static readonly DependencyProperty VideoImageProgressProperty =
-        DependencyProperty.Register("VideoImageProgress", typeof(BlobStorageUploadProgress), typeof(AddMovieViewModel));
-
-    public bool ImageProgressCompleted { get; set; }
-    public BlobStorageUploadProgress ImageProgress
-    {
-        get { return (BlobStorageUploadProgress)GetValue(ImageProgressProperty); }
-        set { SetValue(ImageProgressProperty, value); }
-    }
-    public static readonly DependencyProperty ImageProgressProperty =
-        DependencyProperty.Register("ImageProgress", typeof(BlobStorageUploadProgress), typeof(AddMovieViewModel));
-
-    public bool SearchImageProgressCompleted { get; set; }
-    public BlobStorageUploadProgress SearchImageProgress
-    {
-        get { return (BlobStorageUploadProgress)GetValue(SearchImageProgressProperty); }
-        set { SetValue(SearchImageProgressProperty, value); }
-    }
-    public static readonly DependencyProperty SearchImageProgressProperty =
-        DependencyProperty.Register("SearchImageProgress", typeof(BlobStorageUploadProgress), typeof(AddMovieViewModel));
-
     public AddMovieViewModel(AppDbContext dbContext, IStorageManager storageManager, IAWSStorageManager awsStorageManager)
     {
         _dbContext = dbContext;
         _storageManager = storageManager;
         _awsStorageManager = awsStorageManager;
 
-        Movie = new Movie();
         Producers = dbContext.Producers.ToList();
 
+        Movie = new();
+
+        ProcessStarted = false;
         UploadTasks = new();
         UploadTaskTokens = new();
 
-        SaveCommand = new RelayCommand(() => Save());
-        CancelCommand = new RelayCommand(() => Cancel());
+        SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
+        CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
 
-        OpenVideoDialogCommand = new RelayCommand(() => OpenVideoDialog());
-        OpenVideoImageDialogCommand = new RelayCommand(() => OpenVideoImageDialog());
-        OpenTrailerDialogCommand = new RelayCommand(() => OpenTrailerDialog());
-        OpenImageDialogCommand = new RelayCommand(() => OpenImageDialog());
-        OpenSearchImageDialogCommand = new RelayCommand(() => OpenSearchImageDialog());
+        OpenVideoDialogCommand = new RelayCommand(_ => Movie.VideoUrl = FileDialogService.OpenVideoFile(), _ => !ProcessStarted);
+        OpenVideoImageDialogCommand = new RelayCommand(_ => Movie.VideoImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
+        OpenTrailerDialogCommand = new RelayCommand(_ => Movie.TrailerUrl = FileDialogService.OpenVideoFile(), _ => !ProcessStarted);
+        OpenImageDialogCommand = new RelayCommand(_ => Movie.ImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
+        OpenSearchImageDialogCommand = new RelayCommand(_ => Movie.SearchImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
     }
+
 
     private async Task Save()
     {
-        Movie? dbMovie = _dbContext.Movies.FirstOrDefault(m => m.Name == Movie.Name);
+        await Task.CompletedTask;
+
+        Movie.Verify();
+
+        if (Movie.HasErrors) return;
+
+        ProcessStarted = true;
+
+        var movie = Movie.Adapt<Movie>();
+
+        var dbMovie = _dbContext.Movies.FirstOrDefault(m => m.Name == Movie.Name);
 
         UploadTasks.Clear();
         UploadTaskTokens.Clear();
 
-        VideoProgressCompleted = false;
-        VideoImageProgressCompleted = false;
-        TrailerProgressCompleted = false;
-        ImageProgressCompleted = false;
-        SearchImageProgressCompleted = false;
+        Movie.VideoUploadSuccess = false;
+        Movie.VideoImageUploadSuccess = false;
+        Movie.TrailerUploadSuccess = false;
+        Movie.ImageUploadSuccess = false;
+        Movie.SearchImageUploadSuccess = false;
 
         // Movie VideoUrl
         if (dbMovie is null || dbMovie is not null && dbMovie.VideoUrl != Movie.VideoUrl)
         {
             var videoStream = new FileStream(Movie.VideoUrl, FileMode.Open, FileAccess.Read);
-            Movie.VideoUrl = string.Format("Movies/{0}/{1}-video{2}", Movie.Name, Path.GetFileNameWithoutExtension(Movie.VideoUrl), Path.GetExtension(Movie.VideoUrl));
+            var filename = string.Format("{0}-video{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.VideoUrl));
+            movie.VideoUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
 
             var videoToken = new CancellationTokenSource();
-            var videoUploadTask = _awsStorageManager.UploadFileAsync(videoStream, Movie.VideoUrl, VideoProgressEvent, videoToken.Token);
+            var videoUploadTask = _awsStorageManager.UploadFileAsync(videoStream, movie.VideoUrl, Movie.VideoProgressEvent, videoToken.Token);
 
             UploadTasks.Add(videoUploadTask);
             UploadTaskTokens.Add(videoToken);
 
-            videoUploadTask.ContinueWith(_ => VideoProgressCompleted = true);
+            videoUploadTask.ContinueWith(_ => Movie.VideoUploadSuccess = true);
         }
-        else VideoProgressCompleted = true;
+        else Movie.VideoUploadSuccess = true;
 
         // Movie VideoImageUrl
-        if (dbMovie is null || dbMovie is not null && dbMovie.ImageUrl != Movie.ImageUrl)
+        if (dbMovie is null || dbMovie is not null && dbMovie.VideoImageUrl != Movie.VideoImageUrl)
         {
             var videoImageStream = new FileStream(Movie.VideoImageUrl, FileMode.Open, FileAccess.Read);
-            Movie.VideoImageUrl = string.Format("Movies/{0}/{1}-video-image{2}", Movie.Name, Path.GetFileNameWithoutExtension(Movie.VideoImageUrl), Path.GetExtension(Movie.VideoImageUrl));
+            var filename = string.Format("{0}-video-image{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.VideoImageUrl));
+            movie.VideoImageUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
 
-            VideoImageProgress = new BlobStorageUploadProgress(videoImageStream.Length);
+            Movie.VideoImageProgress = new BlobStorageUploadProgress(videoImageStream.Length);
 
             var videoImageToken = new CancellationTokenSource();
-            var videoImageUploadTask = _storageManager.UploadFileAsync(videoImageStream, Movie.VideoImageUrl, VideoImageProgress, videoImageToken.Token);
+            var videoImageUploadTask = _storageManager.UploadFileAsync(videoImageStream, movie.VideoImageUrl, Movie.VideoImageProgress, videoImageToken.Token);
 
             UploadTasks.Add(videoImageUploadTask);
             UploadTaskTokens.Add(videoImageToken);
 
-            videoImageUploadTask.ContinueWith(_ => VideoImageProgressCompleted = true);
+            videoImageUploadTask.ContinueWith(_ => Movie.VideoImageUploadSuccess = true);
         }
-        else VideoImageProgressCompleted = true;
+        else Movie.VideoImageUploadSuccess = true;
 
         // Movie TrailerUrl
         if (dbMovie is null || dbMovie is not null && dbMovie.TrailerUrl != Movie.TrailerUrl)
         {
             var trailerStream = new FileStream(Movie.TrailerUrl, FileMode.Open, FileAccess.Read);
-            Movie.TrailerUrl = string.Format("Movies/{0}/{1}-trailer{2}", Movie.Name, Path.GetFileNameWithoutExtension(Movie.TrailerUrl), Path.GetExtension(Movie.TrailerUrl));
+            var filename = string.Format("{0}-trailer{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.TrailerUrl));
+            movie.TrailerUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
 
-            TrailerProgress = new BlobStorageUploadProgress(trailerStream.Length);
+            Movie.TrailerProgress = new BlobStorageUploadProgress(trailerStream.Length);
 
             var trailerToken = new CancellationTokenSource();
-            var trailerUploadTask = _storageManager.UploadFileAsync(trailerStream, Movie.TrailerUrl, TrailerProgress, trailerToken.Token);
+            var trailerUploadTask = _storageManager.UploadFileAsync(trailerStream, movie.TrailerUrl, Movie.TrailerProgress, trailerToken.Token);
 
             UploadTasks.Add(trailerUploadTask);
             UploadTaskTokens.Add(trailerToken);
 
-            trailerUploadTask.ContinueWith(_ => TrailerProgressCompleted = true);
+            trailerUploadTask.ContinueWith(_ => Movie.TrailerUploadSuccess = true);
         }
-        else TrailerProgressCompleted = true;
+        else Movie.TrailerUploadSuccess = true;
 
         // Movie ImageUrl
         if (dbMovie is null || dbMovie is not null && dbMovie.ImageUrl != Movie.ImageUrl)
         {
             var imageStream = new FileStream(Movie.ImageUrl, FileMode.Open, FileAccess.Read);
-            Movie.ImageUrl = string.Format("Movies/{0}/{1}-image{2}", Movie.Name, Path.GetFileNameWithoutExtension(Movie.ImageUrl), Path.GetExtension(Movie.ImageUrl));
+            var filename = string.Format("{0}-image{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.ImageUrl));
+            movie.ImageUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
 
-            ImageProgress = new BlobStorageUploadProgress(imageStream.Length);
+            Movie.ImageProgress = new BlobStorageUploadProgress(imageStream.Length);
 
             var imageToken = new CancellationTokenSource();
-            var imageUploadTask = _storageManager.UploadFileAsync(imageStream, Movie.ImageUrl, ImageProgress, imageToken.Token);
+            var imageUploadTask = _storageManager.UploadFileAsync(imageStream, movie.ImageUrl, Movie.ImageProgress, imageToken.Token);
 
             UploadTasks.Add(imageUploadTask);
             UploadTaskTokens.Add(imageToken);
 
-            imageUploadTask.ContinueWith(_ => ImageProgressCompleted = true);
+            imageUploadTask.ContinueWith(_ => Movie.ImageUploadSuccess = true);
         }
-        else ImageProgressCompleted = true;
+        else Movie.ImageUploadSuccess = true;
 
-        // Serial SearchImageUrl
+        // Movie SearchImageUrl
         if (dbMovie is null || dbMovie is not null && dbMovie.SearchImageUrl != Movie.SearchImageUrl)
         {
             var searchImageStream = new FileStream(Movie.SearchImageUrl, FileMode.Open, FileAccess.Read);
-            Movie.SearchImageUrl = string.Format("Movies/{0}/{1}-search-image{2}", Movie.Name, Path.GetFileNameWithoutExtension(Movie.SearchImageUrl), Path.GetExtension(Movie.SearchImageUrl));
+            var filename = string.Format("{0}-search-image{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.SearchImageUrl));
+            movie.SearchImageUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
 
-            SearchImageProgress = new BlobStorageUploadProgress(searchImageStream.Length);
+            Movie.SearchImageProgress = new BlobStorageUploadProgress(searchImageStream.Length);
 
             var searchImageToken = new CancellationTokenSource();
-            var searchImageUploadTask = _storageManager.UploadFileAsync(searchImageStream, Movie.SearchImageUrl, SearchImageProgress, searchImageToken.Token);
+            var searchImageUploadTask = _storageManager.UploadFileAsync(searchImageStream, movie.SearchImageUrl, Movie.SearchImageProgress, searchImageToken.Token);
 
             UploadTasks.Add(searchImageUploadTask);
             UploadTaskTokens.Add(searchImageToken);
 
-            searchImageUploadTask.ContinueWith(_ => SearchImageProgressCompleted = true);
+            searchImageUploadTask.ContinueWith(_ => Movie.SearchImageUploadSuccess = true);
         }
-        else SearchImageProgressCompleted = true;
-
+        else Movie.SearchImageUploadSuccess = true;
 
         if (UploadTasks.Count > 0) await Task.WhenAll(UploadTasks);
 
         if (dbMovie is not null) _dbContext.Movies.Remove(dbMovie);
 
-        _dbContext.Movies.Add(Movie);
+        _dbContext.Movies.Add(movie);
         await _dbContext.SaveChangesAsync();
+
+        App.ServiceProvider.GetService<MovieViewModel>().Movies.Add(movie);
+
+        ProcessStarted = false;
     }
 
     private async Task Cancel()
     {
+        ProcessStarted = false;
+
         UploadTaskTokens.ForEach(ts => ts.Cancel());
 
-        System.Windows.Application.Current.Dispatcher.Invoke(() => VideoProgress = 0);
-        if (VideoProgressCompleted) await _awsStorageManager.DeleteFileAsync(Movie.VideoUrl);
+        System.Windows.Application.Current.Dispatcher.Invoke(() => Movie.VideoProgress = 0);
+        if (Movie.VideoUploadSuccess) await _awsStorageManager.DeleteFileAsync(Movie.VideoUrl);
 
-        VideoImageProgress.Progress = 0;
-        if (VideoImageProgressCompleted) await _storageManager.DeleteFileAsync(Movie.VideoImageUrl);
+        Movie.VideoImageProgress.Progress = 0;
+        if (Movie.VideoImageUploadSuccess) await _storageManager.DeleteFileAsync(Movie.VideoImageUrl);
 
-        TrailerProgress.Progress = 0;
-        if (VideoProgressCompleted) await _storageManager.DeleteFileAsync(Movie.TrailerUrl);
+        Movie.TrailerProgress.Progress = 0;
+        if (Movie.TrailerUploadSuccess) await _storageManager.DeleteFileAsync(Movie.TrailerUrl);
 
-        ImageProgress.Progress = 0;
-        if (VideoProgressCompleted) await _storageManager.DeleteFileAsync(Movie.ImageUrl);
+        Movie.ImageProgress.Progress = 0;
+        if (Movie.ImageUploadSuccess) await _storageManager.DeleteFileAsync(Movie.ImageUrl);
 
-        SearchImageProgress.Progress = 0;
-        if (VideoProgressCompleted) await _storageManager.DeleteFileAsync(Movie.SearchImageUrl);
-    }
-
-    private void OpenVideoDialog()
-    {
-        var fileDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
-
-        fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-
-        fileDialog.Filter = "MP4 Files(*.mp4)|*.mp4|AVI Files(*.avi)|*.avi|MOV Files(*.mov)|*.mov";
-        fileDialog.FilterIndex = 1;
-
-        if (fileDialog.ShowDialog() is false) return;
-
-        Movie.VideoUrl = fileDialog.FileName;
-    }
-
-    private void OpenVideoImageDialog()
-    {
-        var fileDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
-
-        fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-
-        fileDialog.Filter = "PNG Files(*.png)|*.png|JPEG Files(*.jpeg)|*.jpeg|JPG Files(*.jpg)|*.jpg";
-        fileDialog.FilterIndex = 3;
-
-        if (fileDialog.ShowDialog() is false) return;
-
-        Movie.VideoImageUrl = fileDialog.FileName;
-    }
-
-    private void OpenTrailerDialog()
-    {
-        var fileDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
-
-        fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-
-        fileDialog.Filter = "MP4 Files(*.mp4)|*.mp4|AVI Files(*.avi)|*.avi|MOV Files(*.mov)|*.mov";
-        fileDialog.FilterIndex = 1;
-
-        if (fileDialog.ShowDialog() is false) return;
-
-        Movie.TrailerUrl = fileDialog.FileName;
-    }
-
-    private void OpenImageDialog()
-    {
-        var fileDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
-
-        fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-
-        fileDialog.Filter = "PNG Files(*.png)|*.png|JPEG Files(*.jpeg)|*.jpeg|JPG Files(*.jpg)|*.jpg";
-        fileDialog.FilterIndex = 3;
-
-        if (fileDialog.ShowDialog() is false) return;
-
-        Movie.ImageUrl = fileDialog.FileName;
-    }
-
-    private void OpenSearchImageDialog()
-    {
-        var fileDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
-
-        fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-
-        fileDialog.Filter = "PNG Files(*.png)|*.png|JPEG Files(*.jpeg)|*.jpeg|JPG Files(*.jpg)|*.jpg";
-        fileDialog.FilterIndex = 3;
-
-        if (fileDialog.ShowDialog() is false) return;
-
-        Movie.SearchImageUrl = fileDialog.FileName;
-    }
-
-    private void VideoProgressEvent(object sender, UploadProgressArgs e)
-    {
-        var progress = (int)(e.TransferredBytes * 100 / e.TotalBytes);
-
-        System.Windows.Application.Current.Dispatcher.Invoke(() =>
-        {
-            VideoProgress = progress;
-        });
+        Movie.SearchImageProgress.Progress = 0;
+        if (Movie.SearchImageUploadSuccess) await _storageManager.DeleteFileAsync(Movie.SearchImageUrl);
     }
 }

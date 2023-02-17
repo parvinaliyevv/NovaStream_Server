@@ -4,16 +4,8 @@ public class AddSeasonViewModel : DependencyObject
 {
     private readonly AppDbContext _dbContext;
 
-    public Season Season { get; set; }
+    public UploadSeasonModel Season { get; set; }
     public List<Serial> Serials { get; set; }
-
-    public int Number
-    {
-        get { return (int)GetValue(NumberProperty); }
-        set { SetValue(NumberProperty, value); }
-    }
-    public static readonly DependencyProperty NumberProperty =
-        DependencyProperty.Register("Number", typeof(int), typeof(AddSeasonViewModel));
 
     public RelayCommand SaveCommand { get; set; }
     public RelayCommand SelectedSerialChangedCommand { get; set; }
@@ -23,38 +15,35 @@ public class AddSeasonViewModel : DependencyObject
     {
         _dbContext = dbContext;
 
-        Season = new Season();
         Serials = dbContext.Serials.ToList();
 
-        Season.Serial = Serials[0];
+        Season = new();
 
-        SaveCommand = new RelayCommand(() => Save());
-        SelectedSerialChangedCommand = new RelayCommand(() => SelectedSerialChanged());
-
-        SelectedSerialChanged();
+        SaveCommand = new RelayCommand(_ => Save());
+        SelectedSerialChangedCommand = new RelayCommand(_ => SelectedSerialChanged());
     }
 
 
     private async Task Save()
     {
-        Season? dbSeason = _dbContext.Seasons.FirstOrDefault(s => s.SerialName == Season.SerialName);
+        await Task.CompletedTask;
 
-        if (dbSeason is null)
-            Season.SerialName = Season.Serial.Name;
+        Season.Verify();
 
-        if (dbSeason is not null) _dbContext.Seasons.Remove(Season);
+        if (Season.HasErrors) return;
 
-        Season.Number = Number;
+        var season = Season.Adapt<Season>();
 
-        _dbContext.Seasons.Add(Season);
+        _dbContext.Seasons.Add(season);
         await _dbContext.SaveChangesAsync();
+
+        App.ServiceProvider.GetService<SeasonViewModel>().Seasons.Add(season);
     }
 
     private void SelectedSerialChanged()
     {
-        var lastSeasonNumber = _dbContext.Seasons.Where(s => s.SerialName == Season.Serial.Name)
-            .OrderBy(s => s.Number).Last().Number;
+        var lastSeasonNumber = _dbContext.Seasons.Max(s => s.Number);
 
-        Number = lastSeasonNumber + 1;
+        Season.Number = ++lastSeasonNumber;
     }
 }

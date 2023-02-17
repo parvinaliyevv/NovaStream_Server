@@ -18,14 +18,14 @@ public class MainViewModel : ViewModelBase
         
         messenger.Register<NavigationMessage>(this, message => CurrentViewModel = App.ServiceProvider.GetService(message.ViewModelType) as ViewModelBase);
 
-        MovieViewCommand = new RelayCommand(() => _navigationService.NavigateTo<MovieViewModel>());
-        SoonViewCommand = new RelayCommand(() => _navigationService.NavigateTo<SoonViewModel>());
-        SerialViewCommand = new RelayCommand(() => _navigationService.NavigateTo<SerialViewModel>());
-        SeasonViewCommand = new RelayCommand(() => _navigationService.NavigateTo<SeasonViewModel>());
-        EpisodeViewCommand = new RelayCommand(() => _navigationService.NavigateTo<EpisodeViewModel>());
-        ActorViewCommand = new RelayCommand(() => _navigationService.NavigateTo<ActorViewModel>());
-        ProducerViewCommand = new RelayCommand(() => _navigationService.NavigateTo<ProducerViewModel>());
-        GenreViewCommand = new RelayCommand(() => _navigationService.NavigateTo<GenreViewModel>());
+        MovieViewCommand = new RelayCommand(_ => _navigationService.NavigateTo<MovieViewModel>());
+        SoonViewCommand = new RelayCommand(_ => _navigationService.NavigateTo<SoonViewModel>());
+        SerialViewCommand = new RelayCommand(_ => _navigationService.NavigateTo<SerialViewModel>());
+        SeasonViewCommand = new RelayCommand(_ => _navigationService.NavigateTo<SeasonViewModel>());
+        EpisodeViewCommand = new RelayCommand(_ => _navigationService.NavigateTo<EpisodeViewModel>());
+        ActorViewCommand = new RelayCommand(_ => _navigationService.NavigateTo<ActorViewModel>());
+        ProducerViewCommand = new RelayCommand(_ => _navigationService.NavigateTo<ProducerViewModel>());
+        GenreViewCommand = new RelayCommand(_ => _navigationService.NavigateTo<GenreViewModel>());
     }
 
 
