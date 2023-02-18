@@ -181,11 +181,9 @@ public class AccountController : ControllerBase
 
                 await _mailManager.SendMailToAsync(confirmPIN, mail);
 
-                user.ConfirmationPIN = confirmPIN;
+                GlobalCachingProvider.Instance.AddItem(mail.ToString(), confirmPIN);
 
-                var result = await _userManager.UpdateUserAsync(user);
-
-                return Ok(result);
+                return Ok();
             }
 
             return NotFound();
@@ -207,11 +205,11 @@ public class AccountController : ControllerBase
 
             if (user is not null)
             {
-                bool result = user.ConfirmationPIN == pinCode;
+                bool result = GlobalCachingProvider.Instance.GetItem(mail, false) as string == pinCode;
 
                 if (result) 
                 {
-                    user.ConfirmationPIN = "";
+                    GlobalCachingProvider.Instance.RemoveItem(mail);
                     await _userManager.UpdateUserAsync(user);
                 }
 
@@ -237,11 +235,9 @@ public class AccountController : ControllerBase
 
             if (user is not null)
             {
-                user.ConfirmationPIN = "";
+                GlobalCachingProvider.Instance.RemoveItem(mail);
 
-                var result = await _userManager.UpdateUserAsync(user);
-
-                return Ok(result);
+                return Ok();
             }
 
             return NotFound();

@@ -80,8 +80,7 @@ namespace NovaStream.Persistence.Migrations
                     Nickname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OldPasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ConfirmationPIN = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    OldPasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -400,17 +399,17 @@ namespace NovaStream.Persistence.Migrations
                 values: new object[,]
                 {
                     { "Guardians of the Galaxy Vol. 3", "Still reeling from the loss of Gamora, Peter Quill rallies his team to defend the universe and one of their own - a mission that could mean the end of the Guardians if not successful.", new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Soons/Guardians of the Galaxy Vol. 3/guardians-of-the-galaxy-vol-3-trailer-image.jpg", "Soons/Guardians of the Galaxy Vol. 3/guardians-of-the-galaxy-vol-3-trailer.mp4" },
-                    { "John Wick: Chapter 4", "John Wick uncovers a path to defeating The High Table. But before he can earn his freedom, Wick must face off against a new enemy with powerful alliances across the globe and forces that turn old friends into foes.", new DateTime(2023, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "Soons/John Wick: Chapter 4/john-wick-chapter-4-trailer-image.jpg", "Soons/John Wick: Chapter 4/john-wick-chapter-4-trailer.mp4" },
-                    { "Transformers: Rise of the Beasts", "Plot unknown. Reportedly based on the 'Transformers' spinoff 'Beast Wars' which feature robots that transform into robotic animals.", new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "Soons/Transformers: Rise of the Beasts/transformers-rise-of-the-beasts-trailer-image.jpg", "Soons/Transformers: Rise of the Beasts/transformers-rise-of-the-beasts-trailer.mp4" }
+                    { "John Wick: Chapter 4", "John Wick uncovers a path to defeating The High Table. But before he can earn his freedom, Wick must face off against a new enemy with powerful alliances across the globe and forces that turn old friends into foes.", new DateTime(2023, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "Soons/John Wick Chapter 4/john-wick-chapter-4-trailer-image.jpg", "Soons/John Wick Chapter 4/john-wick-chapter-4-trailer.mp4" },
+                    { "Transformers: Rise of the Beasts", "Plot unknown. Reportedly based on the 'Transformers' spinoff 'Beast Wars' which feature robots that transform into robotic animals.", new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "Soons/Transformers Rise of the Beasts/transformers-rise-of-the-beasts-trailer-image.jpg", "Soons/Transformers Rise of the Beasts/transformers-rise-of-the-beasts-trailer.mp4" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "AvatarUrl", "ConfirmationPIN", "Email", "Nickname", "OldPasswordHash", "PasswordHash" },
+                columns: new[] { "Id", "AvatarUrl", "Email", "Nickname", "OldPasswordHash", "PasswordHash" },
                 values: new object[,]
                 {
-                    { 1, "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Avatars%2Favatar-1.png?alt=media&token=4fecc3bf-9511-4186-9c25-0347128c0181", "", "admin@novastream.api", "Admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" },
-                    { 2, "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Avatars%2Favatar-1.png?alt=media&token=4fecc3bf-9511-4186-9c25-0347128c0181", "", "novastream.tester@gmail.com", "tyler", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" }
+                    { 1, "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Avatars%2Favatar-1.png?alt=media&token=4fecc3bf-9511-4186-9c25-0347128c0181", "admin@novastream.api", "Admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" },
+                    { 2, "https://firebasestorage.googleapis.com/v0/b/novastream-a8167.appspot.com/o/Avatars%2Favatar-1.png?alt=media&token=4fecc3bf-9511-4186-9c25-0347128c0181", "novastream.tester@gmail.com", "tyler", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" }
                 });
 
             migrationBuilder.InsertData(

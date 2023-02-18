@@ -9,10 +9,12 @@ public static class ContainerRegistrationService
         services.Configure<AmazonWebServicesOptions>(configuration.GetSection("AmazonWebServices"));
         services.Configure<SenderMailOptions>(configuration.GetSection("SenderMail"));
 
+        services.AddTransient<IMailManager, MailManager>();
         services.AddTransient<IStorageManager, BlobStorageManager>();
         services.AddTransient<IAWSStorageManager, AWSStorageManager>();
         services.AddTransient<IEncryptorService, Sha256EncryptorService>();
+        //services.AddTransient<CachingProviderBase, GlobalCachingProvider>(); //
+        //services.AddTransient<IGlobalCachingProvider, GlobalCachingProvider>(); //
         services.AddTransient<ITokenGeneratorService, TokenGeneratorService>();
-        services.AddTransient<IMailManager, MailManager>();
     }
 }

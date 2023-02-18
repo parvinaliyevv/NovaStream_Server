@@ -1,6 +1,7 @@
 ﻿global using System.Text;
 global using System.Reflection;
 global using System.Globalization;
+global using System.Runtime.Caching;
 
 global using NovaStream.Application.Services;
 global using NovaStream.Domain.Entities.Concrete;
