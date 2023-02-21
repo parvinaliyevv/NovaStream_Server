@@ -629,4 +629,199 @@
         </Grid>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type viewModel:AddMovieGenreViewModel}">
+        <Grid Background="#f7f6f4" Height="600" Width="1100">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Border Background="#fff" CornerRadius="7" Margin="30">
+                <UniformGrid Rows="2">
+
+                    <ComboBox ItemsSource="{Binding Movies}" SelectedItem="{Binding MovieGenre.Movie, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
+                              materialDesign:HintAssist.Hint="Movie" Style="{StaticResource InputComboBox}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <ComboBox ItemsSource="{Binding Genres}" SelectedItem="{Binding MovieGenre.Genre, UpdateSourceTrigger=PropertyChanged}"
+                              materialDesign:HintAssist.Hint="Genre" Style="{StaticResource InputComboBox}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                </UniformGrid>
+            </Border>
+
+            <Border Background="#fff" CornerRadius="7" Margin="20 0 30 20" Grid.Row="1">
+                <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
+            </Border>
+
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModel:AddMovieActorViewModel}">
+        <Grid Background="#f7f6f4" Height="600" Width="1100">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Border Background="#fff" CornerRadius="7" Margin="30">
+                <UniformGrid Rows="2">
+
+                    <ComboBox ItemsSource="{Binding Movies}" SelectedItem="{Binding MovieActor.Movie, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
+                              materialDesign:HintAssist.Hint="Movie" Style="{StaticResource InputComboBox}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <ComboBox ItemsSource="{Binding Actors}" SelectedItem="{Binding MovieActor.Actor, UpdateSourceTrigger=PropertyChanged}"
+                              materialDesign:HintAssist.Hint="Actor" Style="{StaticResource InputComboBox}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                </UniformGrid>
+            </Border>
+
+            <Border Background="#fff" CornerRadius="7" Margin="20 0 30 20" Grid.Row="1">
+                <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
+            </Border>
+
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModel:AddSerialGenreViewModel}">
+        <Grid Background="#f7f6f4" Height="600" Width="1100">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Border Background="#fff" CornerRadius="7" Margin="30">
+                <UniformGrid Rows="2">
+
+                    <ComboBox ItemsSource="{Binding Serials}" SelectedItem="{Binding SerialGenre.Serial, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
+                              materialDesign:HintAssist.Hint="Serial" Style="{StaticResource InputComboBox}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <ComboBox ItemsSource="{Binding Genres}" SelectedItem="{Binding SerialGenre.Genre, UpdateSourceTrigger=PropertyChanged}"
+                              materialDesign:HintAssist.Hint="Genre" Style="{StaticResource InputComboBox}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                </UniformGrid>
+            </Border>
+
+            <Border Background="#fff" CornerRadius="7" Margin="20 0 30 20" Grid.Row="1">
+                <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
+            </Border>
+
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModel:AddSerialActorViewModel}">
+        <Grid Background="#f7f6f4" Height="600" Width="1100">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Border Background="#fff" CornerRadius="7" Margin="30">
+                <UniformGrid Rows="2">
+
+                    <ComboBox ItemsSource="{Binding Serials}" SelectedItem="{Binding SerialActor.Serial, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
+                              materialDesign:HintAssist.Hint="Serial" Style="{StaticResource InputComboBox}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <ComboBox ItemsSource="{Binding Actors}" SelectedItem="{Binding SerialActor.Actor, UpdateSourceTrigger=PropertyChanged}"
+                              materialDesign:HintAssist.Hint="Actor" Style="{StaticResource InputComboBox}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                </UniformGrid>
+            </Border>
+
+            <Border Background="#fff" CornerRadius="7" Margin="20 0 30 20" Grid.Row="1">
+                <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
+            </Border>
+
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModel:AddSoonGenreViewModel}">
+        <Grid Background="#f7f6f4" Height="600" Width="1100">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Border Background="#fff" CornerRadius="7" Margin="30">
+                <UniformGrid Rows="2">
+
+                    <ComboBox ItemsSource="{Binding Soons}" SelectedItem="{Binding SoonGenre.Soon, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
+                              materialDesign:HintAssist.Hint="Soon" Style="{StaticResource InputComboBox}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <ComboBox ItemsSource="{Binding Genres}" SelectedItem="{Binding SoonGenre.Genre, UpdateSourceTrigger=PropertyChanged}"
+                              materialDesign:HintAssist.Hint="Genre" Style="{StaticResource InputComboBox}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                </UniformGrid>
+            </Border>
+
+            <Border Background="#fff" CornerRadius="7" Margin="20 0 30 20" Grid.Row="1">
+                <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
+            </Border>
+
+        </Grid>
+    </DataTemplate>
+
 </ResourceDictionary>

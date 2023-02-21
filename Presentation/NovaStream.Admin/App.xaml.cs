@@ -27,11 +27,26 @@ public partial class App : System.Windows.Application
         Services.AddSingleton<MovieViewModel>();
         Services.AddTransient<AddMovieViewModel>();
 
+        Services.AddSingleton<MovieActorViewModel>();
+        Services.AddTransient<AddMovieActorViewModel>();
+
+        Services.AddSingleton<MovieGenreViewModel>();
+        Services.AddTransient<AddMovieGenreViewModel>();
+
         Services.AddSingleton<SoonViewModel>();
         Services.AddTransient<AddSoonViewModel>();
 
+        Services.AddSingleton<SoonGenreViewModel>();
+        Services.AddTransient<AddSoonGenreViewModel>();
+
         Services.AddSingleton<SerialViewModel>();
         Services.AddTransient<AddSerialViewModel>();
+
+        Services.AddSingleton<SerialActorViewModel>();
+        Services.AddTransient<AddSerialActorViewModel>();
+
+        Services.AddSingleton<SerialGenreViewModel>();
+        Services.AddTransient<AddSerialGenreViewModel>();
 
         Services.AddSingleton<SeasonViewModel>();
         Services.AddTransient<AddSeasonViewModel>();

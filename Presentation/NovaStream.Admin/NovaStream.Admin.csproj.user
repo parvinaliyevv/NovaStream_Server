@@ -26,6 +26,21 @@
     <Compile Update="Views\SoonView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Tabs\MovieActorView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Tabs\MovieGenreView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Tabs\SerialActorView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Tabs\SerialGenreView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Tabs\SoonGenreView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Resources\AppResources.xaml">
@@ -56,6 +71,21 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\SoonView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Tabs\MovieActorView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Tabs\MovieGenreView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Tabs\SerialActorView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Tabs\SerialGenreView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Tabs\SoonGenreView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

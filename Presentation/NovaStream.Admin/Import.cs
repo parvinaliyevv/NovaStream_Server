@@ -21,10 +21,12 @@ global using NovaStream.Admin.ViewModels;
 global using NovaStream.Persistence.Services;
 global using NovaStream.Admin.Models.Abstract;
 global using NovaStream.Admin.Models.Concrete;
+global using NovaStream.Admin.ViewModels.Tabs;
 global using NovaStream.Infrastructure.Services;
 global using NovaStream.Domain.Entities.Concrete;
 global using NovaStream.Persistence.Data.Contexts;
 global using NovaStream.Admin.ViewModels.DialogHosts;
+global using NovaStream.Domain.Entities.Concrete.Adapters;
 
 global using Mapster;
 global using Amazon.S3.Transfer;
