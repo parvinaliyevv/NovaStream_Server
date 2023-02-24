@@ -22,26 +22,39 @@ public class AddSerialActorViewModel
     }
 
 
-    private void Save()
+    private async Task Save()
     {
-        SerialActor.Verify();
+        await Task.CompletedTask;
 
-        if (SerialActor.HasErrors) return;
-
-        var dbSerialActor = _dbContext.SerialActors.Include(sa => sa.Actor)
-            .FirstOrDefault(sa => sa.SerialName == SerialActor.Serial.Name && sa.Actor.Id == SerialActor.Actor.Id);
-
-        if (dbSerialActor is not null) return;
-
-        var serialActor = new SerialActor()
+        try
         {
-            Serial = SerialActor.Serial,
-            Actor = SerialActor.Actor
-        };
+            SerialActor.Verify();
 
-        _dbContext.SerialActors.Add(serialActor);
-        _dbContext.SaveChanges();
+            if (SerialActor.HasErrors) return;
 
-        App.ServiceProvider.GetService<SerialActorViewModel>().SerialActors.Add(serialActor);
+            var dbSerialActor = _dbContext.SerialActors.Include(sa => sa.Actor)
+                .FirstOrDefault(sa => sa.SerialName == SerialActor.Serial.Name && sa.Actor.Id == SerialActor.Actor.Id);
+
+            if (dbSerialActor is not null) return;
+
+            var serialActor = new SerialActor()
+            {
+                Serial = SerialActor.Serial,
+                Actor = SerialActor.Actor
+            };
+
+            _dbContext.SerialActors.Add(serialActor);
+            _dbContext.SaveChanges();
+
+            App.ServiceProvider.GetService<SerialActorViewModel>()?.SerialActors.Add(serialActor);
+
+            DialogHost.Close("RootDialog");
+
+            await MessageBoxService.Show("Serial Actor saved successfully!", MessageBoxType.Success);
+        }
+        catch (Exception ex)
+        {
+            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+        }
     }
 }

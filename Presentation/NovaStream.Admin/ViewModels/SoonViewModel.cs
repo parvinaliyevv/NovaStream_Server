@@ -52,8 +52,9 @@ public class SoonViewModel : ViewModelBase
 
         var pattern = sender.ToString();
 
-        var soons = string.IsNullOrWhiteSpace(pattern)
-            ? _dbContext.Soons.ToList() : _dbContext.Soons.Where(s => s.Name.Contains(pattern)).ToList();
+        var soons = string.IsNullOrWhiteSpace(pattern) ? 
+            _dbContext.Soons.ToList() : 
+            _dbContext.Soons.Where(s => s.Name.Contains(pattern)).ToList();
 
         if (Soons.Count == soons.Count) return;
 
@@ -69,6 +70,8 @@ public class SoonViewModel : ViewModelBase
 
         ArgumentNullException.ThrowIfNull(soon);
 
+        _ = MessageBoxService.Show($"Delete <{soon.Name}>...", MessageBoxType.Progress);
+
         await _storageManager.DeleteFileAsync(soon.TrailerUrl);
         await _storageManager.DeleteFileAsync(soon.TrailerImageUrl);
 
@@ -76,6 +79,8 @@ public class SoonViewModel : ViewModelBase
         await _dbContext.SaveChangesAsync();
 
         Soons.Remove(soon);
+
+        MessageBoxService.Close();
     }
 
     private async Task OpenAddDialogHost()
@@ -95,6 +100,7 @@ public class SoonViewModel : ViewModelBase
         var model = App.ServiceProvider.GetService<AddSoonViewModel>();
 
         model.Soon = soon.Adapt<UploadSoonModel>();
+        model.IsEdit = true;
         
         await DialogHost.Show(model, "RootDialog");
     }

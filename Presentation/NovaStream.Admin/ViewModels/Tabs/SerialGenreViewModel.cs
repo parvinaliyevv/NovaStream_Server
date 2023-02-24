@@ -18,7 +18,6 @@ public class SerialGenreViewModel : ViewModelBase
     public RelayCommand DeleteCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
-    public RelayCommand OpenEditDialogHostCommand { get; set; }
 
 
     public SerialGenreViewModel(AppDbContext dbContext)
@@ -40,7 +39,6 @@ public class SerialGenreViewModel : ViewModelBase
         DeleteCommand = new RelayCommand(sender => Delete(sender));
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
-        OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
     }
 
     private async Task Search(object sender)
@@ -67,10 +65,14 @@ public class SerialGenreViewModel : ViewModelBase
 
         ArgumentNullException.ThrowIfNull(serialGenre);
 
+        _ = MessageBoxService.Show($"Delete <{serialGenre.Genre.Name} from {serialGenre.SerialName}>...", MessageBoxType.Progress);
+        
         _dbContext.SerialGenres.Remove(serialGenre);
         await _dbContext.SaveChangesAsync();
 
         SerialGenres.Remove(serialGenre);
+
+        MessageBoxService.Close();
     }
 
     private async Task OpenAddDialogHost()
@@ -79,21 +81,6 @@ public class SerialGenreViewModel : ViewModelBase
 
         model.SerialGenre.Serial = Serial;
         model.Serials = new List<Serial> { Serial };
-
-        await DialogHost.Show(model, "RootDialog");
-    }
-
-    private async Task OpenEditDialogHost(object sender)
-    {
-        var button = sender as Button;
-        var serialGenre = button?.DataContext as SerialGenre;
-
-        ArgumentNullException.ThrowIfNull(serialGenre);
-
-        var model = App.ServiceProvider.GetService<AddSerialGenreViewModel>();
-
-        model.SerialGenre.Serial = serialGenre.Serial;
-        model.SerialGenre.Genre = serialGenre.Genre;
 
         await DialogHost.Show(model, "RootDialog");
     }

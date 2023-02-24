@@ -76,6 +76,7 @@
 
                 <ResourceDictionary Source="Resources/AppResources.xaml"/>
                 <ResourceDictionary Source="Resources/DialogHostResources.xaml"/>
+                <ResourceDictionary Source="Resources/MessageBoxResources.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
 

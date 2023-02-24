@@ -54,8 +54,9 @@ public class MovieViewModel : ViewModelBase
 
         var pattern = sender.ToString();
 
-        var movies = string.IsNullOrWhiteSpace(pattern)
-            ? _dbContext.Movies.ToList() : _dbContext.Movies.Where(m => m.Name.Contains(pattern)).ToList();
+        var movies = string.IsNullOrWhiteSpace(pattern) ?
+            _dbContext.Movies.Include(m => m.Producer).ToList() : 
+            _dbContext.Movies.Include(m => m.Producer).Where(m => m.Name.Contains(pattern)).ToList();
 
         if (Movies.Count == movies.Count) return;
 
@@ -71,6 +72,8 @@ public class MovieViewModel : ViewModelBase
 
         ArgumentNullException.ThrowIfNull(movie);
 
+        _ = MessageBoxService.Show($"Delete <{movie.Name}>...", MessageBoxType.Progress);
+        
         await _awsStorageManager.DeleteFileAsync(movie.VideoUrl);
         await _storageManager.DeleteFileAsync(movie.VideoImageUrl);
         await _storageManager.DeleteFileAsync(movie.TrailerUrl);
@@ -81,6 +84,8 @@ public class MovieViewModel : ViewModelBase
         await _dbContext.SaveChangesAsync();
 
         Movies.Remove(movie);
+
+        MessageBoxService.Close();
     }
 
     private async Task OpenAddDialogHost()
@@ -101,6 +106,7 @@ public class MovieViewModel : ViewModelBase
         
         model.Movie = movie.Adapt<UploadMovieModel>();
         model.Movie.Producer = movie.Producer;
+        model.IsEdit = true;
 
         await DialogHost.Show(model, "RootDialog");
     }

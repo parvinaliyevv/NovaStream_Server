@@ -22,26 +22,39 @@ public class AddMovieGenreViewModel
     }
 
 
-    private void Save()
+    private async Task Save()
     {
-        MovieGenre.Verify();
+        await Task.CompletedTask;
 
-        if (MovieGenre.HasErrors) return;
-
-        var dbMovieGenre = _dbContext.MovieGenres.Include(mg => mg.Genre)
-            .FirstOrDefault(mg => mg.MovieName == MovieGenre.Movie.Name && mg.Genre.Id == MovieGenre.Genre.Id);
-
-        if (dbMovieGenre is not null) return;
-
-        var movieGenre = new MovieGenre()
+        try
         {
-            Movie = MovieGenre.Movie,
-            Genre = MovieGenre.Genre
-        };
+            MovieGenre.Verify();
 
-        _dbContext.MovieGenres.Add(movieGenre);
-        _dbContext.SaveChanges();
+            if (MovieGenre.HasErrors) return;
 
-        App.ServiceProvider.GetService<MovieGenreViewModel>().MovieGenres.Add(movieGenre);
+            var dbMovieGenre = _dbContext.MovieGenres.Include(mg => mg.Genre)
+                .FirstOrDefault(mg => mg.MovieName == MovieGenre.Movie.Name && mg.Genre.Id == MovieGenre.Genre.Id);
+
+            if (dbMovieGenre is not null) return;
+
+            var movieGenre = new MovieGenre()
+            {
+                Movie = MovieGenre.Movie,
+                Genre = MovieGenre.Genre
+            };
+
+            _dbContext.MovieGenres.Add(movieGenre);
+            _dbContext.SaveChanges();
+
+            App.ServiceProvider.GetService<MovieGenreViewModel>()?.MovieGenres.Add(movieGenre);
+
+            DialogHost.Close("RootDialog");
+
+            await MessageBoxService.Show("Movie Genre saved succesfully!", MessageBoxType.Success);
+        }
+        catch (Exception ex)
+        {
+            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+        }
     }
 }

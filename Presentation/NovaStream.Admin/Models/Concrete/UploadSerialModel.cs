@@ -34,8 +34,8 @@ public class UploadSerialModel : ModelBase
         }
     }
 
-    private short? _age;
-    public short? Age
+    private int _age;
+    public int Age
     {
         get => _age;
         set
@@ -46,7 +46,7 @@ public class UploadSerialModel : ModelBase
 
             ClearErrors(nameof(Age));
 
-            if (_age is null) AddError(nameof(Age), "Age cannot be empty!");
+            if (_age == 0) AddError(nameof(Age), "Age cannot be empty!");
         }
     }
 

@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\HP\Desktop\NovaStream_Server\Presentation\NovaStream.Admin\App.xaml
-16-773112621
+17-792475993
 11413424753
-66-1901630901
+74885772334
 368-1895833172
-Resources\AppResources.xaml;Resources\DialogHostResources.xaml;Views\ActorView.xaml;Views\EpisodeView.xaml;Views\GenreView.xaml;Views\MainView.xaml;Views\MovieView.xaml;Views\ProducerView.xaml;Views\SeasonView.xaml;Views\SerialView.xaml;Views\SoonView.xaml;Views\Tabs\MovieActorView.xaml;Views\Tabs\MovieGenreView.xaml;Views\Tabs\SerialActorView.xaml;Views\Tabs\SerialGenreView.xaml;Views\Tabs\SoonGenreView.xaml;
+Resources\AppResources.xaml;Resources\DialogHostResources.xaml;Resources\MessageBoxResources.xaml;Views\ActorView.xaml;Views\EpisodeView.xaml;Views\GenreView.xaml;Views\MainView.xaml;Views\MovieView.xaml;Views\ProducerView.xaml;Views\SeasonView.xaml;Views\SerialView.xaml;Views\SoonView.xaml;Views\Tabs\MovieActorView.xaml;Views\Tabs\MovieGenreView.xaml;Views\Tabs\SerialActorView.xaml;Views\Tabs\SerialGenreView.xaml;Views\Tabs\SoonGenreView.xaml;
 
-False
+True
 

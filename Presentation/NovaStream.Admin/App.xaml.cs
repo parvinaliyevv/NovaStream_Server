@@ -10,7 +10,7 @@ public partial class App : System.Windows.Application
     static App()
     {
         _Configuration = new ConfigurationBuilder()
-            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../.."))
+            .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).Build();
     }
 
@@ -53,6 +53,7 @@ public partial class App : System.Windows.Application
 
         Services.AddSingleton<EpisodeViewModel>();
         Services.AddTransient<AddEpisodeViewModel>();
+        Services.AddTransient<EditEpisodeViewModel>();
 
         Services.AddSingleton<ActorViewModel>();
         Services.AddTransient<AddActorViewModel>();

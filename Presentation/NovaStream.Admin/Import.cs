@@ -17,6 +17,7 @@ global using System.Runtime.CompilerServices;
 global using NovaStream.Admin.Views;
 global using NovaStream.Admin.Commands;
 global using NovaStream.Admin.Services;
+global using NovaStream.Admin.MessageBoxes;
 global using NovaStream.Admin.ViewModels;
 global using NovaStream.Persistence.Services;
 global using NovaStream.Admin.Models.Abstract;

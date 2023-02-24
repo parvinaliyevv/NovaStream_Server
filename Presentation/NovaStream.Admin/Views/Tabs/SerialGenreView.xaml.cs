@@ -12,7 +12,7 @@ public partial class SerialGenreView : UserControl
 
     private void SerialView_ButtonClicked(object sender, RoutedEventArgs e)
     {
-        App.ServiceProvider.GetService<MainViewModel>().MovieViewCommand.Execute(null);
+        App.ServiceProvider.GetService<MainViewModel>().SerialViewCommand.Execute(null);
     }
 
     private void SerialActorView_ButtonClicked(object sender, RoutedEventArgs e)

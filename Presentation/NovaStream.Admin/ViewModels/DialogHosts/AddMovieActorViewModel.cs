@@ -22,26 +22,39 @@ public class AddMovieActorViewModel
     }
 
 
-    private void Save()
+    private async Task Save()
     {
-        MovieActor.Verify();
+        await Task.CompletedTask;
 
-        if (MovieActor.HasErrors) return;
-
-        var dbMovieActor = _dbContext.MovieActors.Include(ma => ma.Actor)
-            .FirstOrDefault(ma => ma.MovieName == MovieActor.Movie.Name && ma.Actor.Id == MovieActor.Actor.Id);
-
-        if (dbMovieActor is not null) return;
-
-        var movieActor = new MovieActor()
+        try
         {
-            Movie = MovieActor.Movie,
-            Actor = MovieActor.Actor
-        };
+            MovieActor.Verify();
 
-        _dbContext.MovieActors.Add(movieActor);
-        _dbContext.SaveChanges();
+            if (MovieActor.HasErrors) return;
 
-        App.ServiceProvider.GetService<MovieActorViewModel>().MovieActors.Add(movieActor);
+            var dbMovieActor = _dbContext.MovieActors.Include(ma => ma.Actor)
+                .FirstOrDefault(ma => ma.MovieName == MovieActor.Movie.Name && ma.Actor.Id == MovieActor.Actor.Id);
+
+            if (dbMovieActor is not null) return;
+
+            var movieActor = new MovieActor()
+            {
+                Movie = MovieActor.Movie,
+                Actor = MovieActor.Actor
+            };
+
+            _dbContext.MovieActors.Add(movieActor);
+            _dbContext.SaveChanges();
+
+            App.ServiceProvider.GetService<MovieActorViewModel>()?.MovieActors.Add(movieActor);
+
+            DialogHost.Close("RootDialog");
+
+            await MessageBoxService.Show("Movie Actor saved succesfully!", MessageBoxType.Success);
+        }
+        catch (Exception ex)
+        {
+            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+        }
     }
 }

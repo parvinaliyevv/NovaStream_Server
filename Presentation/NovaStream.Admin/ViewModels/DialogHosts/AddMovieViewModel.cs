@@ -9,6 +9,7 @@ public class AddMovieViewModel : DependencyObject
     public UploadMovieModel Movie { get; set; }
     public List<Producer> Producers { get; set; }
 
+    public bool IsEdit { get; set; }
     public bool ProcessStarted { get; set; }
     public List<Task> UploadTasks { get; set; }
     public List<CancellationTokenSource> UploadTaskTokens { get; set; }
@@ -33,6 +34,7 @@ public class AddMovieViewModel : DependencyObject
 
         Movie = new();
 
+        IsEdit = false;
         ProcessStarted = false;
         UploadTasks = new();
         UploadTaskTokens = new();
@@ -52,128 +54,161 @@ public class AddMovieViewModel : DependencyObject
     {
         await Task.CompletedTask;
 
-        Movie.Verify();
-
-        if (Movie.HasErrors) return;
-
-        ProcessStarted = true;
-
-        var movie = Movie.Adapt<Movie>();
-
-        var dbMovie = _dbContext.Movies.FirstOrDefault(m => m.Name == Movie.Name);
-
-        UploadTasks.Clear();
-        UploadTaskTokens.Clear();
-
-        Movie.VideoUploadSuccess = false;
-        Movie.VideoImageUploadSuccess = false;
-        Movie.TrailerUploadSuccess = false;
-        Movie.ImageUploadSuccess = false;
-        Movie.SearchImageUploadSuccess = false;
-
-        // Movie VideoUrl
-        if (dbMovie is null || dbMovie is not null && dbMovie.VideoUrl != Movie.VideoUrl)
+        try
         {
-            var videoStream = new FileStream(Movie.VideoUrl, FileMode.Open, FileAccess.Read);
-            var filename = string.Format("{0}-video{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.VideoUrl));
-            movie.VideoUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
+            Movie.Verify();
 
-            var videoToken = new CancellationTokenSource();
-            var videoUploadTask = _awsStorageManager.UploadFileAsync(videoStream, movie.VideoUrl, Movie.VideoProgressEvent, videoToken.Token);
+            if (Movie.HasErrors) return;
 
-            UploadTasks.Add(videoUploadTask);
-            UploadTaskTokens.Add(videoToken);
+            var dbMovie = _dbContext.Movies.FirstOrDefault(m => m.Name == Movie.Name);
 
-            videoUploadTask.ContinueWith(_ => Movie.VideoUploadSuccess = true);
+            if (!IsEdit && dbMovie is not null)
+                Movie.AddError(nameof(Movie.Name), "Movie with this name already exists!");
+
+            if (Movie.HasErrors) return;
+
+            ProcessStarted = true;
+
+            var movie = Movie.Adapt<Movie>();
+
+            UploadTasks.Clear();
+            UploadTaskTokens.Clear();
+
+            Movie.VideoUploadSuccess = false;
+            Movie.VideoImageUploadSuccess = false;
+            Movie.TrailerUploadSuccess = false;
+            Movie.ImageUploadSuccess = false;
+            Movie.SearchImageUploadSuccess = false;
+
+            // Movie VideoUrl
+            if (dbMovie is null || dbMovie is not null && dbMovie.VideoUrl != Movie.VideoUrl)
+            {
+                var videoStream = new FileStream(Movie.VideoUrl, FileMode.Open, FileAccess.Read);
+                var filename = string.Format("{0}-video{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.VideoUrl));
+                movie.VideoUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
+
+                var videoToken = new CancellationTokenSource();
+                var videoUploadTask = _awsStorageManager.UploadFileAsync(videoStream, movie.VideoUrl, Movie.VideoProgressEvent, videoToken.Token);
+
+                UploadTasks.Add(videoUploadTask);
+                UploadTaskTokens.Add(videoToken);
+
+                videoUploadTask.ContinueWith(_ => Movie.VideoUploadSuccess = true);
+            }
+            else Movie.VideoUploadSuccess = true;
+
+            // Movie VideoImageUrl
+            if (dbMovie is null || dbMovie is not null && dbMovie.VideoImageUrl != Movie.VideoImageUrl)
+            {
+                var videoImageStream = new FileStream(Movie.VideoImageUrl, FileMode.Open, FileAccess.Read);
+                var filename = string.Format("{0}-video-image{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.VideoImageUrl));
+                movie.VideoImageUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
+
+                Movie.VideoImageProgress = new BlobStorageUploadProgress(videoImageStream.Length);
+
+                var videoImageToken = new CancellationTokenSource();
+                var videoImageUploadTask = _storageManager.UploadFileAsync(videoImageStream, movie.VideoImageUrl, Movie.VideoImageProgress, videoImageToken.Token);
+
+                UploadTasks.Add(videoImageUploadTask);
+                UploadTaskTokens.Add(videoImageToken);
+
+                videoImageUploadTask.ContinueWith(_ => Movie.VideoImageUploadSuccess = true);
+            }
+            else Movie.VideoImageUploadSuccess = true;
+
+            // Movie TrailerUrl
+            if (dbMovie is null || dbMovie is not null && dbMovie.TrailerUrl != Movie.TrailerUrl)
+            {
+                var trailerStream = new FileStream(Movie.TrailerUrl, FileMode.Open, FileAccess.Read);
+                var filename = string.Format("{0}-trailer{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.TrailerUrl));
+                movie.TrailerUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
+
+                Movie.TrailerProgress = new BlobStorageUploadProgress(trailerStream.Length);
+
+                var trailerToken = new CancellationTokenSource();
+                var trailerUploadTask = _storageManager.UploadFileAsync(trailerStream, movie.TrailerUrl, Movie.TrailerProgress, trailerToken.Token);
+
+                UploadTasks.Add(trailerUploadTask);
+                UploadTaskTokens.Add(trailerToken);
+
+                trailerUploadTask.ContinueWith(_ => Movie.TrailerUploadSuccess = true);
+            }
+            else Movie.TrailerUploadSuccess = true;
+
+            // Movie ImageUrl
+            if (dbMovie is null || dbMovie is not null && dbMovie.ImageUrl != Movie.ImageUrl)
+            {
+                var imageStream = new FileStream(Movie.ImageUrl, FileMode.Open, FileAccess.Read);
+                var filename = string.Format("{0}-image{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.ImageUrl));
+                movie.ImageUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
+
+                Movie.ImageProgress = new BlobStorageUploadProgress(imageStream.Length);
+
+                var imageToken = new CancellationTokenSource();
+                var imageUploadTask = _storageManager.UploadFileAsync(imageStream, movie.ImageUrl, Movie.ImageProgress, imageToken.Token);
+
+                UploadTasks.Add(imageUploadTask);
+                UploadTaskTokens.Add(imageToken);
+
+                imageUploadTask.ContinueWith(_ => Movie.ImageUploadSuccess = true);
+            }
+            else Movie.ImageUploadSuccess = true;
+
+            // Movie SearchImageUrl
+            if (dbMovie is null || dbMovie is not null && dbMovie.SearchImageUrl != Movie.SearchImageUrl)
+            {
+                var searchImageStream = new FileStream(Movie.SearchImageUrl, FileMode.Open, FileAccess.Read);
+                var filename = string.Format("{0}-search-image{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.SearchImageUrl));
+                movie.SearchImageUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
+
+                Movie.SearchImageProgress = new BlobStorageUploadProgress(searchImageStream.Length);
+
+                var searchImageToken = new CancellationTokenSource();
+                var searchImageUploadTask = _storageManager.UploadFileAsync(searchImageStream, movie.SearchImageUrl, Movie.SearchImageProgress, searchImageToken.Token);
+
+                UploadTasks.Add(searchImageUploadTask);
+                UploadTaskTokens.Add(searchImageToken);
+
+                searchImageUploadTask.ContinueWith(_ => Movie.SearchImageUploadSuccess = true);
+            }
+            else Movie.SearchImageUploadSuccess = true;
+
+            if (UploadTasks.Count > 0) await Task.WhenAll(UploadTasks);
+
+            var movieViewModel = App.ServiceProvider.GetService<MovieViewModel>();
+
+            if (dbMovie is not null)
+            {
+                var entity = movieViewModel.Movies.FirstOrDefault(m => m.Name == dbMovie.Name);
+                _dbContext.Entry(entity).State = EntityState.Detached;
+
+                var index = movieViewModel.Movies.IndexOf(entity);
+                movieViewModel.Movies.RemoveAt(index);
+
+                _dbContext.Movies.Update(movie);
+
+                movieViewModel.Movies.Insert(index, movie);
+            }
+            else
+            {
+                _dbContext.Movies.Add(movie);
+                movieViewModel.Movies.Add(movie);
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            ProcessStarted = false;
+
+            DialogHost.Close("RootDialog");
+
+            await MessageBoxService.Show("Movie succesfully uploaded!", MessageBoxType.Success);
         }
-        else Movie.VideoUploadSuccess = true;
-
-        // Movie VideoImageUrl
-        if (dbMovie is null || dbMovie is not null && dbMovie.VideoImageUrl != Movie.VideoImageUrl)
+        catch (Exception ex)
         {
-            var videoImageStream = new FileStream(Movie.VideoImageUrl, FileMode.Open, FileAccess.Read);
-            var filename = string.Format("{0}-video-image{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.VideoImageUrl));
-            movie.VideoImageUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
+            _ = Cancel();
 
-            Movie.VideoImageProgress = new BlobStorageUploadProgress(videoImageStream.Length);
-
-            var videoImageToken = new CancellationTokenSource();
-            var videoImageUploadTask = _storageManager.UploadFileAsync(videoImageStream, movie.VideoImageUrl, Movie.VideoImageProgress, videoImageToken.Token);
-
-            UploadTasks.Add(videoImageUploadTask);
-            UploadTaskTokens.Add(videoImageToken);
-
-            videoImageUploadTask.ContinueWith(_ => Movie.VideoImageUploadSuccess = true);
+            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
         }
-        else Movie.VideoImageUploadSuccess = true;
-
-        // Movie TrailerUrl
-        if (dbMovie is null || dbMovie is not null && dbMovie.TrailerUrl != Movie.TrailerUrl)
-        {
-            var trailerStream = new FileStream(Movie.TrailerUrl, FileMode.Open, FileAccess.Read);
-            var filename = string.Format("{0}-trailer{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.TrailerUrl));
-            movie.TrailerUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
-
-            Movie.TrailerProgress = new BlobStorageUploadProgress(trailerStream.Length);
-
-            var trailerToken = new CancellationTokenSource();
-            var trailerUploadTask = _storageManager.UploadFileAsync(trailerStream, movie.TrailerUrl, Movie.TrailerProgress, trailerToken.Token);
-
-            UploadTasks.Add(trailerUploadTask);
-            UploadTaskTokens.Add(trailerToken);
-
-            trailerUploadTask.ContinueWith(_ => Movie.TrailerUploadSuccess = true);
-        }
-        else Movie.TrailerUploadSuccess = true;
-
-        // Movie ImageUrl
-        if (dbMovie is null || dbMovie is not null && dbMovie.ImageUrl != Movie.ImageUrl)
-        {
-            var imageStream = new FileStream(Movie.ImageUrl, FileMode.Open, FileAccess.Read);
-            var filename = string.Format("{0}-image{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.ImageUrl));
-            movie.ImageUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
-
-            Movie.ImageProgress = new BlobStorageUploadProgress(imageStream.Length);
-
-            var imageToken = new CancellationTokenSource();
-            var imageUploadTask = _storageManager.UploadFileAsync(imageStream, movie.ImageUrl, Movie.ImageProgress, imageToken.Token);
-
-            UploadTasks.Add(imageUploadTask);
-            UploadTaskTokens.Add(imageToken);
-
-            imageUploadTask.ContinueWith(_ => Movie.ImageUploadSuccess = true);
-        }
-        else Movie.ImageUploadSuccess = true;
-
-        // Movie SearchImageUrl
-        if (dbMovie is null || dbMovie is not null && dbMovie.SearchImageUrl != Movie.SearchImageUrl)
-        {
-            var searchImageStream = new FileStream(Movie.SearchImageUrl, FileMode.Open, FileAccess.Read);
-            var filename = string.Format("{0}-search-image{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.SearchImageUrl));
-            movie.SearchImageUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
-
-            Movie.SearchImageProgress = new BlobStorageUploadProgress(searchImageStream.Length);
-
-            var searchImageToken = new CancellationTokenSource();
-            var searchImageUploadTask = _storageManager.UploadFileAsync(searchImageStream, movie.SearchImageUrl, Movie.SearchImageProgress, searchImageToken.Token);
-
-            UploadTasks.Add(searchImageUploadTask);
-            UploadTaskTokens.Add(searchImageToken);
-
-            searchImageUploadTask.ContinueWith(_ => Movie.SearchImageUploadSuccess = true);
-        }
-        else Movie.SearchImageUploadSuccess = true;
-
-        if (UploadTasks.Count > 0) await Task.WhenAll(UploadTasks);
-
-        if (dbMovie is not null) _dbContext.Movies.Remove(dbMovie);
-
-        _dbContext.Movies.Add(movie);
-        await _dbContext.SaveChangesAsync();
-
-        App.ServiceProvider.GetService<MovieViewModel>().Movies.Add(movie);
-
-        ProcessStarted = false;
     }
 
     private async Task Cancel()

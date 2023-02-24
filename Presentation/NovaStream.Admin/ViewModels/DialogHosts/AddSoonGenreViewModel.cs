@@ -22,26 +22,39 @@ public class AddSoonGenreViewModel
     }
 
 
-    private void Save()
+    private async Task Save()
     {
-        SoonGenre.Verify();
+        await Task.CompletedTask;
 
-        if (SoonGenre.HasErrors) return;
-
-        var dbSoonGenre = _dbContext.SoonGenres.Include(sg => sg.Genre)
-            .FirstOrDefault(sg => sg.SoonName == SoonGenre.Soon.Name && sg.Genre.Id == SoonGenre.Genre.Id);
-
-        if (dbSoonGenre is not null) return;
-
-        var soonGenre = new SoonGenre()
+        try
         {
-            Soon = SoonGenre.Soon,
-            Genre = SoonGenre.Genre
-        };
+            SoonGenre.Verify();
 
-        _dbContext.SoonGenres.Add(soonGenre);
-        _dbContext.SaveChanges();
+            if (SoonGenre.HasErrors) return;
 
-        App.ServiceProvider.GetService<SoonGenreViewModel>().SoonGenres.Add(soonGenre);
+            var dbSoonGenre = _dbContext.SoonGenres.Include(sg => sg.Genre)
+                .FirstOrDefault(sg => sg.SoonName == SoonGenre.Soon.Name && sg.Genre.Id == SoonGenre.Genre.Id);
+
+            if (dbSoonGenre is not null) return;
+
+            var soonGenre = new SoonGenre()
+            {
+                Soon = SoonGenre.Soon,
+                Genre = SoonGenre.Genre
+            };
+
+            _dbContext.SoonGenres.Add(soonGenre);
+            _dbContext.SaveChanges();
+
+            App.ServiceProvider.GetService<SoonGenreViewModel>()?.SoonGenres.Add(soonGenre);
+
+            DialogHost.Close("RootDialog");
+
+            await MessageBoxService.Show("Soon Genre saved successfully!", MessageBoxType.Success);
+        }
+        catch (Exception ex)
+        {
+            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+        }
     }
 }

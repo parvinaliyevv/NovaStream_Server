@@ -18,7 +18,6 @@ public class SoonGenreViewModel : ViewModelBase
     public RelayCommand DeleteCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
-    public RelayCommand OpenEditDialogHostCommand { get; set; }
 
 
     public SoonGenreViewModel(AppDbContext dbContext)
@@ -40,7 +39,6 @@ public class SoonGenreViewModel : ViewModelBase
         DeleteCommand = new RelayCommand(sender => Delete(sender));
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
-        OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
     }
 
     private async Task Search(object sender)
@@ -67,10 +65,14 @@ public class SoonGenreViewModel : ViewModelBase
 
         ArgumentNullException.ThrowIfNull(soonGenre);
 
+        _ = MessageBoxService.Show($"Delete <{soonGenre.Genre.Name} from {soonGenre.SoonName}>...", MessageBoxType.Progress);
+
         _dbContext.SoonGenres.Remove(soonGenre);
         await _dbContext.SaveChangesAsync();
 
         SoonGenres.Remove(soonGenre);
+
+        MessageBoxService.Close();
     }
 
     private async Task OpenAddDialogHost()
@@ -79,21 +81,6 @@ public class SoonGenreViewModel : ViewModelBase
 
         model.SoonGenre.Soon = Soon;
         model.Soons = new List<Soon> { Soon };
-
-        await DialogHost.Show(model, "RootDialog");
-    }
-
-    private async Task OpenEditDialogHost(object sender)
-    {
-        var button = sender as Button;
-        var soonGenre = button?.DataContext as SoonGenre;
-
-        ArgumentNullException.ThrowIfNull(soonGenre);
-
-        var model = App.ServiceProvider.GetService<AddSoonGenreViewModel>();
-
-        model.SoonGenre.Soon = soonGenre.Soon;
-        model.SoonGenre.Genre = soonGenre.Genre;
 
         await DialogHost.Show(model, "RootDialog");
     }

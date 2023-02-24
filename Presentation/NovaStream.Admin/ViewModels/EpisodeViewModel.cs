@@ -32,7 +32,7 @@ public class EpisodeViewModel : ViewModelBase
     }
 
 
-    private async Task Initialize()
+    public async Task Initialize()
     {
         await Task.CompletedTask;
 
@@ -43,7 +43,7 @@ public class EpisodeViewModel : ViewModelBase
 
         SearchCommand = new RelayCommand(sender => Search(sender));
         DeleteCommand = new RelayCommand(sender => Delete(sender));
-        
+
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
         OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
     }
@@ -54,22 +54,43 @@ public class EpisodeViewModel : ViewModelBase
 
         var pattern = sender.ToString();
 
-        var episodes = string.IsNullOrWhiteSpace(pattern)
-            ? _dbContext.Episodes.ToList() : _dbContext.Episodes.Where(e => e.Name.Contains(pattern)).ToList();
+        var episodes = string.IsNullOrWhiteSpace(pattern) ?
+            _dbContext.Episodes.Include(e => e.Season).ToList() :
+            _dbContext.Episodes.Include(e => e.Season).ToArray().Where(e => 
+                string.Format("{0} S{1:00} E{2:00}", e.Season.SerialName, e.Season.Number, e.Number).Contains(pattern) ||
+                string.Format("{0} {1}", e.Season.SerialName, e.Season.Number, e.Name).Contains(pattern)).ToList();
 
         if (Episodes.Count == episodes.Count) return;
-        
+
         Episodes.Clear();
 
         episodes.ForEach(e => Episodes.Add(e));
     }
-    
+
     private async Task Delete(object sender)
     {
         var button = sender as Button;
         var episode = button?.DataContext as Episode;
 
         ArgumentNullException.ThrowIfNull(episode);
+
+        if (episode.Number == 1)
+        {
+            await MessageBoxService.Show("You can't delete the first episode of a serial, but you can't delete an serial!", MessageBoxType.Error);
+
+            return;
+        }
+
+        var lastEpisodeNumber = _dbContext.Episodes.Max(e => e.Number);
+
+        if (episode.Number < lastEpisodeNumber)
+        {
+            await MessageBoxService.Show("You can delete only the last episode of the serial!", MessageBoxType.Error);
+
+            return;
+        }
+
+        _ = MessageBoxService.Show(string.Format("Delete <{0} S{1:00} E{1:00}>...", episode.Season.SerialName, episode.Season.Number, episode.Number), MessageBoxType.Progress);
 
         await _awsStorageManager.DeleteFileAsync(episode.VideoUrl);
         await _storageManager.DeleteFileAsync(episode.ImageUrl);
@@ -78,6 +99,8 @@ public class EpisodeViewModel : ViewModelBase
         await _dbContext.SaveChangesAsync();
 
         Episodes.Remove(episode);
+
+        MessageBoxService.Close();
     }
 
     private async Task OpenAddDialogHost()
@@ -94,9 +117,11 @@ public class EpisodeViewModel : ViewModelBase
 
         ArgumentNullException.ThrowIfNull(episode);
 
-        var model = App.ServiceProvider.GetService<AddEpisodeViewModel>();
+        var model = App.ServiceProvider.GetService<EditEpisodeViewModel>();
 
         model.Episode = episode.Adapt<UploadEpisodeModel>();
+        model.Episode.Serial = _dbContext.Serials.FirstOrDefault(s => s.Name == episode.Season.SerialName);
+        model.Episode.Season = episode.Season;
 
         await DialogHost.Show(model, "RootDialog");
     }

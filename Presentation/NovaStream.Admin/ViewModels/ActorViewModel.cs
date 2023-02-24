@@ -52,8 +52,9 @@ public class ActorViewModel : ViewModelBase
 
         var pattern = sender.ToString();
 
-        var actors = string.IsNullOrWhiteSpace(pattern)
-            ? _dbContext.Actors.ToList() : _dbContext.Actors.Where(a => a.Name.Contains(pattern)).ToList();
+        var actors = string.IsNullOrWhiteSpace(pattern) ?
+            _dbContext.Actors.ToList() : 
+            _dbContext.Actors.Where(a => (a.Name + " " + a.Surname).Contains(pattern)).ToList();
 
         if (Actors.Count == actors.Count) return;
 
@@ -67,14 +68,18 @@ public class ActorViewModel : ViewModelBase
         var button = sender as Button;
         var actor = button?.DataContext as Actor;
 
-        ArgumentNullException.ThrowIfNull(actor);
-
+        ArgumentNullException.ThrowIfNull(actor); 
+        
+        _ = MessageBoxService.Show($"Delete <{actor.Name} {actor.Surname}>...", MessageBoxType.Progress);
+        
         await _storageManager.DeleteFileAsync(actor.ImageUrl);
 
         _dbContext.Actors.Remove(actor);
         await _dbContext.SaveChangesAsync();
 
         Actors.Remove(actor);
+
+        MessageBoxService.Close();
     }
 
     private async Task OpenAddDialogHost()

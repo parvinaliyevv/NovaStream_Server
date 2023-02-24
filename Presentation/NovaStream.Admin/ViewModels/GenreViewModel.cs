@@ -52,8 +52,9 @@ public class GenreViewModel : ViewModelBase
 
         var pattern = sender.ToString();
 
-        var genres = string.IsNullOrWhiteSpace(pattern)
-            ? _dbContext.Genres.ToList() : _dbContext.Genres.Where(g => g.Name.Contains(pattern)).ToList();
+        var genres = string.IsNullOrWhiteSpace(pattern) ?
+            _dbContext.Genres.ToList() : 
+            _dbContext.Genres.Where(g => g.Name.Contains(pattern)).ToList();
 
         if (Genres.Count == genres.Count) return;
 
@@ -69,12 +70,16 @@ public class GenreViewModel : ViewModelBase
 
         ArgumentNullException.ThrowIfNull(genre);
 
+        _ = MessageBoxService.Show($"Delete <{genre.Name}>...", MessageBoxType.Progress);
+        
         await _storageManager.DeleteFileAsync(genre.ImageUrl);
 
         _dbContext.Genres.Remove(genre);
         await _dbContext.SaveChangesAsync();
 
         Genres.Remove(genre);
+
+        MessageBoxService.Close();
     }
 
     private async Task OpenAddDialogHost()
@@ -94,6 +99,7 @@ public class GenreViewModel : ViewModelBase
         var model = App.ServiceProvider.GetService<AddGenreViewModel>();
 
         model.Genre = genre.Adapt<UploadGenreModel>();
+        model.IsEdit = true;
 
         await DialogHost.Show(model, "RootDialog");
     }

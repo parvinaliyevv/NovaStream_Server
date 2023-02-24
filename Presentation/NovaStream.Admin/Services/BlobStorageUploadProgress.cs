@@ -24,10 +24,7 @@ public class BlobStorageUploadProgress : IProgress<long> ,INotifyPropertyChanged
         {
             Progress = (int)(value * 100 / Length);
         }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message);
-        }
+        catch { }
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

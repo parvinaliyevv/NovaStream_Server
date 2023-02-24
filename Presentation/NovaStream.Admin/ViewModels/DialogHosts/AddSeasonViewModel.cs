@@ -28,16 +28,27 @@ public class AddSeasonViewModel : DependencyObject
     {
         await Task.CompletedTask;
 
-        Season.Verify();
+        try
+        {
+            Season.Verify();
 
-        if (Season.HasErrors) return;
+            if (Season.HasErrors) return;
 
-        var season = Season.Adapt<Season>();
+            var season = Season.Adapt<Season>();
 
-        _dbContext.Seasons.Add(season);
-        await _dbContext.SaveChangesAsync();
+            _dbContext.Seasons.Add(season);
+            await _dbContext.SaveChangesAsync();
 
-        App.ServiceProvider.GetService<SeasonViewModel>().Seasons.Add(season);
+            App.ServiceProvider.GetService<SeasonViewModel>()?.Seasons.Add(season);
+
+            DialogHost.Close("RootDialog");
+
+            await MessageBoxService.Show("Season saved succesfully!", MessageBoxType.Success);
+        }
+        catch (Exception ex)
+        {
+            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+        }
     }
 
     private void SelectedSerialChanged()

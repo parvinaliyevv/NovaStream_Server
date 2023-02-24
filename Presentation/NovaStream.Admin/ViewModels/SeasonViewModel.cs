@@ -17,7 +17,6 @@ public class SeasonViewModel : ViewModelBase
     public RelayCommand DeleteCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
-    public RelayCommand OpenEditDialogHostCommand { get; set; }
 
 
     public SeasonViewModel(AppDbContext dbContext)
@@ -28,7 +27,7 @@ public class SeasonViewModel : ViewModelBase
     }
 
 
-    private async Task Initialize()
+    public async Task Initialize()
     {
         await Task.CompletedTask;
 
@@ -41,7 +40,6 @@ public class SeasonViewModel : ViewModelBase
         DeleteCommand = new RelayCommand(sender => Delete(sender));
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
-        OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
     }
 
     private async Task Search(object sender)
@@ -50,8 +48,9 @@ public class SeasonViewModel : ViewModelBase
 
         var pattern = sender.ToString();
 
-        var seasons = string.IsNullOrWhiteSpace(pattern)
-            ? _dbContext.Seasons.ToList() : _dbContext.Seasons.Where(s => s.SerialName.Contains(pattern)).ToList();
+        var seasons = string.IsNullOrWhiteSpace(pattern) ?
+            _dbContext.Seasons.ToList() :
+            _dbContext.Seasons.ToArray().Where(s => string.Format("{0} S{1:00}", s.SerialName, s.Number).Contains(pattern)).ToList();
 
         if (Seasons.Count == seasons.Count) return;
 
@@ -66,30 +65,38 @@ public class SeasonViewModel : ViewModelBase
         var season = button?.DataContext as Season;
 
         ArgumentNullException.ThrowIfNull(season);
-        
+
+        if (season.Number == 1)
+        {
+            await MessageBoxService.Show("You can't delete the first season of a serial, but you can't delete an serial!", MessageBoxType.Error);
+
+            return;
+        }
+
+        var lastSeasonNumber = _dbContext.Seasons.Max(e => e.Number);
+
+        if (season.Number < lastSeasonNumber)
+        {
+            await MessageBoxService.Show("You can delete only the last season of the serial!", MessageBoxType.Error);
+
+            return;
+        }
+
+        _ = MessageBoxService.Show(string.Format("Delete <{0} S{1:00}>...", season.SerialName, season.Number), MessageBoxType.Progress);
+
         _dbContext.Seasons.Remove(season);
         await _dbContext.SaveChangesAsync();
 
+        await App.ServiceProvider.GetService<EpisodeViewModel>().Initialize();
+
         Seasons.Remove(season);
+
+        MessageBoxService.Close();
     }
 
     private async Task OpenAddDialogHost()
     {
         var model = App.ServiceProvider.GetService<AddSeasonViewModel>();
-
-        await DialogHost.Show(model, "RootDialog");
-    }
-
-    private async Task OpenEditDialogHost(object sender)
-    {
-        var button = sender as Button;
-        var season = button?.DataContext as Season;
-
-        ArgumentNullException.ThrowIfNull(season);
-
-        var model = App.ServiceProvider.GetService<AddSeasonViewModel>();
-
-        model.Season = season.Adapt<UploadSeasonModel>();
 
         await DialogHost.Show(model, "RootDialog");
     }

@@ -43,7 +43,7 @@ public class SerialViewModel : ViewModelBase
 
         SearchCommand = new RelayCommand(sender => Search(sender));
         DeleteCommand = new RelayCommand(sender => Delete(sender));
-        
+
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
         OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
     }
@@ -54,8 +54,9 @@ public class SerialViewModel : ViewModelBase
 
         var pattern = sender.ToString();
 
-        var serials = string.IsNullOrWhiteSpace(pattern)
-            ? _dbContext.Serials.ToList() : _dbContext.Serials.Where(s => s.Name.Contains(pattern)).ToList();
+        var serials = string.IsNullOrWhiteSpace(pattern) ?
+            _dbContext.Serials.Include(s => s.Producer).ToList() :
+            _dbContext.Serials.Include(s => s.Producer).Where(s => s.Name.Contains(pattern)).ToList();
 
         if (Serials.Count == serials.Count) return;
 
@@ -71,8 +72,9 @@ public class SerialViewModel : ViewModelBase
 
         ArgumentNullException.ThrowIfNull(serial);
 
-        var episodes = _dbContext.Episodes.Include(e => e.Season)
-            .Where(e => e.Season.SerialName == serial.Name);
+        _ = MessageBoxService.Show($"Delete <{serial.Name}>...", MessageBoxType.Progress);
+
+        var episodes = _dbContext.Episodes.Include(e => e.Season).Where(e => e.Season.SerialName == serial.Name);
 
         foreach (var episode in episodes)
         {
@@ -84,19 +86,15 @@ public class SerialViewModel : ViewModelBase
         await _storageManager.DeleteFileAsync(serial.ImageUrl);
         await _storageManager.DeleteFileAsync(serial.SearchImageUrl);
 
-        var observableSeasons = App.ServiceProvider.GetService<SeasonViewModel>().Seasons;
-        var observableEpisodes = App.ServiceProvider.GetService<EpisodeViewModel>().Episodes;
-
-        observableSeasons.Clear();
-        observableEpisodes.Clear();
-
-        _dbContext.Seasons.ToList().ForEach(s => observableSeasons.Add(s));
-        _dbContext.Episodes.ToList().ForEach(e => observableEpisodes.Add(e));
-
         _dbContext.Serials.Remove(serial);
         await _dbContext.SaveChangesAsync();
 
+        await App.ServiceProvider.GetService<SeasonViewModel>().Initialize();
+        await App.ServiceProvider.GetService<EpisodeViewModel>().Initialize();
+
         Serials.Remove(serial);
+
+        MessageBoxService.Close();
     }
 
     private async Task OpenAddDialogHost()
@@ -117,6 +115,7 @@ public class SerialViewModel : ViewModelBase
 
         model.Serial = serial.Adapt<UploadSerialModel>();
         model.Serial.Producer = serial.Producer;
+        model.IsEdit = true;
 
         if (serial is not null)
         {

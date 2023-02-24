@@ -56,14 +56,9 @@
                 <DataGridTemplateColumn Header="Operations" IsReadOnly="True" Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Style="{StaticResource GridEditButton}" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=DataContext.OpenEditDialogHostCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-                                    <ContentControl Content="{materialDesign:PackIcon Kind=PencilOutline, Size=12}" VerticalAlignment="Center"/>
-                                </Button>
-                                <Button Style="{StaticResource GridRemoveButton}" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=DataContext.DeleteCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="5 0 0 0">
-                                    <ContentControl Content="{materialDesign:PackIcon Kind=DeleteOutline, Size=12}" VerticalAlignment="Center"/>
-                                </Button>
-                            </StackPanel>
+                            <Button Style="{StaticResource GridRemoveButton}" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=DataContext.DeleteCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="5 0 0 0">
+                                <ContentControl Content="{materialDesign:PackIcon Kind=DeleteOutline, Size=12}" VerticalAlignment="Center"/>
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

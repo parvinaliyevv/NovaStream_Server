@@ -58,7 +58,14 @@
             <DataGrid.Columns>
 
                 <DataGridTextColumn Header="Serial Name" Binding="{Binding SerialName}" IsReadOnly="True" Width="auto"/>
-                <DataGridTextColumn Header="Actor Name" Binding="{Binding Actor.Name}" IsReadOnly="True" Width="*"/>
+                <DataGridTextColumn Header="Actor Fullname" IsReadOnly="True" Width="*">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding StringFormat="{}{0} {1}">
+                            <Binding Path="Actor.Name" />
+                            <Binding Path="Actor.Surname" />
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
 
                 <DataGridTemplateColumn Header="Operations" IsReadOnly="True" Width="auto">
                     <DataGridTemplateColumn.CellTemplate>

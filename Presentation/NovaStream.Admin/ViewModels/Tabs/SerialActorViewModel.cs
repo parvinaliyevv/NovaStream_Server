@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Azure;
-
-namespace NovaStream.Admin.ViewModels.Tabs;
+﻿namespace NovaStream.Admin.ViewModels.Tabs;
 
 public class SerialActorViewModel : ViewModelBase
 {
@@ -20,7 +18,6 @@ public class SerialActorViewModel : ViewModelBase
     public RelayCommand DeleteCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
-    public RelayCommand OpenEditDialogHostCommand { get; set; }
 
 
     public SerialActorViewModel(AppDbContext dbContext)
@@ -42,7 +39,6 @@ public class SerialActorViewModel : ViewModelBase
         DeleteCommand = new RelayCommand(sender => Delete(sender));
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
-        OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
     }
 
     private async Task Search(object sender)
@@ -69,10 +65,14 @@ public class SerialActorViewModel : ViewModelBase
 
         ArgumentNullException.ThrowIfNull(serialActor);
 
+        _ = MessageBoxService.Show($"Delete <{serialActor.Actor.Name} {serialActor.Actor.Surname} from {serialActor.SerialName}>...", MessageBoxType.Progress);
+
         _dbContext.SerialActors.Remove(serialActor);
         await _dbContext.SaveChangesAsync();
 
         SerialActors.Remove(serialActor);
+
+        MessageBoxService.Close();
     }
 
     private async Task OpenAddDialogHost()
@@ -81,21 +81,6 @@ public class SerialActorViewModel : ViewModelBase
 
         model.SerialActor.Serial = Serial;
         model.Serials = new List<Serial> { Serial };
-
-        await DialogHost.Show(model, "RootDialog");
-    }
-
-    private async Task OpenEditDialogHost(object sender)
-    {
-        var button = sender as Button;
-        var serialActor = button?.DataContext as SerialActor;
-
-        ArgumentNullException.ThrowIfNull(serialActor);
-
-        var model = App.ServiceProvider.GetService<AddSerialActorViewModel>();
-
-        model.SerialActor.Serial = serialActor.Serial;
-        model.SerialActor.Actor = serialActor.Actor;
 
         await DialogHost.Show(model, "RootDialog");
     }

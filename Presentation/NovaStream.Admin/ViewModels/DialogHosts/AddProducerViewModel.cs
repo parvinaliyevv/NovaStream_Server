@@ -38,50 +38,79 @@ public class AddProducerViewModel : DependencyObject
     {
         await Task.CompletedTask;
 
-        Producer.Verify();
-
-        if (Producer.HasErrors) return;
-
-        ProcessStarted = true;
-
-        var producer = Producer.Adapt<Producer>();
-
-        var dbProducer = _dbContext.Producers.FirstOrDefault(p => p.Name == Producer.Name);
-
-        UploadTasks.Clear();
-        UploadTaskTokens.Clear();
-
-        Producer.ImageUploadSuccess = false;
-
-        // Actor ImageUrl
-        if (dbProducer is null || dbProducer is not null && dbProducer.ImageUrl != Producer.ImageUrl)
+        try
         {
-            var imageStream = new FileStream(Producer.ImageUrl, FileMode.Open, FileAccess.Read);
-            var filename = string.Format("{0}-image{1}", Producer.Name.Replace(' ', '-'), Path.GetExtension(Producer.ImageUrl));
-            producer.ImageUrl = string.Format("Images/Producers/{0}", filename);
+            Producer.Verify();
 
-            Producer.ImageProgress = new BlobStorageUploadProgress(imageStream.Length);
+            if (Producer.HasErrors) return;
 
-            var imageToken = new CancellationTokenSource();
-            var imageUploadTask = _storageManager.UploadFileAsync(imageStream, producer.ImageUrl, Producer.ImageProgress, imageToken.Token);
+            ProcessStarted = true;
 
-            UploadTasks.Add(imageUploadTask);
-            UploadTaskTokens.Add(imageToken);
+            var producer = Producer.Adapt<Producer>();
 
-            imageUploadTask.ContinueWith(_ => Producer.ImageUploadSuccess = true);
+            var dbProducer = _dbContext.Producers.FirstOrDefault(p => p.Id == Producer.Id);
+
+            UploadTasks.Clear();
+            UploadTaskTokens.Clear();
+
+            Producer.ImageUploadSuccess = false;
+
+            // Actor ImageUrl
+            if (dbProducer is null || dbProducer is not null && dbProducer.ImageUrl != Producer.ImageUrl)
+            {
+                var imageStream = new FileStream(Producer.ImageUrl, FileMode.Open, FileAccess.Read);
+                var filename = string.Format("{0}-image{1}", Producer.Name.Replace(' ', '-'), Path.GetExtension(Producer.ImageUrl));
+                producer.ImageUrl = string.Format("Images/Producers/{0}", filename);
+
+                Producer.ImageProgress = new BlobStorageUploadProgress(imageStream.Length);
+
+                var imageToken = new CancellationTokenSource();
+                var imageUploadTask = _storageManager.UploadFileAsync(imageStream, producer.ImageUrl, Producer.ImageProgress, imageToken.Token);
+
+                UploadTasks.Add(imageUploadTask);
+                UploadTaskTokens.Add(imageToken);
+
+                imageUploadTask.ContinueWith(_ => Producer.ImageUploadSuccess = true);
+            }
+            else Producer.ImageUploadSuccess = true;
+
+            if (UploadTasks.Count > 0) await Task.WhenAll(UploadTasks);
+
+            var producerViewModel = App.ServiceProvider.GetService<ProducerViewModel>();
+
+            if (dbProducer is not null)
+            {
+                var entity = producerViewModel.Producers.FirstOrDefault(p => p.Id == dbProducer.Id);
+                _dbContext.Entry(entity).State = EntityState.Detached;
+
+                var index = producerViewModel.Producers.IndexOf(entity);
+                producerViewModel.Producers.RemoveAt(index);
+
+                producer.Id = dbProducer.Id;
+                _dbContext.Producers.Update(producer);
+
+                producerViewModel.Producers.Insert(index, producer);
+            }
+            else
+            {
+                _dbContext.Producers.Add(producer);
+                producerViewModel.Producers.Add(producer);
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            ProcessStarted = false;
+
+            DialogHost.Close("RootDialog");
+
+            await MessageBoxService.Show("Producer saved succesfully!", MessageBoxType.Success);
         }
-        else Producer.ImageUploadSuccess = true;
+        catch (Exception ex)
+        {
+            _ = Cancel();
 
-        if (UploadTasks.Count > 0) await Task.WhenAll(UploadTasks);
-
-        if (dbProducer is not null) _dbContext.Producers.Remove(dbProducer);
-
-        _dbContext.Producers.Add(producer);
-        await _dbContext.SaveChangesAsync();
-
-        App.ServiceProvider.GetService<ProducerViewModel>().Producers.Add(producer);
-
-        ProcessStarted = false;
+            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+        }
     }
 
     private async Task Cancel()

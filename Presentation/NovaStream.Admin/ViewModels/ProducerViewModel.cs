@@ -52,11 +52,12 @@ public class ProducerViewModel : ViewModelBase
 
         var pattern = sender.ToString();
 
-        var producers = string.IsNullOrWhiteSpace(pattern)
-            ? _dbContext.Producers.ToList() : _dbContext.Producers.Where(p => p.Name.Contains(pattern)).ToList();
+        var producers = string.IsNullOrWhiteSpace(pattern) ?
+        _dbContext.Producers.ToList() :
+        _dbContext.Producers.Where(p => (p.Name + " " + p.Surname).Contains(pattern)).ToList();
 
         if (Producers.Count == producers.Count) return;
-        
+
         Producers.Clear();
 
         producers.ForEach(p => Producers.Add(p));
@@ -69,12 +70,16 @@ public class ProducerViewModel : ViewModelBase
 
         ArgumentNullException.ThrowIfNull(producer);
 
+        _ = MessageBoxService.Show($"Delete <{producer.Name} {producer.Surname}>...", MessageBoxType.Progress);
+
         await _storageManager.DeleteFileAsync(producer.ImageUrl);
 
         _dbContext.Producers.Remove(producer);
         await _dbContext.SaveChangesAsync();
 
         Producers.Remove(producer);
+
+        MessageBoxService.Close();
     }
 
     private async Task OpenAddDialogHost()
@@ -94,7 +99,7 @@ public class ProducerViewModel : ViewModelBase
         var model = App.ServiceProvider.GetService<AddProducerViewModel>();
 
         model.Producer = producer.Adapt<UploadProducerModel>();
-        
+
         await DialogHost.Show(model, "RootDialog");
     }
 

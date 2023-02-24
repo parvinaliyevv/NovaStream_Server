@@ -2,6 +2,8 @@
 
 public class UploadGenreModel : ModelBase
 {
+    public int Id { get; set; }
+
     private string _name;
     public string Name
     {

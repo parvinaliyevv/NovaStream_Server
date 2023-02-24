@@ -58,7 +58,14 @@
             <DataGrid.Columns>
 
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" Width="auto"/>
-                <DataGridTextColumn Header="Producer Name" Binding="{Binding Producer.Name}" IsReadOnly="True" Width="auto"/>
+                <DataGridTextColumn Header="Producer Fullname" IsReadOnly="True" Width="auto">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding StringFormat="{}{0} {1}">
+                            <Binding Path="Producer.Name" />
+                            <Binding Path="Producer.Surname" />
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Year" Binding="{Binding Year}" IsReadOnly="True" Width="auto"/>
                 <DataGridTextColumn Header="Age" Binding="{Binding Age, StringFormat={}{0}+}" IsReadOnly="True" Width="auto"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" IsReadOnly="True" Width="*"/>

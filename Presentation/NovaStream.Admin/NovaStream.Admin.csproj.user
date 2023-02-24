@@ -49,6 +49,9 @@
     <Page Update="Resources\DialogHostResources.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Resources\MessageBoxResources.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\ActorView.xaml">
       <SubType>Designer</SubType>
     </Page>

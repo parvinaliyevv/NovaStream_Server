@@ -22,26 +22,39 @@ public class AddSerialGenreViewModel
     }
 
 
-    private void Save()
+    private async Task Save()
     {
-        SerialGenre.Verify();
+        await Task.CompletedTask;
 
-        if (SerialGenre.HasErrors) return;
-
-        var dbSerialGenre = _dbContext.SerialGenres.Include(sg => sg.Genre)
-            .FirstOrDefault(sg => sg.SerialName == SerialGenre.Serial.Name && sg.Genre.Id == SerialGenre.Genre.Id);
-
-        if (dbSerialGenre is not null) return;
-
-        var serialGenre = new SerialGenre()
+        try
         {
-            Serial = SerialGenre.Serial,
-            Genre = SerialGenre.Genre
-        };
+            SerialGenre.Verify();
 
-        _dbContext.SerialGenres.Add(serialGenre);
-        _dbContext.SaveChanges();
+            if (SerialGenre.HasErrors) return;
 
-        App.ServiceProvider.GetService<SerialGenreViewModel>().SerialGenres.Add(serialGenre);
+            var dbSerialGenre = _dbContext.SerialGenres.Include(sg => sg.Genre)
+                .FirstOrDefault(sg => sg.SerialName == SerialGenre.Serial.Name && sg.Genre.Id == SerialGenre.Genre.Id);
+
+            if (dbSerialGenre is not null) return;
+
+            var serialGenre = new SerialGenre()
+            {
+                Serial = SerialGenre.Serial,
+                Genre = SerialGenre.Genre
+            };
+
+            _dbContext.SerialGenres.Add(serialGenre);
+            _dbContext.SaveChanges();
+
+            App.ServiceProvider.GetService<SerialGenreViewModel>()?.SerialGenres.Add(serialGenre);
+
+            DialogHost.Close("RootDialog");
+
+            await MessageBoxService.Show("Serial Genre saved successfully!", MessageBoxType.Success);
+        }
+        catch (Exception ex)
+        {
+            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+        }
     }
 }

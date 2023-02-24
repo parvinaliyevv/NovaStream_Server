@@ -54,69 +54,82 @@ public class AddEpisodeViewModel : DependencyObject
     {
         await Task.CompletedTask;
 
-        Episode.Verify();
-        Episode.Serial = Episode.Serial;
-        Episode.Season = Episode.Season;
-
-        if (Episode.HasErrors) return;
-
-        ProcessStarted = true;
-
-        var episode = Episode.Adapt<Episode>();
-
-        var dbEpisode = _dbContext.Episodes.FirstOrDefault(e => e.SeasonId == Episode.Season.Id && e.Number == episode.Number);
-
-        UploadTasks.Clear();
-        UploadTaskTokens.Clear();
-
-        Episode.VideoUploadSuccess = false;
-        Episode.ImageUploadSuccess = false;
-
-        if (dbEpisode is null || dbEpisode is not null && dbEpisode.VideoUrl != Episode.VideoUrl)
+        try
         {
-            var videoStream = new FileStream(Episode.VideoUrl, FileMode.Open, FileAccess.Read);
-            var filename = string.Format("{0}-S{1:00}E{2:00}-video{3}", Path.GetFileNameWithoutExtension(Episode.Serial.Name).ToLower().Replace(' ', '-'), Episode.Season.Number, Episode.Number, Path.GetExtension(Episode.VideoUrl));
-            episode.VideoUrl = string.Format("Serials/{0}/Season {1}/Episode {2}/{3}", Episode.Serial.Name, Episode.Season.Number, Episode.Number, filename);
+            Episode.Verify();
+            Episode.Serial = Episode.Serial;
+            Episode.Season = Episode.Season;
 
-            var videoToken = new CancellationTokenSource();
-            var videoUploadTask = _awsStorageManager.UploadFileAsync(videoStream, episode.VideoUrl, Episode.VideoProgressEvent, videoToken.Token);
+            if (Episode.HasErrors) return;
 
-            UploadTasks.Add(videoUploadTask);
-            UploadTaskTokens.Add(videoToken);
+            ProcessStarted = true;
 
-            videoUploadTask.ContinueWith(_ => Episode.VideoUploadSuccess = true);
+            var episode = Episode.Adapt<Episode>();
+
+            var dbEpisode = _dbContext.Episodes.FirstOrDefault(e => e.SeasonId == Episode.Season.Id && e.Number == episode.Number);
+
+            UploadTasks.Clear();
+            UploadTaskTokens.Clear();
+
+            Episode.VideoUploadSuccess = false;
+            Episode.ImageUploadSuccess = false;
+
+            if (dbEpisode is null || dbEpisode is not null && dbEpisode.VideoUrl != Episode.VideoUrl)
+            {
+                var videoStream = new FileStream(Episode.VideoUrl, FileMode.Open, FileAccess.Read);
+                var filename = string.Format("{0}-S{1:00}E{2:00}-video{3}", Path.GetFileNameWithoutExtension(Episode.Serial.Name).ToLower().Replace(' ', '-'), Episode.Season.Number, Episode.Number, Path.GetExtension(Episode.VideoUrl));
+                episode.VideoUrl = string.Format("Serials/{0}/Season {1}/Episode {2}/{3}", Episode.Serial.Name, Episode.Season.Number, Episode.Number, filename);
+
+                var videoToken = new CancellationTokenSource();
+                var videoUploadTask = _awsStorageManager.UploadFileAsync(videoStream, episode.VideoUrl, Episode.VideoProgressEvent, videoToken.Token);
+
+                UploadTasks.Add(videoUploadTask);
+                UploadTaskTokens.Add(videoToken);
+
+                videoUploadTask.ContinueWith(_ => Episode.VideoUploadSuccess = true);
+            }
+            else Episode.VideoUploadSuccess = true;
+
+            // Episode ImageUrl
+            if (dbEpisode is null || dbEpisode is not null && dbEpisode.ImageUrl != Episode.ImageUrl)
+            {
+                var videoImageStream = new FileStream(Episode.ImageUrl, FileMode.Open, FileAccess.Read);
+                var filename = string.Format("{0}-S{1:00}E{2:00}-video-image{3}", Path.GetFileNameWithoutExtension(Episode.Serial.Name).ToLower().Replace(' ', '-'), Episode.Season.Number, Episode.Number, Path.GetExtension(Episode.ImageUrl));
+                episode.ImageUrl = string.Format("Serials/{0}/Season {1}/Episode {2}/{3}", Episode.Serial.Name, Episode.Season.Number, Episode.Number, filename);
+
+                Episode.ImageProgress = new BlobStorageUploadProgress(videoImageStream.Length);
+
+                var imageToken = new CancellationTokenSource();
+                var imageUploadTask = _storageManager.UploadFileAsync(videoImageStream, episode.ImageUrl, Episode.ImageProgress, imageToken.Token);
+
+                UploadTasks.Add(imageUploadTask);
+                UploadTaskTokens.Add(imageToken);
+
+                imageUploadTask.ContinueWith(_ => Episode.ImageUploadSuccess = true);
+            }
+            else Episode.ImageUploadSuccess = true;
+
+            if (UploadTasks.Count > 0) await Task.WhenAll(UploadTasks);
+
+            if (dbEpisode is not null) _dbContext.Episodes.Remove(dbEpisode);
+
+            _dbContext.Episodes.Add(episode);
+            await _dbContext.SaveChangesAsync();
+
+            App.ServiceProvider.GetService<EpisodeViewModel>()?.Episodes.Add(episode);
+
+            ProcessStarted = false;
+
+            DialogHost.Close("RootDialog");
+
+            await MessageBoxService.Show($"Episode saved succesfully!", MessageBoxType.Success);
         }
-        else Episode.VideoUploadSuccess = true;
-
-        // Episode ImageUrl
-        if (dbEpisode is null || dbEpisode is not null && dbEpisode.ImageUrl != Episode.ImageUrl)
+        catch (Exception ex)
         {
-            var videoImageStream = new FileStream(Episode.ImageUrl, FileMode.Open, FileAccess.Read);
-            var filename = string.Format("{0}-S{1:00}E{2:00}-video-image{3}", Path.GetFileNameWithoutExtension(Episode.Serial.Name).ToLower().Replace(' ', '-'), Episode.Season.Number, Episode.Number, Path.GetExtension(Episode.ImageUrl));
-            episode.ImageUrl = string.Format("Serials/{0}/Season {1}/Episode {2}/{3}", Episode.Serial.Name, Episode.Season.Number, Episode.Number, filename);
+            _ = Cancel();
 
-            Episode.ImageProgress = new BlobStorageUploadProgress(videoImageStream.Length);
-
-            var imageToken = new CancellationTokenSource();
-            var imageUploadTask = _storageManager.UploadFileAsync(videoImageStream, episode.ImageUrl, Episode.ImageProgress, imageToken.Token);
-
-            UploadTasks.Add(imageUploadTask);
-            UploadTaskTokens.Add(imageToken);
-
-            imageUploadTask.ContinueWith(_ => Episode.ImageUploadSuccess = true);
+            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
         }
-        else Episode.ImageUploadSuccess = true;
-
-        if (UploadTasks.Count > 0) await Task.WhenAll(UploadTasks);
-
-        if (dbEpisode is not null) _dbContext.Episodes.Remove(dbEpisode);
-
-        _dbContext.Episodes.Add(episode);
-        await _dbContext.SaveChangesAsync();
-
-        App.ServiceProvider.GetService<EpisodeViewModel>().Episodes.Add(episode);
-
-        ProcessStarted = false;
     }
 
     private async Task Cancel()

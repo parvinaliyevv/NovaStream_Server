@@ -18,7 +18,6 @@ public class MovieActorViewModel : ViewModelBase
     public RelayCommand DeleteCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
-    public RelayCommand OpenEditDialogHostCommand { get; set; }
 
 
     public MovieActorViewModel(AppDbContext dbContext)
@@ -40,7 +39,6 @@ public class MovieActorViewModel : ViewModelBase
         DeleteCommand = new RelayCommand(sender => Delete(sender));
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
-        OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
     }
 
     private async Task Search(object sender)
@@ -67,10 +65,14 @@ public class MovieActorViewModel : ViewModelBase
 
         ArgumentNullException.ThrowIfNull(movieActor);
 
+        _ = MessageBoxService.Show($"Delete <{movieActor.Actor.Name} {movieActor.Actor.Surname} from {movieActor.MovieName}>...", MessageBoxType.Progress);
+
         _dbContext.MovieActors.Remove(movieActor);
         await _dbContext.SaveChangesAsync();
 
         MovieActors.Remove(movieActor);
+
+        MessageBoxService.Close();
     }
 
     private async Task OpenAddDialogHost()
@@ -79,21 +81,6 @@ public class MovieActorViewModel : ViewModelBase
 
         model.MovieActor.Movie = Movie;
         model.Movies = new List<Movie> { Movie };
-
-        await DialogHost.Show(model, "RootDialog");
-    }
-
-    private async Task OpenEditDialogHost(object sender)
-    {
-        var button = sender as Button;
-        var movieActor = button?.DataContext as MovieActor;
-
-        ArgumentNullException.ThrowIfNull(movieActor);
-
-        var model = App.ServiceProvider.GetService<AddMovieActorViewModel>();
-
-        model.MovieActor.Movie = movieActor.Movie;
-        model.MovieActor.Actor = movieActor.Actor;
 
         await DialogHost.Show(model, "RootDialog");
     }
