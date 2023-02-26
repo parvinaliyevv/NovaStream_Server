@@ -12,10 +12,16 @@ public class ProducerViewModel : ViewModelBase
         set { _producerCount = value; RaisePropertyChanged(); }
     }
 
-    public ObservableCollection<Producer> Producers { get; set; }
+    private ObservableCollection<Producer> _producers;
+    public ObservableCollection<Producer> Producers
+    {
+        get => _producers;
+        set { _producers = value; RaisePropertyChanged(); }
+    }
 
     public RelayCommand SearchCommand { get; set; }
     public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand RefreshCommand { get; set; }
 
     public RelayCommand OpenEditDialogHostCommand { get; set; }
     public RelayCommand OpenAddDialogHostCommand { get; set; }
@@ -41,6 +47,8 @@ public class ProducerViewModel : ViewModelBase
 
         SearchCommand = new RelayCommand(sender => Search(sender));
         DeleteCommand = new RelayCommand(sender => Delete(sender));
+        RefreshCommand = new RelayCommand(_ => Initialize());
+
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
         OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));

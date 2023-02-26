@@ -1,12 +1,20 @@
 ﻿namespace NovaStream.Admin.ViewModels.DialogHosts;
 
-public class AddSoonGenreViewModel
+public class AddSoonGenreViewModel : DependencyObject
 {
     private readonly AppDbContext _dbContext;
 
     public List<Soon> Soons { get; set; }
     public List<Genre> Genres { get; set; }
     public UploadSoonGenreViewModel SoonGenre { get; set; }
+
+    public bool ProcessStarted
+    {
+        get { return (bool)GetValue(ProcessStartedProperty); }
+        set { SetValue(ProcessStartedProperty, value); }
+    }
+    public static readonly DependencyProperty ProcessStartedProperty =
+        DependencyProperty.Register("ProcessStarted", typeof(bool), typeof(AddSoonGenreViewModel));
 
     public RelayCommand SaveCommand { get; set; }
 
@@ -32,6 +40,8 @@ public class AddSoonGenreViewModel
 
             if (SoonGenre.HasErrors) return;
 
+            ProcessStarted = true;
+
             var dbSoonGenre = _dbContext.SoonGenres.Include(sg => sg.Genre)
                 .FirstOrDefault(sg => sg.SoonName == SoonGenre.Soon.Name && sg.Genre.Id == SoonGenre.Genre.Id);
 
@@ -48,6 +58,8 @@ public class AddSoonGenreViewModel
 
             App.ServiceProvider.GetService<SoonGenreViewModel>()?.SoonGenres.Add(soonGenre);
 
+            ProcessStarted = false;
+
             DialogHost.Close("RootDialog");
 
             await MessageBoxService.Show("Soon Genre saved successfully!", MessageBoxType.Success);
@@ -55,6 +67,8 @@ public class AddSoonGenreViewModel
         catch (Exception ex)
         {
             await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+
+            ProcessStarted = false;
         }
     }
 }

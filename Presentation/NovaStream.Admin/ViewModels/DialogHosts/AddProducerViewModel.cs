@@ -7,7 +7,14 @@ public class AddProducerViewModel : DependencyObject
 
     public UploadProducerModel Producer { get; set; }
 
-    public bool ProcessStarted { get; set; }
+    public bool ProcessStarted
+    {
+        get { return (bool)GetValue(ProcessStartedProperty); }
+        set { SetValue(ProcessStartedProperty, value); }
+    }
+    public static readonly DependencyProperty ProcessStartedProperty =
+        DependencyProperty.Register("ProcessStarted", typeof(bool), typeof(AddProducerViewModel));
+    
     public List<Task> UploadTasks { get; set; }
     public List<CancellationTokenSource> UploadTaskTokens { get; set; }
 
@@ -30,7 +37,7 @@ public class AddProducerViewModel : DependencyObject
         SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
         CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
 
-        OpenImageDialogCommand = new RelayCommand(_ => Producer.ImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
+        OpenImageDialogCommand = new RelayCommand(_ => Producer.ImageUrl = FileDialogService.OpenImageFile(Producer.ImageUrl), _ => !ProcessStarted);
     }
 
 
@@ -55,14 +62,16 @@ public class AddProducerViewModel : DependencyObject
 
             Producer.ImageUploadSuccess = false;
 
-            // Actor ImageUrl
+            // Producer ImageUrl
             if (dbProducer is null || dbProducer is not null && dbProducer.ImageUrl != Producer.ImageUrl)
             {
                 var imageStream = new FileStream(Producer.ImageUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-image{1}", Producer.Name.Replace(' ', '-'), Path.GetExtension(Producer.ImageUrl));
+                var filename = string.Format("{0}-image-{1}{2}", $"{Producer.Name} {Producer.Surname}".Replace(' ', '-'), Random.Shared.Next(), Path.GetExtension(Producer.ImageUrl));
                 producer.ImageUrl = string.Format("Images/Producers/{0}", filename);
 
                 Producer.ImageProgress = new BlobStorageUploadProgress(imageStream.Length);
+
+                if (dbProducer is not null) _ = _storageManager.DeleteFileAsync(dbProducer.ImageUrl);
 
                 var imageToken = new CancellationTokenSource();
                 var imageUploadTask = _storageManager.UploadFileAsync(imageStream, producer.ImageUrl, Producer.ImageProgress, imageToken.Token);
@@ -107,9 +116,9 @@ public class AddProducerViewModel : DependencyObject
         }
         catch (Exception ex)
         {
-            _ = Cancel();
-
             await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+
+            await Cancel();
         }
     }
 

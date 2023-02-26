@@ -10,7 +10,14 @@ public class AddMovieViewModel : DependencyObject
     public List<Producer> Producers { get; set; }
 
     public bool IsEdit { get; set; }
-    public bool ProcessStarted { get; set; }
+    public bool ProcessStarted
+    {
+        get { return (bool)GetValue(ProcessStartedProperty); }
+        set { SetValue(ProcessStartedProperty, value); }
+    }
+    public static readonly DependencyProperty ProcessStartedProperty =
+        DependencyProperty.Register("ProcessStarted", typeof(bool), typeof(AddMovieViewModel));
+    
     public List<Task> UploadTasks { get; set; }
     public List<CancellationTokenSource> UploadTaskTokens { get; set; }
 
@@ -42,11 +49,11 @@ public class AddMovieViewModel : DependencyObject
         SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
         CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
 
-        OpenVideoDialogCommand = new RelayCommand(_ => Movie.VideoUrl = FileDialogService.OpenVideoFile(), _ => !ProcessStarted);
-        OpenVideoImageDialogCommand = new RelayCommand(_ => Movie.VideoImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
-        OpenTrailerDialogCommand = new RelayCommand(_ => Movie.TrailerUrl = FileDialogService.OpenVideoFile(), _ => !ProcessStarted);
-        OpenImageDialogCommand = new RelayCommand(_ => Movie.ImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
-        OpenSearchImageDialogCommand = new RelayCommand(_ => Movie.SearchImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
+        OpenVideoDialogCommand = new RelayCommand(_ => Movie.VideoUrl = FileDialogService.OpenVideoFile(Movie.VideoUrl), _ => !ProcessStarted);
+        OpenVideoImageDialogCommand = new RelayCommand(_ => Movie.VideoImageUrl = FileDialogService.OpenImageFile(Movie.VideoImageUrl), _ => !ProcessStarted);
+        OpenTrailerDialogCommand = new RelayCommand(_ => Movie.TrailerUrl = FileDialogService.OpenVideoFile(Movie.TrailerUrl), _ => !ProcessStarted);
+        OpenImageDialogCommand = new RelayCommand(_ => Movie.ImageUrl = FileDialogService.OpenImageFile(Movie.ImageUrl), _ => !ProcessStarted);
+        OpenSearchImageDialogCommand = new RelayCommand(_ => Movie.SearchImageUrl = FileDialogService.OpenImageFile(Movie.SearchImageUrl), _ => !ProcessStarted);
     }
 
 
@@ -101,10 +108,12 @@ public class AddMovieViewModel : DependencyObject
             if (dbMovie is null || dbMovie is not null && dbMovie.VideoImageUrl != Movie.VideoImageUrl)
             {
                 var videoImageStream = new FileStream(Movie.VideoImageUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-video-image{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.VideoImageUrl));
+                var filename = string.Format("{0}-video-image-{1}{2}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Random.Shared.Next(), Path.GetExtension(Movie.VideoImageUrl));
                 movie.VideoImageUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
 
                 Movie.VideoImageProgress = new BlobStorageUploadProgress(videoImageStream.Length);
+                
+                if (dbMovie is not null) _ = _storageManager.DeleteFileAsync(dbMovie.VideoImageUrl);
 
                 var videoImageToken = new CancellationTokenSource();
                 var videoImageUploadTask = _storageManager.UploadFileAsync(videoImageStream, movie.VideoImageUrl, Movie.VideoImageProgress, videoImageToken.Token);
@@ -139,10 +148,12 @@ public class AddMovieViewModel : DependencyObject
             if (dbMovie is null || dbMovie is not null && dbMovie.ImageUrl != Movie.ImageUrl)
             {
                 var imageStream = new FileStream(Movie.ImageUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-image{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.ImageUrl));
+                var filename = string.Format("{0}-image-{1}{2}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Random.Shared.Next(), Path.GetExtension(Movie.ImageUrl));
                 movie.ImageUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
 
                 Movie.ImageProgress = new BlobStorageUploadProgress(imageStream.Length);
+
+                if (dbMovie is not null) _ = _storageManager.DeleteFileAsync(dbMovie.ImageUrl);
 
                 var imageToken = new CancellationTokenSource();
                 var imageUploadTask = _storageManager.UploadFileAsync(imageStream, movie.ImageUrl, Movie.ImageProgress, imageToken.Token);
@@ -158,10 +169,12 @@ public class AddMovieViewModel : DependencyObject
             if (dbMovie is null || dbMovie is not null && dbMovie.SearchImageUrl != Movie.SearchImageUrl)
             {
                 var searchImageStream = new FileStream(Movie.SearchImageUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-search-image{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.SearchImageUrl));
+                var filename = string.Format("{0}-search-image-{1}{2}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Random.Shared.Next(), Path.GetExtension(Movie.SearchImageUrl));
                 movie.SearchImageUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
 
                 Movie.SearchImageProgress = new BlobStorageUploadProgress(searchImageStream.Length);
+
+                if (dbMovie is not null) _ = _storageManager.DeleteFileAsync(dbMovie.SearchImageUrl);
 
                 var searchImageToken = new CancellationTokenSource();
                 var searchImageUploadTask = _storageManager.UploadFileAsync(searchImageStream, movie.SearchImageUrl, Movie.SearchImageProgress, searchImageToken.Token);
@@ -201,13 +214,13 @@ public class AddMovieViewModel : DependencyObject
 
             DialogHost.Close("RootDialog");
 
-            await MessageBoxService.Show("Movie succesfully uploaded!", MessageBoxType.Success);
+            await MessageBoxService.Show("Movie saved succesfully!", MessageBoxType.Success);
         }
         catch (Exception ex)
         {
-            _ = Cancel();
-
             await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+
+            await Cancel();
         }
     }
 

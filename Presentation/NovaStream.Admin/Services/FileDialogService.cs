@@ -2,27 +2,27 @@
 
 public static class FileDialogService
 {
-    public static string OpenImageFile()
+    public static string OpenImageFile(string onCancelValue = "")
     {
         var fileDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
 
         fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
 
-        fileDialog.Filter = "JPG Files(*.jpg)|*.jpg|PNG Files(*.png)|*.png|JPEG Files(*.jpeg)|*.jpeg";
+        fileDialog.Filter = "Image Files(*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg";
         fileDialog.FilterIndex = 1;
 
-        return (bool)fileDialog.ShowDialog() ? fileDialog.FileName : string.Empty;
+        return (bool)fileDialog.ShowDialog() ? fileDialog.FileName : onCancelValue;
     }
 
-    public static string OpenVideoFile()
+    public static string OpenVideoFile(string onCancelValue = "")
     {
         var fileDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
 
         fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
 
-        fileDialog.Filter = "MP4 Files(*.mp4)|*.mp4|AVI Files(*.avi)|*.avi|MOV Files(*.mov)|*.mov";
+        fileDialog.Filter = "Video Files(*.mp4;*.mkv;*.avi)|*.mp4;*.mkv;*.avi";
         fileDialog.FilterIndex = 1;
 
-        return (bool)fileDialog.ShowDialog() ? fileDialog.FileName : string.Empty;
+        return (bool)fileDialog.ShowDialog() ? fileDialog.FileName : onCancelValue;
     }
 }

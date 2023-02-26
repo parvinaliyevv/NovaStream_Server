@@ -8,7 +8,14 @@ public class EditEpisodeViewModel : DependencyObject
 
     public UploadEpisodeModel Episode { get; set; }
 
-    public bool ProcessStarted { get; set; }
+    public bool ProcessStarted
+    {
+        get { return (bool)GetValue(ProcessStartedProperty); }
+        set { SetValue(ProcessStartedProperty, value); }
+    }
+    public static readonly DependencyProperty ProcessStartedProperty =
+        DependencyProperty.Register("ProcessStarted", typeof(bool), typeof(EditEpisodeViewModel));
+
     public List<Task> UploadTasks { get; set; }
     public List<CancellationTokenSource> UploadTaskTokens { get; set; }
 
@@ -34,8 +41,8 @@ public class EditEpisodeViewModel : DependencyObject
         SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
         CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
 
-        OpenVideoDialogCommand = new RelayCommand(_ => Episode.VideoUrl = FileDialogService.OpenVideoFile(), _ => !ProcessStarted);
-        OpenVideoImageDialogCommand = new RelayCommand(_ => Episode.ImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
+        OpenVideoDialogCommand = new RelayCommand(_ => Episode.VideoUrl = FileDialogService.OpenVideoFile(Episode.VideoUrl), _ => !ProcessStarted);
+        OpenVideoImageDialogCommand = new RelayCommand(_ => Episode.ImageUrl = FileDialogService.OpenImageFile(Episode.ImageUrl), _ => !ProcessStarted);
     }
 
 
@@ -82,10 +89,12 @@ public class EditEpisodeViewModel : DependencyObject
             if (dbEpisode is null || dbEpisode is not null && dbEpisode.ImageUrl != Episode.ImageUrl)
             {
                 var videoImageStream = new FileStream(Episode.ImageUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-S{1:00}E{2:00}-video-image{3}", Path.GetFileNameWithoutExtension(Episode.Serial.Name).ToLower().Replace(' ', '-'), Episode.Season.Number, Episode.Number, Path.GetExtension(Episode.ImageUrl));
+                var filename = string.Format("{0}-S{1:00}E{2:00}-video-image-{3}{4}", Path.GetFileNameWithoutExtension(Episode.Serial.Name).ToLower().Replace(' ', '-'), Episode.Season.Number, Episode.Number, Random.Shared.Next(), Path.GetExtension(Episode.ImageUrl));
                 episode.ImageUrl = string.Format("Serials/{0}/Season {1}/Episode {2}/{3}", Episode.Serial.Name, Episode.Season.Number, Episode.Number, filename);
 
                 Episode.ImageProgress = new BlobStorageUploadProgress(videoImageStream.Length);
+                
+                if (dbEpisode is not null) _ = _storageManager.DeleteFileAsync(dbEpisode.ImageUrl);
 
                 var imageToken = new CancellationTokenSource();
                 var imageUploadTask = _storageManager.UploadFileAsync(videoImageStream, episode.ImageUrl, Episode.ImageProgress, imageToken.Token);
@@ -122,9 +131,9 @@ public class EditEpisodeViewModel : DependencyObject
         }
         catch (Exception ex)
         {
-            _ = Cancel();
-
             await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+
+            await Cancel();
         }
     }
 

@@ -13,10 +13,16 @@ public class EpisodeViewModel : ViewModelBase
         set { _episodeCount = value; RaisePropertyChanged(); }
     }
 
-    public ObservableCollection<Episode> Episodes { get; set; }
+    private ObservableCollection<Episode> _episodes;
+    public ObservableCollection<Episode> Episodes
+    {
+        get => _episodes;
+        set { _episodes = value; RaisePropertyChanged(); }
+    }
 
     public RelayCommand SearchCommand { get; set; }
     public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand RefreshCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
     public RelayCommand OpenEditDialogHostCommand { get; set; }
@@ -43,6 +49,7 @@ public class EpisodeViewModel : ViewModelBase
 
         SearchCommand = new RelayCommand(sender => Search(sender));
         DeleteCommand = new RelayCommand(sender => Delete(sender));
+        RefreshCommand = new RelayCommand(_ => Initialize());
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
         OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
@@ -74,18 +81,18 @@ public class EpisodeViewModel : ViewModelBase
 
         ArgumentNullException.ThrowIfNull(episode);
 
-        if (episode.Number == 1)
+        if (episode.Number == 1 && episode.Season.Number == 1)
         {
             await MessageBoxService.Show("You can't delete the first episode of a serial, but you can't delete an serial!", MessageBoxType.Error);
 
             return;
         }
 
-        var lastEpisodeNumber = _dbContext.Episodes.Max(e => e.Number);
+        var lastEpisodeNumber = _dbContext.Episodes.Where(e => e.SeasonId == episode.SeasonId).Max(e => e.Number);
 
         if (episode.Number < lastEpisodeNumber)
         {
-            await MessageBoxService.Show("You can delete only the last episode of the serial!", MessageBoxType.Error);
+            await MessageBoxService.Show("You can delete only the last episode of the season!", MessageBoxType.Error);
 
             return;
         }

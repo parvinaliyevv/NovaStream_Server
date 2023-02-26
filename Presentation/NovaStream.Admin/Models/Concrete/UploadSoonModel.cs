@@ -117,8 +117,8 @@ public class UploadSoonModel : ModelBase
 
     public override void Verify()
     {
-        Name = Name;
-        Description = Description;
+        Name = Name is null ? Name : Name.Trim();
+        Description = Description is null ? Description : Description.Trim();
         OutDate = OutDate;
         TrailerUrl = TrailerUrl;
         TrailerImageUrl = TrailerImageUrl;

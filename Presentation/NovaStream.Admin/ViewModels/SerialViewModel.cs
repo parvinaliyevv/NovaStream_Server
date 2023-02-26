@@ -13,10 +13,16 @@ public class SerialViewModel : ViewModelBase
         set { _serialCount = value; RaisePropertyChanged(); }
     }
 
-    public ObservableCollection<Serial> Serials { get; set; }
+    private ObservableCollection<Serial> _serials;
+    public ObservableCollection<Serial> Serials
+    {
+        get => _serials;
+        set { _serials = value; RaisePropertyChanged(); }
+    }
 
     public RelayCommand SearchCommand { get; set; }
     public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand RefreshCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
     public RelayCommand OpenEditDialogHostCommand { get; set; }
@@ -43,6 +49,7 @@ public class SerialViewModel : ViewModelBase
 
         SearchCommand = new RelayCommand(sender => Search(sender));
         DeleteCommand = new RelayCommand(sender => Delete(sender));
+        RefreshCommand = new RelayCommand(_ => Initialize());
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
         OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));

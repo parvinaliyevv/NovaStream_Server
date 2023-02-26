@@ -5,8 +5,8 @@
         Height="700" Width="1200" AllowsTransparency="True" WindowStyle="None"
         Title="Admin" WindowStartupLocation="CenterScreen" Background="Transparent">
 
-    <materialDesign:DialogHost Identifier="RootDialog" CloseOnClickAway="True">
-        <materialDesign:DialogHost Identifier="MessageBox">
+    <materialDesign:DialogHost Identifier="RootDialog" CornerRadius="25">
+        <materialDesign:DialogHost Identifier="MessageBox" CornerRadius="25">
             <Border CornerRadius="25" Padding="20" Background="#f7f6f4" MouseDown="DragWindow_MouseDown" MouseLeftButtonDown="ResizeWindow_MouseLeftButtonDown">
                 <Grid>
 

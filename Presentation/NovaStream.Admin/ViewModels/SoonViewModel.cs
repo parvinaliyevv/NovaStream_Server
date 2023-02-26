@@ -12,10 +12,16 @@ public class SoonViewModel : ViewModelBase
         set { _soonCount = value; RaisePropertyChanged(); }
     }
 
-    public ObservableCollection<Soon> Soons { get; set; }
+    private ObservableCollection<Soon> _soons;
+    public ObservableCollection<Soon> Soons
+    {
+        get => _soons;
+        set { _soons = value; RaisePropertyChanged(); }
+    }
 
     public RelayCommand SearchCommand { get; set; }
     public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand RefreshCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
     public RelayCommand OpenEditDialogHostCommand { get; set; }
@@ -41,6 +47,7 @@ public class SoonViewModel : ViewModelBase
 
         SearchCommand = new RelayCommand(sender => Search(sender));
         DeleteCommand = new RelayCommand(sender => Delete(sender));
+        RefreshCommand = new RelayCommand(_ => Initialize());
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
         OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));

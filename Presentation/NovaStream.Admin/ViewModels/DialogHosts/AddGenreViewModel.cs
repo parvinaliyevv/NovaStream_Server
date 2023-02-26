@@ -8,7 +8,14 @@ public class AddGenreViewModel : DependencyObject
     public UploadGenreModel Genre { get; set; }
 
     public bool IsEdit { get; set; }
-    public bool ProcessStarted { get; set; }
+    public bool ProcessStarted
+    {
+        get { return (bool)GetValue(ProcessStartedProperty); }
+        set { SetValue(ProcessStartedProperty, value); }
+    }
+    public static readonly DependencyProperty ProcessStartedProperty =
+        DependencyProperty.Register("ProcessStarted", typeof(bool), typeof(AddGenreViewModel));
+
     public List<Task> UploadTasks { get; set; }
     public List<CancellationTokenSource> UploadTaskTokens { get; set; }
 
@@ -32,7 +39,7 @@ public class AddGenreViewModel : DependencyObject
         SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
         CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
 
-        OpenImageDialogCommand = new RelayCommand(_ => Genre.ImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
+        OpenImageDialogCommand = new RelayCommand(_ => Genre.ImageUrl = FileDialogService.OpenImageFile(Genre.ImageUrl), _ => !ProcessStarted);
     }
 
 
@@ -53,6 +60,8 @@ public class AddGenreViewModel : DependencyObject
 
             if (Genre.HasErrors) return;
 
+            dbGenre = _dbContext.Genres.FirstOrDefault(g => g.Id == Genre.Id);
+
             ProcessStarted = true;
 
             var genre = Genre.Adapt<Genre>();
@@ -66,10 +75,12 @@ public class AddGenreViewModel : DependencyObject
             if (dbGenre is null || dbGenre is not null && dbGenre.ImageUrl != Genre.ImageUrl)
             {
                 var imageStream = new FileStream(Genre.ImageUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-image{1}", Genre.Name.ToLower().Replace(' ', '-'), Path.GetExtension(Genre.ImageUrl));
+                var filename = string.Format("{0}-image-{1}{2}", Genre.Name.ToLower().Replace(' ', '-'), Random.Shared.Next(), Path.GetExtension(Genre.ImageUrl));
                 genre.ImageUrl = string.Format("Images/Genres/{0}", filename);
 
                 Genre.ImageProgress = new BlobStorageUploadProgress(imageStream.Length);
+
+                if (dbGenre is not null) _ = _storageManager.DeleteFileAsync(dbGenre.ImageUrl);
 
                 var imageToken = new CancellationTokenSource();
                 var imageUploadTask = _storageManager.UploadFileAsync(imageStream, genre.ImageUrl, Genre.ImageProgress, imageToken.Token);
@@ -114,9 +125,9 @@ public class AddGenreViewModel : DependencyObject
         }
         catch (Exception ex)
         {
-            _ = Cancel();
-
             await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+
+            await Cancel();
         }
     }
 

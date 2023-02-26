@@ -15,18 +15,5 @@ public class MovieGenreConfiguration : IEntityTypeConfiguration<MovieGenre>
             .WithMany(c => c.MovieGenres)
             .HasForeignKey(bc => bc.GenreId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        var movieGenres = new MovieGenre[]
-        {
-            new() { GenreId = 1, MovieName = "Interstellar" },
-            new() { GenreId = 2, MovieName = "Interstellar" },
-            new() { GenreId = 3, MovieName = "Interstellar" },
-            new() { GenreId = 2, MovieName = "Inception" },
-            new() { GenreId = 3, MovieName = "Inception" },
-            new() { GenreId = 4, MovieName = "Inception" },
-            new() { GenreId = 6, MovieName = "Inception" }
-        };
-
-        builder.HasData(movieGenres);
     }
 }

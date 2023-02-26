@@ -62,7 +62,7 @@
 
     <Style x:Key="TextboxSearch" TargetType="TextBox">
         <Setter Property="Background" Value="#fff"/>
-        <Setter Property="Foreground" Value="#b0b9c6"/>
+        <Setter Property="Foreground" Value="Black"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="Padding" Value="25 17"/>
@@ -463,7 +463,7 @@
     <!--#endregion-->
 
     <!--#region AddItem Style-->
-    
+
     <Style x:Key="InputTextBox" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
         <Setter Property="Height" Value="50"/>
         <Setter Property="Margin" Value="10"/>
@@ -485,7 +485,7 @@
     <Style x:Key="InputTextArea" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
         <Setter Property="AcceptsReturn" Value="True"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
-        <Setter Property="Height" Value="100"/>
+        <Setter Property="Height" Value="90"/>
         <Setter Property="Margin" Value="10"/>
 
         <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="#fb7657"/>
@@ -529,13 +529,14 @@
         <Setter Property="materialDesign:HintAssist.FloatingScale" Value="1.1"/>
         <Setter Property="materialDesign:ValidationAssist.OnlyShowOnFocus" Value="True"/>
         <Setter Property="materialDesign:ValidationAssist.UsePopup" Value="True"/>
-        <Setter Property="materialDesign:ValidationAssist.Background" Value="Transparent"/>
         <Setter Property="CalendarStyle" Value="{StaticResource CustomCalendar}" />
 
+        <Style.Resources>
+            <SolidColorBrush x:Key="MaterialDesignPaper" Color="#fff"/>
+            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#fb7657"/>
+        </Style.Resources>
+        
         <Style.Triggers>
-            <Trigger Property="materialDesign:HintAssist.IsFloating" Value="True">
-                <Setter Property="materialDesign:HintAssist.Background" Value="Red"/>
-            </Trigger>
             <Trigger Property="Validation.HasError" Value="False">
                 <Setter Property="materialDesign:DatePickerAssist.OutlinedBorderInactiveThickness" Value="1"/>
                 <Setter Property="materialDesign:DatePickerAssist.OutlinedBorderActiveThickness" Value="1"/>
@@ -544,6 +545,7 @@
                 <Setter Property="materialDesign:DatePickerAssist.OutlinedBorderInactiveThickness" Value="2"/>
                 <Setter Property="materialDesign:DatePickerAssist.OutlinedBorderActiveThickness" Value="2"/>
             </Trigger>
+
         </Style.Triggers>
     </Style>
 
@@ -552,7 +554,7 @@
     </Style>
         
     <Style x:Key="CircularProgressBarCard" TargetType="materialDesign:Card" >
-        <Setter Property="Background" Value="#94b49f"/>
+        <Setter Property="Background" Value="#B5D5C5"/>
         <Setter Property="Margin" Value="3, 0"/>
         <Setter Property="Width" Value="80"/>
     </Style>
@@ -561,9 +563,9 @@
         <Setter Property="Background" Value="#fb7657"/>
         <Setter Property="Foreground" Value="#f7f6f4"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Height" Value="35"/>
-        <Setter Property="Margin" Value="30 0"/>
-        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Margin" Value="10 0"/>
+        <Setter Property="FontSize" Value="18"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -607,7 +609,17 @@
                 <Setter Property="Background" Value="#fb8757"/>
                 <Setter Property="Foreground" Value="#fed6ce"/>
             </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="#FFB8A7"/>
+                <Setter Property="Foreground" Value="GhostWhite"/>
+            </Trigger>
         </Style.Triggers>
+    </Style>
+
+    <Style x:Key="CloseDialogButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignIconForegroundButton}">
+        <Setter Property="Content" Value="{materialDesign:PackIcon Kind=Close}"/>
+        <Setter Property="Foreground" Value="#fff"/>
+        <Setter Property="materialDesign:RippleAssist.Feedback" Value="#fff"/>
     </Style>
 
     <!--#endregion-->

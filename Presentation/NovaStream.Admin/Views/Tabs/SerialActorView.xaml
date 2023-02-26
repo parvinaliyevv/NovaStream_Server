@@ -37,6 +37,9 @@
         <TextBlock Text="{Binding SerialActorCount, StringFormat={}{0} Serial Actors}" Grid.Row="3" FontSize="18" FontWeight="SemiBold"
                    Foreground="#121518" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
+        <Button Content="{materialDesign:PackIcon Kind=Refresh}" Command="{Binding RefreshCommand}" Style="{StaticResource MaterialDesignIconForegroundButton}"
+                   Foreground="#121518" Margin="130 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" />
+        
         <TextBlock Text="Filter by" Grid.Row="3" FontSize="13" FontWeight="SemiBold" Margin="0 0 215 0"
                    Foreground="#121518" HorizontalAlignment="Right" VerticalAlignment="Center"/>
 

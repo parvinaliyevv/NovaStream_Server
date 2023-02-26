@@ -8,7 +8,14 @@ public class AddSoonViewModel : DependencyObject
     public UploadSoonModel Soon { get; set; }
 
     public bool IsEdit { get; set; }
-    public bool ProcessStarted { get; set; }
+    public bool ProcessStarted
+    {
+        get { return (bool)GetValue(ProcessStartedProperty); }
+        set { SetValue(ProcessStartedProperty, value); }
+    }
+    public static readonly DependencyProperty ProcessStartedProperty =
+        DependencyProperty.Register("ProcessStarted", typeof(bool), typeof(AddSoonViewModel));
+    
     public List<Task> UploadTasks { get; set; }
     public List<CancellationTokenSource> UploadTaskTokens { get; set; }
 
@@ -34,8 +41,8 @@ public class AddSoonViewModel : DependencyObject
         SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
         CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
 
-        OpenTrailerDialogCommand = new RelayCommand(_ => Soon.TrailerUrl = FileDialogService.OpenVideoFile(), _ => !ProcessStarted);
-        OpenTrailerImageDialogCommand = new RelayCommand(_ => Soon.TrailerImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
+        OpenTrailerDialogCommand = new RelayCommand(_ => Soon.TrailerUrl = FileDialogService.OpenVideoFile(Soon.TrailerUrl), _ => !ProcessStarted);
+        OpenTrailerImageDialogCommand = new RelayCommand(_ => Soon.TrailerImageUrl = FileDialogService.OpenImageFile(Soon.TrailerImageUrl), _ => !ProcessStarted);
     }
 
 
@@ -89,11 +96,13 @@ public class AddSoonViewModel : DependencyObject
             if (dbSoon is null || dbSoon is not null && dbSoon.TrailerImageUrl != Soon.TrailerImageUrl)
             {
                 var imageStream = new FileStream(Soon.TrailerImageUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-trailer-image{1}", Path.GetFileNameWithoutExtension(Soon.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Soon.TrailerImageUrl));
+                var filename = string.Format("{0}-trailer-image-{1}{2}", Path.GetFileNameWithoutExtension(Soon.Name).ToLower().Replace(' ', '-'), Random.Shared.Next(), Path.GetExtension(Soon.TrailerImageUrl));
                 soon.TrailerImageUrl = string.Format("Soons/{0}/{1}", Soon.Name, filename);
                 
                 Soon.TrailerImageProgress = new BlobStorageUploadProgress(imageStream.Length);
 
+                if (dbSoon is not null) _ = _storageManager.DeleteFileAsync(dbSoon.TrailerImageUrl);
+                
                 var imageToken = new CancellationTokenSource();
                 var imageUploadTask = _storageManager.UploadFileAsync(imageStream, soon.TrailerImageUrl, Soon.TrailerImageProgress, imageToken.Token);
 
@@ -136,9 +145,9 @@ public class AddSoonViewModel : DependencyObject
         }
         catch (Exception ex)
         {
-            _ = Cancel();
-
             await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+
+            await Cancel();
         }
     }
 

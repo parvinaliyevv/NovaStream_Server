@@ -1,12 +1,20 @@
 ﻿namespace NovaStream.Admin.ViewModels.DialogHosts;
 
-public class AddSerialGenreViewModel
+public class AddSerialGenreViewModel : DependencyObject
 {
     private readonly AppDbContext _dbContext;
 
     public List<Serial> Serials { get; set; }
     public List<Genre> Genres { get; set; }
     public UploadSerialGenreViewModel SerialGenre { get; set; }
+
+    public bool ProcessStarted
+    {
+        get { return (bool)GetValue(ProcessStartedProperty); }
+        set { SetValue(ProcessStartedProperty, value); }
+    }
+    public static readonly DependencyProperty ProcessStartedProperty =
+        DependencyProperty.Register("ProcessStarted", typeof(bool), typeof(AddSerialGenreViewModel));
 
     public RelayCommand SaveCommand { get; set; }
 
@@ -32,6 +40,8 @@ public class AddSerialGenreViewModel
 
             if (SerialGenre.HasErrors) return;
 
+            ProcessStarted = true;
+
             var dbSerialGenre = _dbContext.SerialGenres.Include(sg => sg.Genre)
                 .FirstOrDefault(sg => sg.SerialName == SerialGenre.Serial.Name && sg.Genre.Id == SerialGenre.Genre.Id);
 
@@ -48,6 +58,8 @@ public class AddSerialGenreViewModel
 
             App.ServiceProvider.GetService<SerialGenreViewModel>()?.SerialGenres.Add(serialGenre);
 
+            ProcessStarted = false;
+
             DialogHost.Close("RootDialog");
 
             await MessageBoxService.Show("Serial Genre saved successfully!", MessageBoxType.Success);
@@ -55,6 +67,8 @@ public class AddSerialGenreViewModel
         catch (Exception ex)
         {
             await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+
+            ProcessStarted = false;
         }
     }
 }

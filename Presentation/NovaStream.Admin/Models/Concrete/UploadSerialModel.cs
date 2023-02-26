@@ -179,10 +179,10 @@ public class UploadSerialModel : ModelBase
 
     public override void Verify()
     {
-        Name = Name;
+        Name = Name is null ? Name : Name.Trim();
         Year = Year;
         Age = Age;
-        Description = Description;
+        Description = Description is null ? Description : Description.Trim();
         TrailerUrl = TrailerUrl;
         ImageUrl = ImageUrl;
         SearchImageUrl = SearchImageUrl;

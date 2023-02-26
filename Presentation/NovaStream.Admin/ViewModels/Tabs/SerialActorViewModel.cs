@@ -11,11 +11,18 @@ public class SerialActorViewModel : ViewModelBase
         set { _serialActorCount = value; RaisePropertyChanged(); }
     }
 
+    private ObservableCollection<SerialActor> _serialActors;
+    public ObservableCollection<SerialActor> SerialActors
+    {
+        get => _serialActors;
+        set { _serialActors = value; RaisePropertyChanged(); }
+    }
+    
     public Serial Serial { get; set; }
-    public ObservableCollection<SerialActor> SerialActors { get; set; }
 
     public RelayCommand SearchCommand { get; set; }
     public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand RefreshCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
 
@@ -37,6 +44,7 @@ public class SerialActorViewModel : ViewModelBase
 
         SearchCommand = new RelayCommand(sender => Search(sender));
         DeleteCommand = new RelayCommand(sender => Delete(sender));
+        RefreshCommand = new RelayCommand(_ => Initialize());
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
     }
@@ -81,6 +89,16 @@ public class SerialActorViewModel : ViewModelBase
 
         model.SerialActor.Serial = Serial;
         model.Serials = new List<Serial> { Serial };
+
+        var existsActors = await _dbContext.SerialActors.Include(sa => sa.Actor).Where(sa => sa.SerialName == Serial.Name).Select(sa => sa.Actor).ToListAsync();
+
+        if (model.Actors.Count == existsActors.Count)
+        {
+            await MessageBoxService.Show("Added all possible actors", MessageBoxType.Info);
+            return;
+        }
+
+        foreach (var actor in existsActors) model.Actors.Remove(actor);
 
         await DialogHost.Show(model, "RootDialog");
     }

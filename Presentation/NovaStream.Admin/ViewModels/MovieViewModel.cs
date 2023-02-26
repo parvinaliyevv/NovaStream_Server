@@ -12,11 +12,17 @@ public class MovieViewModel : ViewModelBase
         get => _movieCount;
         set { _movieCount = value; RaisePropertyChanged(); }
     }
-    
-    public ObservableCollection<Movie> Movies { get; set; }
+
+    private ObservableCollection<Movie> _movies;
+    public ObservableCollection<Movie> Movies
+    {
+        get => _movies;
+        set { _movies = value; RaisePropertyChanged(); }
+    }
 
     public RelayCommand SearchCommand { get; set; }
     public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand RefreshCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
     public RelayCommand OpenEditDialogHostCommand { get; set; }
@@ -43,6 +49,7 @@ public class MovieViewModel : ViewModelBase
 
         SearchCommand = new RelayCommand(sender => Search(sender));
         DeleteCommand = new RelayCommand(sender => Delete(sender));
+        RefreshCommand = new RelayCommand(_ => Initialize());
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
         OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));

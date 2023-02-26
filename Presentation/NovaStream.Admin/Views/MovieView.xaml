@@ -37,6 +37,9 @@
         <TextBlock Text="{Binding MovieCount, StringFormat={}{0} Movies}" Grid.Row="3" FontSize="18" FontWeight="SemiBold"
                    Foreground="#121518" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
+        <Button Content="{materialDesign:PackIcon Kind=Refresh}" Command="{Binding RefreshCommand}" Style="{StaticResource MaterialDesignIconForegroundButton}"
+                   Foreground="#121518" Margin="80 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" />
+
         <TextBlock Text="Filter by" Grid.Row="3" FontSize="13" FontWeight="SemiBold" Margin="0 0 215 0"
                    Foreground="#121518" HorizontalAlignment="Right" VerticalAlignment="Center"/>
 
@@ -58,7 +61,14 @@
             <DataGrid.Columns>
 
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" Width="auto"/>
-                <DataGridTextColumn Header="Producer Name" Binding="{Binding Producer.Name}" IsReadOnly="True" Width="auto"/>
+                <DataGridTextColumn Header="Producer Fullname" IsReadOnly="True" Width="auto">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding StringFormat="{}{0} {1}">
+                            <Binding Path="Producer.Name" />
+                            <Binding Path="Producer.Surname" />
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Year" Binding="{Binding Year}" IsReadOnly="True" Width="auto"/>
                 <DataGridTextColumn Header="Age" Binding="{Binding Age, StringFormat={}{0}+}" IsReadOnly="True" Width="auto"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" IsReadOnly="True" Width="*"/>

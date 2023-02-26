@@ -11,11 +11,18 @@ public class SerialGenreViewModel : ViewModelBase
         set { _serialGenreCount = value; RaisePropertyChanged(); }
     }
 
+    private ObservableCollection<SerialGenre> _serialGenres;
+    public ObservableCollection<SerialGenre> SerialGenres
+    {
+        get => _serialGenres;
+        set { _serialGenres = value; RaisePropertyChanged(); }
+    }
+
     public Serial Serial { get; set; }
-    public ObservableCollection<SerialGenre> SerialGenres { get; set; }
 
     public RelayCommand SearchCommand { get; set; }
     public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand RefreshCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
 
@@ -37,6 +44,7 @@ public class SerialGenreViewModel : ViewModelBase
 
         SearchCommand = new RelayCommand(sender => Search(sender));
         DeleteCommand = new RelayCommand(sender => Delete(sender));
+        RefreshCommand = new RelayCommand(_ => Initialize());
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
     }
@@ -81,6 +89,16 @@ public class SerialGenreViewModel : ViewModelBase
 
         model.SerialGenre.Serial = Serial;
         model.Serials = new List<Serial> { Serial };
+
+        var existsGenres = await _dbContext.SerialGenres.Include(sg => sg.Genre).Where(sg => sg.SerialName == Serial.Name).Select(sg => sg.Genre).ToListAsync();
+
+        if (model.Genres.Count == existsGenres.Count)
+        {
+            await MessageBoxService.Show("Added all possible genres", MessageBoxType.Info);
+            return;
+        }
+
+        foreach (var genre in existsGenres) model.Genres.Remove(genre);
 
         await DialogHost.Show(model, "RootDialog");
     }

@@ -40,7 +40,7 @@ public class UploadEpisodeModel : ModelBase
 
             var parseResult = !TimeSpan.TryParse(value, out TimeSpan time);
 
-            if (time.TotalMinutes <= 0) AddError(nameof(VideoLength), "Video cannot be zero minutes long!");
+            if (time.TotalSeconds < 60) AddError(nameof(VideoLength), "Video cannot be zero minutes long!");
 
             _videoLength = time;
 
@@ -162,8 +162,8 @@ public class UploadEpisodeModel : ModelBase
 
     public override void Verify()
     {
-        Name = Name;
-        Description = Description;
+        Name = Name is null ? Name : Name.Trim();
+        Description = Description is null ? Description : Description.Trim();
         VideoLength = VideoLength;
         VideoUrl = VideoUrl;
         ImageUrl = ImageUrl;

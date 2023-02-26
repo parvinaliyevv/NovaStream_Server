@@ -12,10 +12,16 @@ public class ActorViewModel : ViewModelBase
         set { _actorCount = value; RaisePropertyChanged(); }
     }
 
-    public ObservableCollection<Actor> Actors { get; set; }
+    private ObservableCollection<Actor> _actors;
+    public ObservableCollection<Actor> Actors
+    {
+        get => _actors;
+        set { _actors = value; RaisePropertyChanged(); }
+    }
 
     public RelayCommand SearchCommand { get; set; }
     public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand RefreshCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
     public RelayCommand OpenEditDialogHostCommand { get; set; }
@@ -41,6 +47,7 @@ public class ActorViewModel : ViewModelBase
 
         SearchCommand = new RelayCommand(sender => Search(sender));
         DeleteCommand = new RelayCommand(sender => Delete(sender));
+        RefreshCommand = new RelayCommand(_ => Initialize());
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
         OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));

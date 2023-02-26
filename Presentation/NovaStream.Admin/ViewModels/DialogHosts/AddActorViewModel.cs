@@ -7,7 +7,14 @@ public class AddActorViewModel : DependencyObject
     
     public UploadActorModel Actor { get; set; }
 
-    public bool ProcessStarted { get; set; }
+    public bool ProcessStarted
+    {
+        get { return (bool)GetValue(ProcessStartedProperty); }
+        set { SetValue(ProcessStartedProperty, value); }
+    }
+    public static readonly DependencyProperty ProcessStartedProperty =
+        DependencyProperty.Register("ProcessStarted", typeof(bool), typeof(AddActorViewModel));
+    
     public List<Task> UploadTasks { get; set; }
     public List<CancellationTokenSource> UploadTaskTokens { get; set; }
 
@@ -29,7 +36,7 @@ public class AddActorViewModel : DependencyObject
         SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
         CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
 
-        OpenImageDialogCommand = new RelayCommand(_ => Actor.ImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
+        OpenImageDialogCommand = new RelayCommand(_ => Actor.ImageUrl = FileDialogService.OpenImageFile(Actor.ImageUrl), _ => !ProcessStarted);
     }
 
 
@@ -58,10 +65,12 @@ public class AddActorViewModel : DependencyObject
             if (dbActor is null || dbActor is not null && dbActor.ImageUrl != Actor.ImageUrl)
             {
                 var imageStream = new FileStream(Actor.ImageUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-image{1}", Actor.Name.Replace(' ', '-'), Path.GetExtension(Actor.ImageUrl));
+                var filename = string.Format("{0}-image-{1}{2}", $"{Actor.Name} {Actor.Surname}".Replace(' ', '-'), Random.Shared.Next(), Path.GetExtension(Actor.ImageUrl));
                 actor.ImageUrl = string.Format("Images/Actors/{0}", filename);
 
                 Actor.ImageProgress = new BlobStorageUploadProgress(imageStream.Length);
+
+                if (dbActor is not null) _ = _storageManager.DeleteFileAsync(dbActor.ImageUrl);
 
                 var imageToken = new CancellationTokenSource();
                 var imageUploadTask = _storageManager.UploadFileAsync(imageStream, actor.ImageUrl, Actor.ImageProgress, imageToken.Token);
@@ -106,9 +115,9 @@ public class AddActorViewModel : DependencyObject
         }
         catch (Exception ex)
         {
-            _ = Cancel();
-
             await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+
+            await Cancel();
         }
     }
 

@@ -11,11 +11,18 @@ public class MovieActorViewModel : ViewModelBase
         set { _movieActorCount = value; RaisePropertyChanged(); }
     }
 
+    private ObservableCollection<MovieActor> _movieActors;
+    public ObservableCollection<MovieActor> MovieActors
+    {
+        get => _movieActors;
+        set { _movieActors = value; RaisePropertyChanged(); }
+    }
+
     public Movie Movie { get; set; }
-    public ObservableCollection<MovieActor> MovieActors { get; set; }
 
     public RelayCommand SearchCommand { get; set; }
     public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand RefreshCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
 
@@ -37,6 +44,7 @@ public class MovieActorViewModel : ViewModelBase
 
         SearchCommand = new RelayCommand(sender => Search(sender));
         DeleteCommand = new RelayCommand(sender => Delete(sender));
+        RefreshCommand = new RelayCommand(_ => Initialize());
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
     }
@@ -81,6 +89,16 @@ public class MovieActorViewModel : ViewModelBase
 
         model.MovieActor.Movie = Movie;
         model.Movies = new List<Movie> { Movie };
+
+        var existsActors = await _dbContext.MovieActors.Include(ma => ma.Actor).Where(ma => ma.MovieName == Movie.Name).Select(ma => ma.Actor).ToListAsync();
+
+        if (model.Actors.Count == existsActors.Count)
+        {
+            await MessageBoxService.Show("Added all possible actors", MessageBoxType.Info);
+            return;
+        }
+
+        foreach (var actor in existsActors) model.Actors.Remove(actor);
 
         await DialogHost.Show(model, "RootDialog");
     }

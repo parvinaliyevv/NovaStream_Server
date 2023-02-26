@@ -11,11 +11,19 @@ public class MovieGenreViewModel : ViewModelBase
         set { _movieGenreCount = value; RaisePropertyChanged(); }
     }
 
+    private ObservableCollection<MovieGenre> _movieGenres;
+    public ObservableCollection<MovieGenre> MovieGenres
+    {
+        get => _movieGenres;
+        set { _movieGenres = value; RaisePropertyChanged(); }
+    }
+   
     public Movie Movie { get; set; }
-    public ObservableCollection<MovieGenre> MovieGenres { get; set; }
 
     public RelayCommand SearchCommand { get; set; }
     public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand RefreshCommand { get; set; }
+
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
 
@@ -37,6 +45,7 @@ public class MovieGenreViewModel : ViewModelBase
 
         SearchCommand = new RelayCommand(sender => Search(sender));
         DeleteCommand = new RelayCommand(sender => Delete(sender));
+        RefreshCommand = new RelayCommand(_ => Initialize());
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
     }
@@ -81,6 +90,16 @@ public class MovieGenreViewModel : ViewModelBase
 
         model.MovieGenre.Movie = Movie;
         model.Movies = new List<Movie> { Movie };
+
+        var existsGenres = await _dbContext.MovieGenres.Include(mg => mg.Genre).Where(mg => mg.MovieName == Movie.Name).Select(mg => mg.Genre).ToListAsync();
+
+        if (model.Genres.Count == existsGenres.Count)
+        {
+            await MessageBoxService.Show("Added all possible genres", MessageBoxType.Info);
+            return;
+        }
+
+        foreach (var genre in existsGenres) model.Genres.Remove(genre);
 
         await DialogHost.Show(model, "RootDialog");
     }

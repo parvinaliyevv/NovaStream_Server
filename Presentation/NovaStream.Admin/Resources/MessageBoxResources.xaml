@@ -4,7 +4,7 @@
                     xmlns:messageBox="clr-namespace:NovaStream.Admin.MessageBoxes">
 
     <DataTemplate DataType="{x:Type messageBox:SuccessMessageBox}">
-        <Grid Height="200" Width="500">
+        <Grid MinHeight="200" Width="500">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"/>
@@ -29,8 +29,34 @@
         </Grid>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type messageBox:InfoMessageBox}">
+        <Grid MinHeight="200" Width="500">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <Border Background="#1061cb" Grid.Row="0">
+                <TextBlock Text="{Binding Title}" Foreground="#f4faf7" Margin="10"
+                           FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            </Border>
+
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="20, 0" Grid.Row="1">
+                <ContentControl Content="{materialDesign:PackIcon Kind=Information, Size=50}" Foreground="#1061cb"/>
+                <TextBlock Text="{Binding Message}" FontFamily="Calibri" FontSize="18" FontWeight="Medium" 
+                           TextWrapping="Wrap" Width="400" Margin="10 0 0 0"/>
+            </StackPanel>
+
+            <Button Content="OK" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                    Background="#337ab7" BorderBrush="#2a6494" Margin="20, 0" Grid.Row="2"/>
+
+        </Grid>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type messageBox:ErrorMessageBox}">
-        <Grid Height="200" Width="500">
+        <Grid MinHeight="200" Width="500">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"/>
@@ -56,7 +82,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type messageBox:ProgressMessageBox}">
-        <Grid Height="150" Width="500">
+        <Grid MinHeight="150" Width="500">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"/>

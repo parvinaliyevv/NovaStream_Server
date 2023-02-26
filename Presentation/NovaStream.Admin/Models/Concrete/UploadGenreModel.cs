@@ -57,7 +57,7 @@ public class UploadGenreModel : ModelBase
 
     public override void Verify()
     {
-        Name = Name;
+        Name = Name is null ? Name : Name.Trim();
         ImageUrl = ImageUrl;
     }
 }

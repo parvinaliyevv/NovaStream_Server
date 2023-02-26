@@ -7,10 +7,31 @@ public class AddEpisodeViewModel : DependencyObject
     private readonly IAWSStorageManager _awsStorageManager;
 
     public UploadEpisodeModel Episode { get; set; }
-    public ObservableCollection<Serial> Serials { get; set; }
-    public ObservableCollection<Season> Seasons { get; set; }
 
-    public bool ProcessStarted { get; set; }
+    public List<Serial> Serials
+    {
+        get { return (List<Serial>)GetValue(SerialsProperty); }
+        set { SetValue(SerialsProperty, value); }
+    }
+    public static readonly DependencyProperty SerialsProperty =
+        DependencyProperty.Register("Serials", typeof(List<Serial>), typeof(AddEpisodeViewModel));
+    
+    public List<Season> Seasons
+    {
+        get { return (List<Season>)GetValue(SeasonsProperty); }
+        set { SetValue(SeasonsProperty, value); }
+    }
+    public static readonly DependencyProperty SeasonsProperty =
+        DependencyProperty.Register("Seasons", typeof(List<Season>), typeof(AddEpisodeViewModel));
+
+    public bool ProcessStarted
+    {
+        get { return (bool)GetValue(ProcessStartedProperty); }
+        set { SetValue(ProcessStartedProperty, value); }
+    }
+    public static readonly DependencyProperty ProcessStartedProperty =
+        DependencyProperty.Register("ProcessStarted", typeof(bool), typeof(AddEpisodeViewModel));
+
     public List<Task> UploadTasks { get; set; }
     public List<CancellationTokenSource> UploadTaskTokens { get; set; }
 
@@ -32,8 +53,8 @@ public class AddEpisodeViewModel : DependencyObject
 
         Episode = new();
 
-        Serials = new ObservableCollection<Serial>(_dbContext.Serials);
-        Seasons = new ObservableCollection<Season>();
+        Serials = new List<Serial>(_dbContext.Serials);
+        Seasons = new List<Season>();
 
         ProcessStarted = false;
         UploadTasks = new();
@@ -42,8 +63,8 @@ public class AddEpisodeViewModel : DependencyObject
         SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
         CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
 
-        OpenVideoDialogCommand = new RelayCommand(_ => Episode.VideoUrl = FileDialogService.OpenVideoFile(), _ => !ProcessStarted);
-        OpenVideoImageDialogCommand = new RelayCommand(_ => Episode.ImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
+        OpenVideoDialogCommand = new RelayCommand(_ => Episode.VideoUrl = FileDialogService.OpenVideoFile(Episode.VideoUrl), _ => !ProcessStarted);
+        OpenVideoImageDialogCommand = new RelayCommand(_ => Episode.ImageUrl = FileDialogService.OpenImageFile(Episode.ImageUrl), _ => !ProcessStarted);
 
         SelectedSerialChangedCommand = new RelayCommand(_ => SelectedSerialChanged(), _ => !ProcessStarted);
         SelectedSeasonChangedCommand = new RelayCommand(_ => SelectedSeasonChanged(), _ => !ProcessStarted);
@@ -74,6 +95,7 @@ public class AddEpisodeViewModel : DependencyObject
             Episode.VideoUploadSuccess = false;
             Episode.ImageUploadSuccess = false;
 
+            // Episode VideoUrl
             if (dbEpisode is null || dbEpisode is not null && dbEpisode.VideoUrl != Episode.VideoUrl)
             {
                 var videoStream = new FileStream(Episode.VideoUrl, FileMode.Open, FileAccess.Read);
@@ -94,10 +116,12 @@ public class AddEpisodeViewModel : DependencyObject
             if (dbEpisode is null || dbEpisode is not null && dbEpisode.ImageUrl != Episode.ImageUrl)
             {
                 var videoImageStream = new FileStream(Episode.ImageUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-S{1:00}E{2:00}-video-image{3}", Path.GetFileNameWithoutExtension(Episode.Serial.Name).ToLower().Replace(' ', '-'), Episode.Season.Number, Episode.Number, Path.GetExtension(Episode.ImageUrl));
+                var filename = string.Format("{0}-S{1:00}E{2:00}-video-image-{3}{4}", Path.GetFileNameWithoutExtension(Episode.Serial.Name).ToLower().Replace(' ', '-'), Episode.Season.Number, Episode.Number, Random.Shared.Next(), Path.GetExtension(Episode.ImageUrl));
                 episode.ImageUrl = string.Format("Serials/{0}/Season {1}/Episode {2}/{3}", Episode.Serial.Name, Episode.Season.Number, Episode.Number, filename);
 
                 Episode.ImageProgress = new BlobStorageUploadProgress(videoImageStream.Length);
+
+                if (dbEpisode is not null) _ = _storageManager.DeleteFileAsync(dbEpisode.ImageUrl);
 
                 var imageToken = new CancellationTokenSource();
                 var imageUploadTask = _storageManager.UploadFileAsync(videoImageStream, episode.ImageUrl, Episode.ImageProgress, imageToken.Token);
@@ -126,9 +150,9 @@ public class AddEpisodeViewModel : DependencyObject
         }
         catch (Exception ex)
         {
-            _ = Cancel();
-
             await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+
+            await Cancel();
         }
     }
 
@@ -147,9 +171,7 @@ public class AddEpisodeViewModel : DependencyObject
 
     private void SelectedSerialChanged()
     {
-        Seasons.Clear();
-
-        _dbContext.Seasons.Where(s => s.SerialName == Episode.Serial.Name).ToList().ForEach(s => Seasons.Add(s));
+        Seasons = new List<Season>(_dbContext.Seasons.Where(s => s.SerialName == Episode.Serial.Name).ToList());
 
         Episode.Season = Seasons.FirstOrDefault();
     }

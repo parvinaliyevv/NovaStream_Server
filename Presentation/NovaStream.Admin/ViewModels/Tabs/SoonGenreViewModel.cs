@@ -11,11 +11,18 @@ public class SoonGenreViewModel : ViewModelBase
         set { _soonGenreCount = value; RaisePropertyChanged(); }
     }
 
+    private ObservableCollection<SoonGenre> _soonGenres;
+    public ObservableCollection<SoonGenre> SoonGenres
+    {
+        get => _soonGenres;
+        set { _soonGenres = value; RaisePropertyChanged(); }
+    }
+    
     public Soon Soon { get; set; }
-    public ObservableCollection<SoonGenre> SoonGenres { get; set; }
 
     public RelayCommand SearchCommand { get; set; }
     public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand RefreshCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
 
@@ -37,6 +44,7 @@ public class SoonGenreViewModel : ViewModelBase
 
         SearchCommand = new RelayCommand(sender => Search(sender));
         DeleteCommand = new RelayCommand(sender => Delete(sender));
+        RefreshCommand = new RelayCommand(_ => Initialize());
 
         OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
     }
@@ -81,6 +89,16 @@ public class SoonGenreViewModel : ViewModelBase
 
         model.SoonGenre.Soon = Soon;
         model.Soons = new List<Soon> { Soon };
+
+        var existsGenres = await _dbContext.SoonGenres.Include(sg => sg.Genre).Where(sg => sg.SoonName == Soon.Name).Select(sg => sg.Genre).ToListAsync();
+
+        if (model.Genres.Count == existsGenres.Count)
+        {
+            await MessageBoxService.Show("Added all possible genres", MessageBoxType.Info);
+            return;
+        }
+
+        foreach (var genre in existsGenres) model.Genres.Remove(genre);
 
         await DialogHost.Show(model, "RootDialog");
     }

@@ -1,12 +1,20 @@
 ﻿namespace NovaStream.Admin.ViewModels.DialogHosts;
 
-public class AddMovieGenreViewModel
+public class AddMovieGenreViewModel : DependencyObject
 {
     private readonly AppDbContext _dbContext;
 
     public List<Movie> Movies { get; set; }
     public List<Genre> Genres { get; set; }
     public UploadMovieGenreViewModel MovieGenre { get; set; }
+
+    public bool ProcessStarted
+    {
+        get { return (bool)GetValue(ProcessStartedProperty); }
+        set { SetValue(ProcessStartedProperty, value); }
+    }
+    public static readonly DependencyProperty ProcessStartedProperty =
+        DependencyProperty.Register("ProcessStarted", typeof(bool), typeof(AddMovieGenreViewModel));
 
     public RelayCommand SaveCommand { get; set; }
 
@@ -32,6 +40,8 @@ public class AddMovieGenreViewModel
 
             if (MovieGenre.HasErrors) return;
 
+            ProcessStarted = true;
+
             var dbMovieGenre = _dbContext.MovieGenres.Include(mg => mg.Genre)
                 .FirstOrDefault(mg => mg.MovieName == MovieGenre.Movie.Name && mg.Genre.Id == MovieGenre.Genre.Id);
 
@@ -48,6 +58,8 @@ public class AddMovieGenreViewModel
 
             App.ServiceProvider.GetService<MovieGenreViewModel>()?.MovieGenres.Add(movieGenre);
 
+            ProcessStarted = false;
+
             DialogHost.Close("RootDialog");
 
             await MessageBoxService.Show("Movie Genre saved succesfully!", MessageBoxType.Success);
@@ -55,6 +67,8 @@ public class AddMovieGenreViewModel
         catch (Exception ex)
         {
             await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+
+            ProcessStarted = false;
         }
     }
 }

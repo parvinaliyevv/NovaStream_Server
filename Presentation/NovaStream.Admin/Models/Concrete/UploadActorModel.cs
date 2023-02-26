@@ -88,9 +88,9 @@ public class UploadActorModel : ModelBase
 
     public override void Verify()
     {
-        Name = Name;
-        Surname = Surname;
-        About = About;
+        Name = Name is null ? Name : Name.Trim();
+        Surname = Surname is null ? Surname : Surname.Trim();
+        About = About is null ? About : About.Trim();
         ImageUrl = ImageUrl;
     }
 }

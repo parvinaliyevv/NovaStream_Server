@@ -12,7 +12,14 @@ public class AddSerialViewModel : DependencyObject
     public List<Producer> Producers { get; set; }
 
     public bool IsEdit { get; set; }
-    public bool ProcessStarted { get; set; }
+    public bool ProcessStarted
+    {
+        get { return (bool)GetValue(ProcessStartedProperty); }
+        set { SetValue(ProcessStartedProperty, value); }
+    }
+    public static readonly DependencyProperty ProcessStartedProperty =
+        DependencyProperty.Register("ProcessStarted", typeof(bool), typeof(AddSerialViewModel));
+    
     public List<Task> UploadTasks { get; set; }
     public List<CancellationTokenSource> UploadTaskTokens { get; set; }
 
@@ -46,11 +53,11 @@ public class AddSerialViewModel : DependencyObject
         SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
         CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
         
-        OpenVideoDialogCommand = new RelayCommand(_ => Episode.VideoUrl = FileDialogService.OpenVideoFile(), _ => !ProcessStarted);
-        OpenVideoImageDialogCommand = new RelayCommand(_ => Episode.ImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
-        OpenTrailerDialogCommand = new RelayCommand(_ => Serial.TrailerUrl = FileDialogService.OpenVideoFile(), _ => !ProcessStarted);
-        OpenImageDialogCommand = new RelayCommand(_ => Serial.ImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
-        OpenSearchImageDialogCommand = new RelayCommand(_ => Serial.SearchImageUrl = FileDialogService.OpenImageFile(), _ => !ProcessStarted);
+        OpenVideoDialogCommand = new RelayCommand(_ => Episode.VideoUrl = FileDialogService.OpenVideoFile(Episode.VideoUrl), _ => !ProcessStarted);
+        OpenVideoImageDialogCommand = new RelayCommand(_ => Episode.ImageUrl = FileDialogService.OpenImageFile(Episode.ImageUrl), _ => !ProcessStarted);
+        OpenTrailerDialogCommand = new RelayCommand(_ => Serial.TrailerUrl = FileDialogService.OpenVideoFile(Serial.TrailerUrl), _ => !ProcessStarted);
+        OpenImageDialogCommand = new RelayCommand(_ => Serial.ImageUrl = FileDialogService.OpenImageFile(Serial.ImageUrl), _ => !ProcessStarted);
+        OpenSearchImageDialogCommand = new RelayCommand(_ => Serial.SearchImageUrl = FileDialogService.OpenImageFile(Serial.SearchImageUrl), _ => !ProcessStarted);
     }
 
 
@@ -83,7 +90,7 @@ public class AddSerialViewModel : DependencyObject
 
             if (dbSerial is not null)
             {
-                dbSeason = _dbContext.Seasons.AsNoTracking().FirstOrDefault(s => s.SerialName == Serial.Name && s.Number == 1);
+                dbSeason = _dbContext.Seasons.AsNoTracking().FirstOrDefault(s => s.SerialName == dbSerial.Name && s.Number == 1);
 
                 if (dbSeason is not null)
                     dbEpisode = _dbContext.Episodes.AsNoTracking().FirstOrDefault(e => e.SeasonId == dbSeason.Id && e.Number == 1);
@@ -120,10 +127,12 @@ public class AddSerialViewModel : DependencyObject
             if (dbEpisode is null || dbEpisode is not null && dbEpisode.ImageUrl != Episode.ImageUrl)
             {
                 var videoImageStream = new FileStream(Episode.ImageUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-S01E01-video-image{1}", Path.GetFileNameWithoutExtension(Serial.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Episode.ImageUrl));
+                var filename = string.Format("{0}-S01E01-video-image-{1}{2}", Path.GetFileNameWithoutExtension(Serial.Name).ToLower().Replace(' ', '-'), Random.Shared.Next(), Path.GetExtension(Episode.ImageUrl));
                 episode.ImageUrl = string.Format("Serials/{0}/Season 1/Episode 1/{1}", Serial.Name, filename);
 
                 Episode.ImageProgress = new BlobStorageUploadProgress(videoImageStream.Length);
+
+                if (dbEpisode is not null) _ = _storageManager.DeleteFileAsync(dbEpisode.ImageUrl);
 
                 var imageToken = new CancellationTokenSource();
                 var imageUploadTask = _storageManager.UploadFileAsync(videoImageStream, episode.ImageUrl, Episode.ImageProgress, imageToken.Token);
@@ -158,10 +167,12 @@ public class AddSerialViewModel : DependencyObject
             if (dbSerial is null || dbSerial is not null && dbSerial.ImageUrl != Serial.ImageUrl)
             {
                 var imageStream = new FileStream(Serial.ImageUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-image{1}", Path.GetFileNameWithoutExtension(Serial.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Serial.ImageUrl));
+                var filename = string.Format("{0}-image-{1}{2}", Path.GetFileNameWithoutExtension(Serial.Name).ToLower().Replace(' ', '-'), Random.Shared.Next(), Path.GetExtension(Serial.ImageUrl));
                 serial.ImageUrl = string.Format("Serials/{0}/{1}", Serial.Name, filename);
 
                 Serial.ImageProgress = new BlobStorageUploadProgress(imageStream.Length);
+
+                if (dbSerial is not null) _ = _storageManager.DeleteFileAsync(dbSerial.ImageUrl);
 
                 var imageToken = new CancellationTokenSource();
                 var imageUploadTask = _storageManager.UploadFileAsync(imageStream, serial.ImageUrl, Serial.ImageProgress, imageToken.Token);
@@ -177,10 +188,12 @@ public class AddSerialViewModel : DependencyObject
             if (dbSerial is null || dbSerial is not null && dbSerial.SearchImageUrl != Serial.SearchImageUrl)
             {
                 var searchImageStream = new FileStream(Serial.SearchImageUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-search-image{1}", Path.GetFileNameWithoutExtension(Serial.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Serial.SearchImageUrl));
+                var filename = string.Format("{0}-search-image-{1}{2}", Path.GetFileNameWithoutExtension(Serial.Name).ToLower().Replace(' ', '-'), Random.Shared.Next(), Path.GetExtension(Serial.SearchImageUrl));
                 serial.SearchImageUrl = string.Format("Serials/{0}/{1}", Serial.Name, filename);
 
                 Serial.SearchImageProgress = new BlobStorageUploadProgress(searchImageStream.Length);
+
+                if (dbSerial is not null) _ = _storageManager.DeleteFileAsync(dbSerial.SearchImageUrl);
 
                 var searchImageToken = new CancellationTokenSource();
                 var searchImageUploadTask = _storageManager.UploadFileAsync(searchImageStream, serial.SearchImageUrl, Serial.SearchImageProgress, searchImageToken.Token);
@@ -194,79 +207,92 @@ public class AddSerialViewModel : DependencyObject
 
             if (UploadTasks.Count > 0) await Task.WhenAll(UploadTasks);
 
-            var serialViewModel = App.ServiceProvider.GetService<SerialViewModel>();
-
             if (dbSerial is not null)
             {
-                var entity = serialViewModel.Serials.FirstOrDefault(s => s.Name == dbSerial.Name);
-                _dbContext.Entry(entity).State = EntityState.Detached;
+                var serialViewModel = App.ServiceProvider.GetService<SerialViewModel>();
 
-                var index = serialViewModel.Serials.IndexOf(entity);
+                var viewSerial = serialViewModel.Serials.FirstOrDefault(s => s.Name == dbSerial.Name);
+                _dbContext.Entry(viewSerial).State = EntityState.Detached;
+
+                var index = serialViewModel.Serials.IndexOf(viewSerial);
                 serialViewModel.Serials.RemoveAt(index);
 
                 _dbContext.Serials.Update(serial);
 
                 serialViewModel.Serials.Insert(index, serial);
+
+                await _dbContext.SaveChangesAsync();
+
+                var episodeViewModel = App.ServiceProvider.GetService<EpisodeViewModel>();
+
+                episode.Number = 1;
+                episode.Season = dbSeason;
+
+                if (dbEpisode is not null)
+                {
+                    var viewEpisode = episodeViewModel.Episodes.FirstOrDefault(e => e.Id == dbEpisode.Id);
+                    _dbContext.Entry(viewEpisode).State = EntityState.Detached;
+                    _dbContext.Entry(viewEpisode.Season).State = EntityState.Detached;
+
+                    index = episodeViewModel.Episodes.IndexOf(viewEpisode);
+                    episodeViewModel.Episodes.RemoveAt(index);
+
+                    episode.Id = dbEpisode.Id;
+                    _dbContext.Episodes.Update(episode);
+
+                    episodeViewModel.Episodes.Insert(index, episode);
+
+                    await _dbContext.SaveChangesAsync();
+
+                    var seasonViewModel = App.ServiceProvider.GetService<SeasonViewModel>();
+
+                    season.Number = 1;
+                    season.SerialName = serial.Name;
+
+                    if (dbSeason is not null)
+                    {
+                        var viewSeason = seasonViewModel.Seasons.FirstOrDefault(s => s.Id == dbSeason.Id);
+                        _dbContext.Entry(viewSeason).State = EntityState.Detached;
+
+                        index = seasonViewModel.Seasons.IndexOf(viewSeason);
+                        seasonViewModel.Seasons.RemoveAt(index);
+
+                        season.Id = dbSeason.Id;
+                        _dbContext.Seasons.Update(season);
+
+                        seasonViewModel.Seasons.Insert(index, season);
+                    }
+                }
             }
             else
             {
+                var serialViewModel = App.ServiceProvider.GetService<SerialViewModel>();
+
                 _dbContext.Serials.Add(serial);
                 serialViewModel.Serials.Add(serial);
-            }
 
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
 
-            var seasonViewModel = App.ServiceProvider.GetService<SeasonViewModel>();
+                var seasonViewModel = App.ServiceProvider.GetService<SeasonViewModel>();
 
-            season.Id = dbSeason.Id;
-            season.SerialName = dbSeason.SerialName;
-            season.Number = dbSeason.Number;
+                season.Number = 1;
+                season.SerialName = serial.Name;
 
-            if (dbSeason is not null)
-            {
-                var entity = seasonViewModel.Seasons.FirstOrDefault(s => s.Id == dbSeason.Id);
-                _dbContext.Entry(entity).State = EntityState.Detached;
-
-                var index = seasonViewModel.Seasons.IndexOf(entity);
-                seasonViewModel.Seasons.RemoveAt(index);
-
-                _dbContext.Seasons.Update(dbSeason);
-
-                seasonViewModel.Seasons.Insert(index, dbSeason);
-            }
-            else
-            {
                 _dbContext.Seasons.Add(season);
                 seasonViewModel.Seasons.Add(season);
-            }
 
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
 
-            var episodeViewModel = App.ServiceProvider.GetService<EpisodeViewModel>();
+                var episodeViewModel = App.ServiceProvider.GetService<EpisodeViewModel>();
 
-            episode.Id = dbEpisode.Id;
-            episode.Season = dbSeason;
-            episode.Number = dbEpisode.Number;
+                episode.Number = 1;
+                episode.Season = season;
 
-            if (dbEpisode is not null)
-            {
-                var entity = episodeViewModel.Episodes.FirstOrDefault(e => e.Id == dbEpisode.Id);
-                _dbContext.Entry(entity).State = EntityState.Detached;
-
-                var index = episodeViewModel.Episodes.IndexOf(entity);
-                episodeViewModel.Episodes.RemoveAt(index);
-
-                _dbContext.Episodes.Update(episode);
-
-                episodeViewModel.Episodes.Insert(index, episode);
-            }
-            else
-            {
                 _dbContext.Episodes.Add(episode);
                 episodeViewModel.Episodes.Add(episode);
-            }
 
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
+            }
 
             ProcessStarted = false;
 
@@ -276,9 +302,9 @@ public class AddSerialViewModel : DependencyObject
         }
         catch (Exception ex)
         {
-            _ = Cancel();
-
             await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+
+            await Cancel();
         }
     }
 
@@ -302,5 +328,9 @@ public class AddSerialViewModel : DependencyObject
 
         Serial.SearchImageProgress.Progress = 0;
         if (Serial.SearchImageUploadSuccess) await _storageManager.DeleteFileAsync(Serial.SearchImageUrl);
+
+        var dbSerial = _dbContext.Serials.FirstOrDefault(s => s.Name == Serial.Name);
+
+        if (dbSerial is not null) _dbContext.Serials.Remove(dbSerial);
     }
 }
