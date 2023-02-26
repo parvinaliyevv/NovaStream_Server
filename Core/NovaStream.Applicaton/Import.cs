@@ -11,6 +11,7 @@ global using NovaStream.Application.MapsterProfiles;
 
 global using Mapster;
 global using FluentValidation;
+global using Amazon.S3.Transfer;
 global using Microsoft.AspNetCore.Http;
 global using FluentValidation.AspNetCore;
 global using Microsoft.Extensions.DependencyInjection;

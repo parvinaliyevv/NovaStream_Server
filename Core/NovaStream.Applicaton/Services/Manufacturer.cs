@@ -4,6 +4,8 @@ public static class Manufacturer
 {
     public static string ManufactureGenres(List<string> genres)
     {
+        if (genres.Count == 0) return string.Empty;
+
         var builder = new StringBuilder();
 
         builder.Append($"{genres[0]} •");
@@ -19,6 +21,6 @@ public static class Manufacturer
     {
         var minutes = Convert.ToInt32(time.TotalMinutes);
 
-        return minutes > 60 ? $"{minutes / 60}h {minutes % 60}m" : $"{minutes % 60}m";
+        return minutes >= 60 ? $"{minutes / 60}h {minutes % 60}m" : $"{minutes % 60}m";
     }
 }

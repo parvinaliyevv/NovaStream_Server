@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NovaStream.Application", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NovaStream.Domain", "Core\NovaStream.Domain\NovaStream.Domain.csproj", "{178B71BF-9389-4174-91F9-0A2D3D900C1A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NovaStream.Admin", "Presentation\NovaStream.Admin\NovaStream.Admin.csproj", "{F2DEF059-629B-4568-AFBE-CFAE07EB746A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{178B71BF-9389-4174-91F9-0A2D3D900C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{178B71BF-9389-4174-91F9-0A2D3D900C1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{178B71BF-9389-4174-91F9-0A2D3D900C1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2DEF059-629B-4568-AFBE-CFAE07EB746A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2DEF059-629B-4568-AFBE-CFAE07EB746A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2DEF059-629B-4568-AFBE-CFAE07EB746A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2DEF059-629B-4568-AFBE-CFAE07EB746A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{F2B02019-3C04-4F04-BB04-9F4FCBDF4E09} = {462C3B3E-CB5C-41FE-B3C3-31E1498BB153}
 		{C9E7BCC0-BAC5-47A7-9B08-4CDF66126283} = {01705F9D-B56C-44B8-BC0C-C93EBCF06ACA}
 		{178B71BF-9389-4174-91F9-0A2D3D900C1A} = {01705F9D-B56C-44B8-BC0C-C93EBCF06ACA}
+		{F2DEF059-629B-4568-AFBE-CFAE07EB746A} = {E74ABEA1-59BE-44A0-BB3E-B5F9EA0BB2E9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C5F3DC52-9E43-4E51-9729-6168934B3D06}

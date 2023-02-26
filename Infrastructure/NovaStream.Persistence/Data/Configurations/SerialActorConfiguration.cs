@@ -15,14 +15,5 @@ public class SerialActorConfiguration : IEntityTypeConfiguration<SerialActor>
             .WithMany(a => a.Serials)
             .HasForeignKey(sa => sa.ActorId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        var serialActors = new SerialActor[]
-        {
-            new() { ActorId = 4, SerialName = "The Last of Us" },
-            new() { ActorId = 5, SerialName = "The Last of Us" },
-            new() { ActorId = 6, SerialName = "The Last of Us" }
-        };
-
-        builder.HasData(serialActors);
     }
 }

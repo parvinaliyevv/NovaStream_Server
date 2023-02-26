@@ -1,0 +1,86 @@
+﻿<Application x:Class="NovaStream.Admin.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:view="clr-namespace:NovaStream.Admin.Views"
+             xmlns:viewTab="clr-namespace:NovaStream.Admin.Views.Tabs"
+             xmlns:viewModel="clr-namespace:NovaStream.Admin.ViewModels"
+             xmlns:viewModelTab="clr-namespace:NovaStream.Admin.ViewModels.Tabs">
+
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <DataTemplate DataType="{x:Type viewModel:MainViewModel}">
+                <view:MainView></view:MainView>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:MovieViewModel}">
+                <view:MovieView></view:MovieView>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:SoonViewModel}">
+                <view:SoonView></view:SoonView>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:SerialViewModel}">
+                <view:SerialView></view:SerialView>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:SeasonViewModel}">
+                <view:SeasonView></view:SeasonView>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:EpisodeViewModel}">
+                <view:EpisodeView></view:EpisodeView>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:ActorViewModel}">
+                <view:ActorView></view:ActorView>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:ProducerViewModel}">
+                <view:ProducerView></view:ProducerView>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:GenreViewModel}">
+                <view:GenreView></view:GenreView>
+            </DataTemplate>
+
+            
+            <DataTemplate DataType="{x:Type viewModelTab:MovieActorViewModel}">
+                <viewTab:MovieActorView></viewTab:MovieActorView>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type viewModelTab:MovieGenreViewModel}">
+                <viewTab:MovieGenreView></viewTab:MovieGenreView>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModelTab:SoonGenreViewModel}">
+                <viewTab:SoonGenreView></viewTab:SoonGenreView>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModelTab:SerialActorViewModel}">
+                <viewTab:SerialActorView></viewTab:SerialActorView>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModelTab:SerialGenreViewModel}">
+                <viewTab:SerialGenreView></viewTab:SerialGenreView>
+            </DataTemplate>
+
+
+            <ResourceDictionary.MergedDictionaries>
+
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+
+                <ResourceDictionary Source="Resources/AppResources.xaml"/>
+                <ResourceDictionary Source="Resources/DialogHostResources.xaml"/>
+                <ResourceDictionary Source="Resources/MessageBoxResources.xaml"/>
+
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+    </Application.Resources>
+
+</Application>

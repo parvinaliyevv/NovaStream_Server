@@ -1,0 +1,106 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:messageBox="clr-namespace:NovaStream.Admin.MessageBoxes">
+
+    <DataTemplate DataType="{x:Type messageBox:SuccessMessageBox}">
+        <Grid MinHeight="200" Width="500">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <Border Background="#0b934f" Grid.Row="0">
+                <TextBlock Text="{Binding Title}" Foreground="#f4faf7" Margin="10"
+                           FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            </Border>
+
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="20, 0" Grid.Row="1">
+                <ContentControl Content="{materialDesign:PackIcon Kind=CheckboxMarkedCircle, Size=50}" Foreground="#0b934f"/>
+                <TextBlock Text="{Binding Message}" FontFamily="Calibri" FontSize="18" FontWeight="Medium" 
+                           TextWrapping="Wrap" Width="400" Margin="10 0 0 0"/>
+            </StackPanel>
+
+            <Button Content="OK" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                    Background="#337ab7" BorderBrush="#2a6494" Margin="20, 0" Grid.Row="2"/>
+
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type messageBox:InfoMessageBox}">
+        <Grid MinHeight="200" Width="500">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <Border Background="#1061cb" Grid.Row="0">
+                <TextBlock Text="{Binding Title}" Foreground="#f4faf7" Margin="10"
+                           FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            </Border>
+
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="20, 0" Grid.Row="1">
+                <ContentControl Content="{materialDesign:PackIcon Kind=Information, Size=50}" Foreground="#1061cb"/>
+                <TextBlock Text="{Binding Message}" FontFamily="Calibri" FontSize="18" FontWeight="Medium" 
+                           TextWrapping="Wrap" Width="400" Margin="10 0 0 0"/>
+            </StackPanel>
+
+            <Button Content="OK" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                    Background="#337ab7" BorderBrush="#2a6494" Margin="20, 0" Grid.Row="2"/>
+
+        </Grid>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type messageBox:ErrorMessageBox}">
+        <Grid MinHeight="200" Width="500">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <Border Background="#ac0c16" Grid.Row="0">
+                <TextBlock Text="{Binding Title}" Foreground="#f4faf7" Margin="10"
+                           FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            </Border>
+
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="20, 0" Grid.Row="1">
+                <ContentControl Content="{materialDesign:PackIcon Kind=CloseCircle, Size=50}" Foreground="#ac0c16"/>
+                <TextBlock Text="{Binding Message}" FontFamily="Calibri" FontSize="18" FontWeight="Medium" 
+                           TextWrapping="Wrap" Width="400" Margin="10 0 0 0"/>
+            </StackPanel>
+
+            <Button Content="OK" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                    Background="#337ab7" BorderBrush="#2a6494" Margin="20, 0" Grid.Row="2"/>
+
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type messageBox:ProgressMessageBox}">
+        <Grid MinHeight="150" Width="500">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Background="#fb7657" Grid.Row="0">
+                <TextBlock Text="{Binding Title}" Foreground="#f4faf7" Margin="10"
+                           FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            </Border>
+
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="20, 0" Grid.Row="1">
+                <ProgressBar IsIndeterminate="True" Height="50" Width="50" Style="{StaticResource CircularProgressBar}"/>
+                <TextBlock Text="{Binding Message}" FontFamily="Calibri" FontSize="18" FontWeight="Medium" 
+                           TextWrapping="Wrap" VerticalAlignment="Center" Width="400" Margin="25 0 0 0"/>
+            </StackPanel>
+
+        </Grid>
+    </DataTemplate>
+
+</ResourceDictionary>
