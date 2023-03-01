@@ -6,7 +6,7 @@ public class AddSerialGenreViewModel : DependencyObject
 
     public List<Serial> Serials { get; set; }
     public List<Genre> Genres { get; set; }
-    public UploadSerialGenreViewModel SerialGenre { get; set; }
+    public SerialGenreViewModelContent SerialGenre { get; set; }
 
     public bool ProcessStarted
     {
@@ -24,15 +24,17 @@ public class AddSerialGenreViewModel : DependencyObject
         _dbContext = dbContext;
 
         Genres = _dbContext.Genres.ToList();
-        SerialGenre = new UploadSerialGenreViewModel();
+        SerialGenre = new SerialGenreViewModelContent();
 
-        SaveCommand = new RelayCommand(_ => Save());
+        SaveCommand = new RelayCommand(() => Save());
     }
 
 
     private async Task Save()
     {
         await Task.CompletedTask;
+
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         try
         {
@@ -64,9 +66,13 @@ public class AddSerialGenreViewModel : DependencyObject
 
             await MessageBoxService.Show("Serial Genre saved successfully!", MessageBoxType.Success);
         }
-        catch (Exception ex)
+        catch
         {
-            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+            if (!InternetService.CheckInternet())
+                await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error);
+
+            else
+                await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
 
             ProcessStarted = false;
         }

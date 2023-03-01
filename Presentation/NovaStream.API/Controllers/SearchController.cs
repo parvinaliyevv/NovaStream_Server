@@ -25,7 +25,7 @@ public class SearchController : ControllerBase
             videos.AddRange(_dbContext.Movies.ProjectToType<MovieSearchDto>());
             videos.AddRange(_dbContext.Serials.ProjectToType<SerialSearchDto>());
 
-            videos.Sort((a, b) => string.Compare(a.Name, b.Name));
+            videos = Random.Shared.Shuffle(videos);
 
             var json = JsonConvert.SerializeObject(videos, Formatting.Indented);
 

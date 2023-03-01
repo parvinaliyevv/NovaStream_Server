@@ -19,12 +19,12 @@ public class GenreViewModel : ViewModelBase
         set { _genres = value; RaisePropertyChanged(); }
     }
 
-    public RelayCommand SearchCommand { get; set; }
-    public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand<string> SearchCommand { get; set; }
+    public RelayCommand<Genre> DeleteCommand { get; set; }
     public RelayCommand RefreshCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
-    public RelayCommand OpenEditDialogHostCommand { get; set; }
+    public RelayCommand<Genre> OpenEditDialogHostCommand { get; set; }
 
 
     public GenreViewModel(AppDbContext dbContext, IStorageManager storageManager)
@@ -33,6 +33,13 @@ public class GenreViewModel : ViewModelBase
         _storageManager = storageManager;
 
         Initialize();
+
+        SearchCommand = new RelayCommand<string>(pattern => Search(pattern));
+        DeleteCommand = new RelayCommand<Genre>(genre => Delete(genre));
+        RefreshCommand = new RelayCommand(() => Initialize());
+
+        OpenAddDialogHostCommand = new RelayCommand(() => OpenAddDialogHost());
+        OpenEditDialogHostCommand = new RelayCommand<Genre>(genre => OpenEditDialogHost(genre));
     }
 
 
@@ -40,72 +47,100 @@ public class GenreViewModel : ViewModelBase
     {
         await Task.CompletedTask;
 
-        Genres = new ObservableCollection<Genre>(_dbContext.Genres);
-        GenreCount = Genres.Count;
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
+        
+        _ = MessageBoxService.Show($"Loading genres...", MessageBoxType.Progress);
 
-        Genres.CollectionChanged += GenreCountChanged;
+        await Task.Delay(1000);
 
-        SearchCommand = new RelayCommand(sender => Search(sender));
-        DeleteCommand = new RelayCommand(sender => Delete(sender));
-        RefreshCommand = new RelayCommand(_ => Initialize());
+        try
+        {
+            Genres = new ObservableCollection<Genre>(_dbContext.Genres);
+            GenreCount = Genres.Count;
 
-        OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
-        OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
+            Genres.CollectionChanged += GenreCountChanged;
+
+            MessageBoxService.Close();
+        }
+        catch
+        {
+            await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
+        }
     }
 
-    private async Task Search(object sender)
+    private async Task Search(string pattern)
     {
         await Task.CompletedTask;
 
-        var pattern = sender.ToString();
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
-        var genres = string.IsNullOrWhiteSpace(pattern) ?
-            _dbContext.Genres.ToList() : 
+        try
+        {
+            var genres = string.IsNullOrWhiteSpace(pattern) ?
+            _dbContext.Genres.ToList() :
             _dbContext.Genres.Where(g => g.Name.Contains(pattern)).ToList();
 
-        if (Genres.Count == genres.Count) return;
+            if (Genres.Count == genres.Count) return;
 
-        Genres.Clear();
+            Genres.Clear();
 
-        genres.ForEach(g => Genres.Add(g));
+            genres.ForEach(g => Genres.Add(g));
+        }
+        catch
+        {
+            await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
+        }
     }
 
-    private async Task Delete(object sender)
+    private async Task Delete(Genre genre)
     {
-        var button = sender as Button;
-        var genre = button?.DataContext as Genre;
+        await Task.CompletedTask;
+
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         ArgumentNullException.ThrowIfNull(genre);
 
         _ = MessageBoxService.Show($"Delete <{genre.Name}>...", MessageBoxType.Progress);
-        
-        await _storageManager.DeleteFileAsync(genre.ImageUrl);
 
-        _dbContext.Genres.Remove(genre);
-        await _dbContext.SaveChangesAsync();
+        await Task.Delay(1000);
 
-        Genres.Remove(genre);
+        try
+        {
+            var imageUrl = genre.ImageUrl;
 
-        MessageBoxService.Close();
+            _dbContext.Genres.Remove(genre);
+            await _dbContext.SaveChangesAsync();
+
+            Genres.Remove(genre);
+
+            await _storageManager.DeleteFileAsync(imageUrl);
+
+            MessageBoxService.Close();
+        }
+        catch
+        {
+            await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
+        }
     }
 
     private async Task OpenAddDialogHost()
     {
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
+
         var model = App.ServiceProvider.GetService<AddGenreViewModel>();
 
         await DialogHost.Show(model, "RootDialog");
     }
 
-    private async Task OpenEditDialogHost(object sender)
+    private async Task OpenEditDialogHost(Genre genre)
     {
-        var button = sender as Button;
-        var genre = button?.DataContext as Genre;
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         ArgumentNullException.ThrowIfNull(genre);
 
         var model = App.ServiceProvider.GetService<AddGenreViewModel>();
 
-        model.Genre = genre.Adapt<UploadGenreModel>();
+        model.Genre = genre.Adapt<GenreViewModelContent>();
         model.IsEdit = true;
 
         await DialogHost.Show(model, "RootDialog");

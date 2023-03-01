@@ -6,508 +6,452 @@
                     xmlns:viewModel="clr-namespace:NovaStream.Admin.ViewModels.DialogHosts">
 
     <DataTemplate DataType="{x:Type viewModel:AddMovieViewModel}">
-        <Grid Background="#f7f6f4" Height="600" Width="1100">
+        <Border Background="{StaticResource RootBorderBgColor}" CornerRadius="7" Height="600" Width="1100">
+            <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="6*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="6*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
 
-            <Border Background="#fb7657" Grid.ColumnSpan="2">
-                <DockPanel Margin="20, 10">
-                    <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
+                <Border  Background="{StaticResource AppColor}" CornerRadius="5 5 0 0" Grid.ColumnSpan="2">
+                    <DockPanel Margin="20, 10">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource CloseDialogButton}" DockPanel.Dock="Right"/>
-                    <TextBlock Text="Movie Details" Foreground="#f4faf7" Margin="10"
+                        <TextBlock Text="Movie Details" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Border>
-
-            <Border Background="#fff" CornerRadius="7" Margin="20" Grid.Row="1" Grid.Column="0">
-                <Grid>
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="1.5*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBox Text="{Binding Movie.Name}" materialDesign:HintAssist.Hint="Name" IsReadOnly="{Binding IsEdit}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
-
-                    <TextBox Text="{Binding Movie.Year}" materialDesign:HintAssist.Hint="Year" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
-
-                    <ComboBox SelectedValue="{Binding Movie.Age, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Age" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}" Grid.Column="2">
-                        <ComboBox.ItemsSource>
-                            <x:Array Type="{x:Type sys:Int32}">
-                                <sys:Int32>3</sys:Int32>
-                                <sys:Int32>6</sys:Int32>
-                                <sys:Int32>7</sys:Int32>
-                                <sys:Int32>8</sys:Int32>
-                                <sys:Int32>9</sys:Int32>
-                                <sys:Int32>10</sys:Int32>
-                                <sys:Int32>11</sys:Int32>
-                                <sys:Int32>12</sys:Int32>
-                                <sys:Int32>13</sys:Int32>
-                                <sys:Int32>14</sys:Int32>
-                                <sys:Int32>15</sys:Int32>
-                                <sys:Int32>16</sys:Int32>
-                                <sys:Int32>17</sys:Int32>
-                                <sys:Int32>18</sys:Int32>
-                            </x:Array>
-                        </ComboBox.ItemsSource>
-                    </ComboBox>
-
-                    <TextBox Text="{Binding Movie.Description}" materialDesign:HintAssist.Hint="Description" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="3"/>
-
-                    <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="3">
-                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenTrailerDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                            <ProgressBar Value="{Binding Movie.TrailerProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
-                        </materialDesign:Card>
-                        <TextBox Text="{Binding Movie.TrailerUrl}" materialDesign:HintAssist.Hint="Trailer Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
                     </DockPanel>
+                </Border>
 
-                    <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="3">
-                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                            <ProgressBar Value="{Binding Movie.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
-                        </materialDesign:Card>
-                        <TextBox Text="{Binding Movie.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
-                    </DockPanel>
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20" Grid.Row="1" Grid.Column="0">
+                    <Grid>
 
-                    <DockPanel Margin="10" Grid.Row="4" Grid.ColumnSpan="3">
-                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenSearchImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                            <ProgressBar Value="{Binding Movie.SearchImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
-                        </materialDesign:Card>
-                        <TextBox Text="{Binding Movie.SearchImageUrl}" materialDesign:HintAssist.Hint="Search Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
-                    </DockPanel>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="1.5*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                </Grid>
-            </Border>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
 
-            <Border Margin="0 20 20 20" Grid.Row="1" Grid.Column="1">
-                <Grid>
+                        <TextBox Text="{Binding Movie.Name}" materialDesign:HintAssist.Hint="Name" IsReadOnly="{Binding IsEdit}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="80"/>
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
+                        <TextBox Text="{Binding Movie.Year}" materialDesign:HintAssist.Hint="Year" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
 
-                    <Border Background="#fff" CornerRadius="7" Margin="0 0 0 10" Grid.Row="0">
-                        <ComboBox ItemsSource="{Binding Producers}" SelectedItem="{Binding Movie.Producer, UpdateSourceTrigger=PropertyChanged}" Margin="10 3"
-                              materialDesign:HintAssist.Hint="Producer" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Id, StringFormat={}{0:00000}}"/>
-                                        <TextBlock Text=" - "/>
-                                        <TextBlock Text="{Binding Name}"/>
-                                        <TextBlock Text=" "/>
-                                        <TextBlock Text="{Binding Surname}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
+                        <ComboBox SelectedValue="{Binding Movie.Age, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Age" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}" Grid.Column="2">
+                            <ComboBox.ItemsSource>
+                                <x:Array Type="{x:Type sys:Int32}">
+                                    <sys:Int32>3</sys:Int32>
+                                    <sys:Int32>6</sys:Int32>
+                                    <sys:Int32>7</sys:Int32>
+                                    <sys:Int32>8</sys:Int32>
+                                    <sys:Int32>9</sys:Int32>
+                                    <sys:Int32>10</sys:Int32>
+                                    <sys:Int32>11</sys:Int32>
+                                    <sys:Int32>12</sys:Int32>
+                                    <sys:Int32>13</sys:Int32>
+                                    <sys:Int32>14</sys:Int32>
+                                    <sys:Int32>15</sys:Int32>
+                                    <sys:Int32>16</sys:Int32>
+                                    <sys:Int32>17</sys:Int32>
+                                    <sys:Int32>18</sys:Int32>
+                                </x:Array>
+                            </ComboBox.ItemsSource>
                         </ComboBox>
-                    </Border>
 
-                    <Border Background="#fff" CornerRadius="7" Grid.Row="1">
-                        <Grid>
+                        <TextBox Text="{Binding Movie.Description}" materialDesign:HintAssist.Hint="Description" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="3"/>
 
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="1.5*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
+                        <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="3">
+                            <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenTrailerDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                            <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                <ProgressBar Value="{Binding Movie.TrailerProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                            </materialDesign:Card>
+                            <TextBox Text="{Binding Movie.TrailerUrl}" materialDesign:HintAssist.Hint="Trailer Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                        </DockPanel>
 
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
+                        <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="3">
+                            <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                            <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                <ProgressBar Value="{Binding Movie.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                            </materialDesign:Card>
+                            <TextBox Text="{Binding Movie.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                        </DockPanel>
 
-                            <TextBox Text="{Binding Movie.VideoName}" materialDesign:HintAssist.Hint="Video Name" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
+                        <DockPanel Margin="10" Grid.Row="4" Grid.ColumnSpan="3">
+                            <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenSearchImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                            <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                <ProgressBar Value="{Binding Movie.SearchImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                            </materialDesign:Card>
+                            <TextBox Text="{Binding Movie.SearchImageUrl}" materialDesign:HintAssist.Hint="Search Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                        </DockPanel>
 
-                            <TextBox Text="{Binding Movie.VideoLength}" materialDesign:HintAssist.Hint="Video Length" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
+                    </Grid>
+                </Border>
 
-                            <TextBox Text="{Binding Movie.VideoDescription}" materialDesign:HintAssist.Hint="Video Description" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="2"/>
+                <Border Margin="0 20 20 20" Grid.Row="1" Grid.Column="1">
+                    <Grid>
 
-                            <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
-                                <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                                <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                                    <ProgressBar Value="{Binding Movie.VideoProgress}" Style="{StaticResource CircularProgressBar}"/>
-                                </materialDesign:Card>
-                                <TextBox Text="{Binding Movie.VideoUrl}" materialDesign:HintAssist.Hint="Video Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0"  Style="{StaticResource InputTextBox}"/>
-                            </DockPanel>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="80"/>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
 
-                            <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="2">
-                                <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                                <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                                    <ProgressBar Value="{Binding Movie.VideoImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
-                                </materialDesign:Card>
-                                <TextBox Text="{Binding Movie.VideoImageUrl}" materialDesign:HintAssist.Hint="Video Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
-                            </DockPanel>
+                        <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="0 0 0 10" Grid.Row="0">
+                            <ComboBox ItemsSource="{Binding Directors}" SelectedItem="{Binding Movie.Director, UpdateSourceTrigger=PropertyChanged}" Margin="10 3"
+                              materialDesign:HintAssist.Hint="Director" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Id, StringFormat={}{0:00000}}"/>
+                                            <TextBlock Text=" - "/>
+                                            <TextBlock Text="{Binding Name}"/>
+                                            <TextBlock Text=" "/>
+                                            <TextBlock Text="{Binding Surname}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Border>
 
-                        </Grid>
-                    </Border>
+                        <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Grid.Row="1">
+                            <Grid>
 
-                </Grid>
-            </Border>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="1.5*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2" Grid.ColumnSpan="2">
-                <UniformGrid Columns="2" VerticalAlignment="Center">
-                    <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SaveCancelButton}"/>
-                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
-                </UniformGrid>
-            </Border>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
 
-        </Grid>
+                                <TextBox Text="{Binding Movie.VideoName}" materialDesign:HintAssist.Hint="Video Name" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
+
+                                <TextBox Text="{Binding Movie.VideoLength}" materialDesign:HintAssist.Hint="Video Length" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
+
+                                <TextBox Text="{Binding Movie.VideoDescription}" materialDesign:HintAssist.Hint="Video Description" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+                                <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
+                                    <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                                    <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                        <ProgressBar Value="{Binding Movie.VideoProgress}" Style="{StaticResource CircularProgressBar}"/>
+                                    </materialDesign:Card>
+                                    <TextBox Text="{Binding Movie.VideoUrl}" materialDesign:HintAssist.Hint="Video Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0"  Style="{StaticResource InputTextBox}"/>
+                                </DockPanel>
+
+                                <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="2">
+                                    <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                                    <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                        <ProgressBar Value="{Binding Movie.VideoImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                                    </materialDesign:Card>
+                                    <TextBox Text="{Binding Movie.VideoImageUrl}" materialDesign:HintAssist.Hint="Video Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                                </DockPanel>
+
+                            </Grid>
+                        </Border>
+
+                    </Grid>
+                </Border>
+
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2" Grid.ColumnSpan="2">
+                    <UniformGrid Columns="2" VerticalAlignment="Center">
+                        <Button Content="Cancel" Command="{Binding CancelCommand}" IsEnabled="{Binding ProcessStarted}" Style="{StaticResource SaveCancelButton}"/>
+                        <Button Content="Save" Command="{Binding SaveCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource SaveCancelButton}"/>
+                    </UniformGrid>
+                </Border>
+
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddSoonViewModel}">
-        <Grid Background="#f7f6f4" Height="550" Width="800">
+        <Border Background="{StaticResource RootBorderBgColor}" CornerRadius="7" Height="550" Width="800">
+            <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="5*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Border Background="#fb7657">
-                <DockPanel Margin="20, 10">
-                    <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
+                <Border  Background="{StaticResource AppColor}" CornerRadius="5 5 0 0" >
+                    <DockPanel Margin="20, 10">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource CloseDialogButton}" DockPanel.Dock="Right"/>
-                    <TextBlock Text="Soon Details" Foreground="#f4faf7" Margin="10"
+                        <TextBlock Text="Soon Details" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Border>
-
-            <Border Background="#fff" CornerRadius="7" Margin="20" Grid.Row="1">
-                <Grid>
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="1.5*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBox Text="{Binding Soon.Name}" materialDesign:HintAssist.Hint="Name" IsReadOnly="{Binding IsEdit}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
-
-                    <DatePicker SelectedDate="{Binding Soon.OutDate}" materialDesign:HintAssist.Hint="OutDate" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputDatePicker}" Grid.Column="1"/>
-
-                    <TextBox Text="{Binding Soon.Description}" materialDesign:HintAssist.Hint="Description" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="2"/>
-
-                    <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
-                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenTrailerDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                            <ProgressBar Value="{Binding Soon.TrailerProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
-                        </materialDesign:Card>
-                        <TextBox Text="{Binding Soon.TrailerUrl}" materialDesign:HintAssist.Hint="Trailer Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
                     </DockPanel>
+                </Border>
 
-                    <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="2">
-                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenTrailerImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                            <ProgressBar Value="{Binding Soon.TrailerImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
-                        </materialDesign:Card>
-                        <TextBox Text="{Binding Soon.TrailerImageUrl}" materialDesign:HintAssist.Hint="Trailer Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
-                    </DockPanel>
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20" Grid.Row="1">
+                    <Grid>
 
-                </Grid>
-            </Border>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="1.5*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
-                <UniformGrid Columns="2" VerticalAlignment="Center">
-                    <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SaveCancelButton}"/>
-                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
-                </UniformGrid>
-            </Border>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
 
-        </Grid>
+                        <TextBox Text="{Binding Soon.Name}" materialDesign:HintAssist.Hint="Name" IsReadOnly="{Binding IsEdit}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
+
+                        <DatePicker SelectedDate="{Binding Soon.OutDate}" materialDesign:HintAssist.Hint="OutDate" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputDatePicker}" Grid.Column="1"/>
+
+                        <TextBox Text="{Binding Soon.Description}" materialDesign:HintAssist.Hint="Description" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+                        <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
+                            <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenTrailerDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                            <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                <ProgressBar Value="{Binding Soon.TrailerProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                            </materialDesign:Card>
+                            <TextBox Text="{Binding Soon.TrailerUrl}" materialDesign:HintAssist.Hint="Trailer Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                        </DockPanel>
+
+                        <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="2">
+                            <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenTrailerImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                            <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                <ProgressBar Value="{Binding Soon.TrailerImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                            </materialDesign:Card>
+                            <TextBox Text="{Binding Soon.TrailerImageUrl}" materialDesign:HintAssist.Hint="Trailer Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                        </DockPanel>
+
+                    </Grid>
+                </Border>
+
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
+                    <UniformGrid Columns="2" VerticalAlignment="Center">
+                        <Button Content="Cancel" Command="{Binding CancelCommand}" IsEnabled="{Binding ProcessStarted}" Style="{StaticResource SaveCancelButton}"/>
+                        <Button Content="Save" Command="{Binding SaveCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource SaveCancelButton}"/>
+                    </UniformGrid>
+                </Border>
+
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddSerialViewModel}">
-        <Grid Background="#f7f6f4" Height="600" Width="1100">
+        <Border Background="{StaticResource RootBorderBgColor}" CornerRadius="7" Height="600" Width="1100">
+            <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="6*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="6*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
 
-            <Border Background="#fb7657" Grid.ColumnSpan="2">
-                <DockPanel Margin="20, 10">
-                    <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
+                <Border  Background="{StaticResource AppColor}" CornerRadius="5 5 0 0" Grid.ColumnSpan="2">
+                    <DockPanel Margin="20, 10">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource CloseDialogButton}" DockPanel.Dock="Right"/>
-                    <TextBlock Text="Serial Details" Foreground="#f4faf7" Margin="10"
+                        <TextBlock Text="Serial Details" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Border>
-
-            <Border Background="#fff" CornerRadius="7" Margin="20" Grid.Row="1" Grid.Column="0">
-                <Grid>
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="1.5*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBox Text="{Binding Serial.Name}" materialDesign:HintAssist.Hint="Name" IsReadOnly="{Binding IsEdit}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
-
-                    <TextBox Text="{Binding Serial.Year}" materialDesign:HintAssist.Hint="Year" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
-
-                    <ComboBox SelectedValue="{Binding Serial.Age, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Age" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}" Grid.Column="2">
-                        <ComboBox.ItemsSource>
-                            <x:Array Type="{x:Type sys:Int32}">
-                                <sys:Int32>3</sys:Int32>
-                                <sys:Int32>6</sys:Int32>
-                                <sys:Int32>7</sys:Int32>
-                                <sys:Int32>8</sys:Int32>
-                                <sys:Int32>9</sys:Int32>
-                                <sys:Int32>10</sys:Int32>
-                                <sys:Int32>11</sys:Int32>
-                                <sys:Int32>12</sys:Int32>
-                                <sys:Int32>13</sys:Int32>
-                                <sys:Int32>14</sys:Int32>
-                                <sys:Int32>15</sys:Int32>
-                                <sys:Int32>16</sys:Int32>
-                                <sys:Int32>17</sys:Int32>
-                                <sys:Int32>18</sys:Int32>
-                            </x:Array>
-                        </ComboBox.ItemsSource>
-                    </ComboBox>
-
-                    <TextBox Text="{Binding Serial.Description}" materialDesign:HintAssist.Hint="Description" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="3"/>
-
-                    <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="3">
-                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenTrailerDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                            <ProgressBar Value="{Binding Serial.TrailerProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
-                        </materialDesign:Card>
-                        <TextBox Text="{Binding Serial.TrailerUrl}" materialDesign:HintAssist.Hint="Trailer Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
                     </DockPanel>
+                </Border>
 
-                    <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="3">
-                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                            <ProgressBar Value="{Binding Serial.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
-                        </materialDesign:Card>
-                        <TextBox Text="{Binding Serial.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
-                    </DockPanel>
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20" Grid.Row="1" Grid.Column="0">
+                    <Grid>
 
-                    <DockPanel Margin="10" Grid.Row="4" Grid.ColumnSpan="3">
-                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenSearchImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                            <ProgressBar Value="{Binding Serial.SearchImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
-                        </materialDesign:Card>
-                        <TextBox Text="{Binding Serial.SearchImageUrl}" materialDesign:HintAssist.Hint="Search Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
-                    </DockPanel>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="1.5*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                </Grid>
-            </Border>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
 
-            <Border Margin="0 20 20 20" Grid.Row="1" Grid.Column="1">
-                <Grid>
+                        <TextBox Text="{Binding Serial.Name}" materialDesign:HintAssist.Hint="Name" IsReadOnly="{Binding IsEdit}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="80"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
+                        <TextBox Text="{Binding Serial.Year}" materialDesign:HintAssist.Hint="Year" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
 
-                    <Border Background="#fff" CornerRadius="7" Margin="0 0 0 10" Grid.Row="0">
-                        <ComboBox ItemsSource="{Binding Producers}" SelectedItem="{Binding Serial.Producer, UpdateSourceTrigger=PropertyChanged}" Margin="10 3"
-                              materialDesign:HintAssist.Hint="Producer" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Id, StringFormat={}{0:00000}}"/>
-                                        <TextBlock Text=" - "/>
-                                        <TextBlock Text="{Binding Name}"/>
-                                        <TextBlock Text=" "/>
-                                        <TextBlock Text="{Binding Surname}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
+                        <ComboBox SelectedValue="{Binding Serial.Age, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Age" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}" Grid.Column="2">
+                            <ComboBox.ItemsSource>
+                                <x:Array Type="{x:Type sys:Int32}">
+                                    <sys:Int32>3</sys:Int32>
+                                    <sys:Int32>6</sys:Int32>
+                                    <sys:Int32>7</sys:Int32>
+                                    <sys:Int32>8</sys:Int32>
+                                    <sys:Int32>9</sys:Int32>
+                                    <sys:Int32>10</sys:Int32>
+                                    <sys:Int32>11</sys:Int32>
+                                    <sys:Int32>12</sys:Int32>
+                                    <sys:Int32>13</sys:Int32>
+                                    <sys:Int32>14</sys:Int32>
+                                    <sys:Int32>15</sys:Int32>
+                                    <sys:Int32>16</sys:Int32>
+                                    <sys:Int32>17</sys:Int32>
+                                    <sys:Int32>18</sys:Int32>
+                                </x:Array>
+                            </ComboBox.ItemsSource>
                         </ComboBox>
-                    </Border>
 
-                    <Border Background="#fff" CornerRadius="7" Grid.Row="1">
-                        <Grid>
+                        <TextBox Text="{Binding Serial.Description}" materialDesign:HintAssist.Hint="Description" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="3"/>
 
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="1.5*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
+                        <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="3">
+                            <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenTrailerDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                            <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                <ProgressBar Value="{Binding Serial.TrailerProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                            </materialDesign:Card>
+                            <TextBox Text="{Binding Serial.TrailerUrl}" materialDesign:HintAssist.Hint="Trailer Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                        </DockPanel>
 
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
+                        <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="3">
+                            <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                            <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                <ProgressBar Value="{Binding Serial.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                            </materialDesign:Card>
+                            <TextBox Text="{Binding Serial.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                        </DockPanel>
 
-                            <TextBox Text="{Binding Episode.Name}" materialDesign:HintAssist.Hint="Episode Name" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
+                        <DockPanel Margin="10" Grid.Row="4" Grid.ColumnSpan="3">
+                            <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenSearchImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                            <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                <ProgressBar Value="{Binding Serial.SearchImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                            </materialDesign:Card>
+                            <TextBox Text="{Binding Serial.SearchImageUrl}" materialDesign:HintAssist.Hint="Search Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                        </DockPanel>
 
-                            <TextBox Text="{Binding Episode.VideoLength}" materialDesign:HintAssist.Hint="Episode Video Length" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
+                    </Grid>
+                </Border>
 
-                            <TextBox Text="{Binding Episode.Description}" materialDesign:HintAssist.Hint="Episode Description" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="2"/>
+                <Border Margin="0 20 20 20" Grid.Row="1" Grid.Column="1">
+                    <Grid>
 
-                            <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
-                                <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                                <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                                    <ProgressBar Value="{Binding Episode.VideoProgress}" Style="{StaticResource CircularProgressBar}"/>
-                                </materialDesign:Card>
-                                <TextBox Text="{Binding Episode.VideoUrl}" materialDesign:HintAssist.Hint="Episode Video Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
-                            </DockPanel>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="80"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
 
-                            <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="2">
-                                <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                                <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                                    <ProgressBar Value="{Binding Episode.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
-                                </materialDesign:Card>
-                                <TextBox Text="{Binding Episode.ImageUrl}" materialDesign:HintAssist.Hint="Episode Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
-                            </DockPanel>
+                        <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="0 0 0 10" Grid.Row="0">
+                            <ComboBox ItemsSource="{Binding Directors}" SelectedItem="{Binding Serial.Director, UpdateSourceTrigger=PropertyChanged}" Margin="10 3"
+                              materialDesign:HintAssist.Hint="Director" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Id, StringFormat={}{0:00000}}"/>
+                                            <TextBlock Text=" - "/>
+                                            <TextBlock Text="{Binding Name}"/>
+                                            <TextBlock Text=" "/>
+                                            <TextBlock Text="{Binding Surname}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Border>
 
-                        </Grid>
-                    </Border>
+                        <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Grid.Row="1">
+                            <Grid>
 
-                </Grid>
-            </Border>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="1.5*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2" Grid.ColumnSpan="2">
-                <UniformGrid Columns="2" VerticalAlignment="Center">
-                    <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SaveCancelButton}"/>
-                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
-                </UniformGrid>
-            </Border>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
 
-        </Grid>
+                                <TextBox Text="{Binding Episode.Name}" materialDesign:HintAssist.Hint="Episode Name" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
+
+                                <TextBox Text="{Binding Episode.VideoLength}" materialDesign:HintAssist.Hint="Episode Video Length" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
+
+                                <TextBox Text="{Binding Episode.Description}" materialDesign:HintAssist.Hint="Episode Description" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+                                <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
+                                    <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                                    <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                        <ProgressBar Value="{Binding Episode.VideoProgress}" Style="{StaticResource CircularProgressBar}"/>
+                                    </materialDesign:Card>
+                                    <TextBox Text="{Binding Episode.VideoUrl}" materialDesign:HintAssist.Hint="Episode Video Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                                </DockPanel>
+
+                                <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="2">
+                                    <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                                    <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                        <ProgressBar Value="{Binding Episode.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                                    </materialDesign:Card>
+                                    <TextBox Text="{Binding Episode.ImageUrl}" materialDesign:HintAssist.Hint="Episode Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                                </DockPanel>
+
+                            </Grid>
+                        </Border>
+
+                    </Grid>
+                </Border>
+
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2" Grid.ColumnSpan="2">
+                    <UniformGrid Columns="2" VerticalAlignment="Center">
+                        <Button Content="Cancel" Command="{Binding CancelCommand}" IsEnabled="{Binding ProcessStarted}" Style="{StaticResource SaveCancelButton}"/>
+                        <Button Content="Save" Command="{Binding SaveCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource SaveCancelButton}"/>
+                    </UniformGrid>
+                </Border>
+
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddSeasonViewModel}">
-        <Grid Background="#f7f6f4" Height="400" Width="600">
+        <Border Background="{StaticResource RootBorderBgColor}" CornerRadius="7" Height="400" Width="600">
+            <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="3*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Border Background="#fb7657">
-                <DockPanel Margin="20, 10">
-                    <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
+                <Border  Background="{StaticResource AppColor}" CornerRadius="5 5 0 0" >
+                    <DockPanel Margin="20, 10">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource CloseDialogButton}" DockPanel.Dock="Right"/>
-                    <TextBlock Text="Season Details" Foreground="#f4faf7" Margin="10"
+                        <TextBlock Text="Season Details" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Border>
+                    </DockPanel>
+                </Border>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20" Grid.Row="1">
-                <Grid>
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20" Grid.Row="1">
+                    <Grid>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
 
-                    <ComboBox ItemsSource="{Binding Serials}" SelectedItem="{Binding Season.Serial, UpdateSourceTrigger=PropertyChanged}"
+                        <ComboBox ItemsSource="{Binding Serials}" SelectedItem="{Binding Season.Serial, UpdateSourceTrigger=PropertyChanged}"
                               materialDesign:HintAssist.Hint="Serial" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}" Grid.Row="0">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding SelectedSerialChangedCommand}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </ComboBox>
-
-                    <TextBox Text="{Binding Season.Number}" materialDesign:HintAssist.Hint="Number" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Row="1"/>
-
-                </Grid>
-            </Border>
-
-            <Border Background="#fff" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
-                <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
-            </Border>
-
-        </Grid>
-    </DataTemplate>
-    
-    <DataTemplate DataType="{x:Type viewModel:AddEpisodeViewModel}">
-        <Grid Background="#f7f6f4" Height="600" Width="900">
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="6*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-
-            <Border Background="#fb7657">
-                <DockPanel Margin="20, 10">
-                    <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
-                            Style="{StaticResource CloseDialogButton}" DockPanel.Dock="Right"/>
-                    <TextBlock Text="Episode Details" Foreground="#f4faf7" Margin="10"
-                           FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Border>
-
-            <Border Background="#fff" CornerRadius="7" Margin="20" Grid.Row="1">
-                <Grid>
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="1.5*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <UniformGrid Columns="2" Margin="10" Grid.ColumnSpan="3">
-                        <ComboBox ItemsSource="{Binding Serials}" SelectedItem="{Binding Episode.Serial, UpdateSourceTrigger=PropertyChanged}"
-                              materialDesign:HintAssist.Hint="Serial" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}" Margin="0 0 5 0">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Name}"/>
@@ -520,559 +464,642 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
-                        <ComboBox ItemsSource="{Binding Seasons}" SelectedItem="{Binding Episode.Season, UpdateSourceTrigger=PropertyChanged}"
+
+                        <TextBox Text="{Binding Season.Number}" materialDesign:HintAssist.Hint="Number" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Row="1"/>
+
+                    </Grid>
+                </Border>
+
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
+                    <Button Content="Save" Command="{Binding SaveCommand}"  IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource SaveCancelButton}"/>
+                </Border>
+
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModel:AddEpisodeViewModel}">
+        <Border Background="{StaticResource RootBorderBgColor}" CornerRadius="7" Height="600" Width="900">
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="6*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Border  Background="{StaticResource AppColor}" CornerRadius="5 5 0 0" >
+                    <DockPanel Margin="20, 10">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
+                            Style="{StaticResource CloseDialogButton}" DockPanel.Dock="Right"/>
+                        <TextBlock Text="Episode Details" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
+                           FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </Border>
+
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20" Grid.Row="1">
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="1.5*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <UniformGrid Columns="2" Margin="10" Grid.ColumnSpan="3">
+                            <ComboBox ItemsSource="{Binding Serials}" SelectedItem="{Binding Episode.Serial, UpdateSourceTrigger=PropertyChanged}"
+                              materialDesign:HintAssist.Hint="Serial" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}" Margin="0 0 5 0">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="SelectionChanged">
+                                        <i:InvokeCommandAction Command="{Binding SelectedSerialChangedCommand}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
+                            <ComboBox ItemsSource="{Binding Seasons}" SelectedItem="{Binding Episode.Season, UpdateSourceTrigger=PropertyChanged}"
                               materialDesign:HintAssist.Hint="Season" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}" Margin="5 0 0 0">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Number}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Number}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
 
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectionChanged">
-                                    <i:InvokeCommandAction Command="{Binding SelectedSeasonChangedCommand}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </ComboBox>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="SelectionChanged">
+                                        <i:InvokeCommandAction Command="{Binding SelectedSeasonChangedCommand}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
+                        </UniformGrid>
+
+                        <TextBox Text="{Binding Episode.Number}" materialDesign:HintAssist.Hint="Number" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Row="1" Grid.Column="0"/>
+
+                        <TextBox Text="{Binding Episode.Name}" materialDesign:HintAssist.Hint="Name" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Row="1" Grid.Column="1"/>
+
+                        <TextBox Text="{Binding Episode.VideoLength}" materialDesign:HintAssist.Hint="Video Length" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Row="1" Grid.Column="2"/>
+
+                        <TextBox Text="{Binding Episode.Description}" materialDesign:HintAssist.Hint="Description" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="2" Grid.ColumnSpan="3"/>
+
+                        <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="3">
+                            <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                            <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                <ProgressBar Value="{Binding Episode.VideoProgress}" Style="{StaticResource CircularProgressBar}"/>
+                            </materialDesign:Card>
+                            <TextBox Text="{Binding Episode.VideoUrl}" materialDesign:HintAssist.Hint="Video Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                        </DockPanel>
+
+                        <DockPanel Margin="10" Grid.Row="4" Grid.ColumnSpan="3">
+                            <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                            <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                <ProgressBar Value="{Binding Episode.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                            </materialDesign:Card>
+                            <TextBox Text="{Binding Episode.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                        </DockPanel>
+
+                    </Grid>
+                </Border>
+
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
+                    <UniformGrid Columns="2" VerticalAlignment="Center">
+                        <Button Content="Cancel" Command="{Binding CancelCommand}" IsEnabled="{Binding ProcessStarted}" Style="{StaticResource SaveCancelButton}"/>
+                        <Button Content="Save" Command="{Binding SaveCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource SaveCancelButton}"/>
                     </UniformGrid>
+                </Border>
 
-                    <TextBox Text="{Binding Episode.Number}" materialDesign:HintAssist.Hint="Number" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Row="1" Grid.Column="0"/>
-
-                    <TextBox Text="{Binding Episode.Name}" materialDesign:HintAssist.Hint="Name" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Row="1" Grid.Column="1"/>
-
-                    <TextBox Text="{Binding Episode.VideoLength}" materialDesign:HintAssist.Hint="Video Length" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Row="1" Grid.Column="2"/>
-
-                    <TextBox Text="{Binding Episode.Description}" materialDesign:HintAssist.Hint="Description" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="2" Grid.ColumnSpan="3"/>
-
-                    <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="3">
-                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                            <ProgressBar Value="{Binding Episode.VideoProgress}" Style="{StaticResource CircularProgressBar}"/>
-                        </materialDesign:Card>
-                        <TextBox Text="{Binding Episode.VideoUrl}" materialDesign:HintAssist.Hint="Video Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
-                    </DockPanel>
-
-                    <DockPanel Margin="10" Grid.Row="4" Grid.ColumnSpan="3">
-                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                            <ProgressBar Value="{Binding Episode.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
-                        </materialDesign:Card>
-                        <TextBox Text="{Binding Episode.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" IsReadOnly="True" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
-                    </DockPanel>
-
-                </Grid>
-            </Border>
-
-            <Border Background="#fff" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
-                <UniformGrid Columns="2" VerticalAlignment="Center">
-                    <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SaveCancelButton}"/>
-                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
-                </UniformGrid>
-            </Border>
-
-        </Grid>
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:EditEpisodeViewModel}">
-        <Grid Background="#f7f6f4" Height="600" Width="900">
+        <Border Background="{StaticResource RootBorderBgColor}" Height="600" Width="900">
+            <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="6*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="6*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Border Background="#fb7657">
-                <DockPanel Margin="20, 10">
-                    <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
+                <Border  Background="{StaticResource AppColor}" CornerRadius="5 5 0 0" >
+                    <DockPanel Margin="20, 10">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource CloseDialogButton}" DockPanel.Dock="Right"/>
-                    <TextBlock Text="Episode Details" Foreground="#f4faf7" Margin="10"
+                        <TextBlock Text="Episode Details" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Border>
+                    </DockPanel>
+                </Border>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20" Grid.Row="1">
-                <Grid>
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20" Grid.Row="1">
+                    <Grid>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="1.5*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="1.5*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
 
-                    <UniformGrid Columns="2" Grid.ColumnSpan="3">
-                        <TextBox Text="{Binding Episode.Serial.Name}" materialDesign:HintAssist.Hint="Serial" Height="50" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}"/>
-                        <TextBox Text="{Binding Episode.Season.Number}" materialDesign:HintAssist.Hint="Season" Height="50" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}"/>
+                        <UniformGrid Columns="2" Grid.ColumnSpan="3">
+                            <TextBox Text="{Binding Episode.Serial.Name}" materialDesign:HintAssist.Hint="Serial" Height="50" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}"/>
+                            <TextBox Text="{Binding Episode.Season.Number}" materialDesign:HintAssist.Hint="Season" Height="50" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}"/>
+                        </UniformGrid>
+
+                        <TextBox Text="{Binding Episode.Number}" materialDesign:HintAssist.Hint="Number" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Row="1" Grid.Column="0"/>
+
+                        <TextBox Text="{Binding Episode.Name}" materialDesign:HintAssist.Hint="Name" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Row="1" Grid.Column="1"/>
+
+                        <TextBox Text="{Binding Episode.VideoLength}" materialDesign:HintAssist.Hint="Video Length" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Row="1" Grid.Column="2"/>
+
+                        <TextBox Text="{Binding Episode.Description}" materialDesign:HintAssist.Hint="Description" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="2" Grid.ColumnSpan="3"/>
+
+                        <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="3">
+                            <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                            <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                <ProgressBar Value="{Binding Episode.VideoProgress}" Style="{StaticResource CircularProgressBar}"/>
+                            </materialDesign:Card>
+                            <TextBox Text="{Binding Episode.VideoUrl}" materialDesign:HintAssist.Hint="Video Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                        </DockPanel>
+
+                        <DockPanel Margin="10" Grid.Row="4" Grid.ColumnSpan="3">
+                            <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                            <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                <ProgressBar Value="{Binding Episode.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                            </materialDesign:Card>
+                            <TextBox Text="{Binding Episode.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                        </DockPanel>
+
+                    </Grid>
+                </Border>
+
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
+                    <UniformGrid Columns="2" VerticalAlignment="Center">
+                        <Button Content="Cancel" Command="{Binding CancelCommand}" IsEnabled="{Binding ProcessStarted}" Style="{StaticResource SaveCancelButton}"/>
+                        <Button Content="Save" Command="{Binding SaveCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource SaveCancelButton}"/>
                     </UniformGrid>
-
-                    <TextBox Text="{Binding Episode.Number}" materialDesign:HintAssist.Hint="Number" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Row="1" Grid.Column="0"/>
-
-                    <TextBox Text="{Binding Episode.Name}" materialDesign:HintAssist.Hint="Name" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Row="1" Grid.Column="1"/>
-
-                    <TextBox Text="{Binding Episode.VideoLength}" materialDesign:HintAssist.Hint="Video Length" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Row="1" Grid.Column="2"/>
-
-                    <TextBox Text="{Binding Episode.Description}" materialDesign:HintAssist.Hint="Description" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="2" Grid.ColumnSpan="3"/>
-
-                    <DockPanel Margin="10" Grid.Row="3" Grid.ColumnSpan="3">
-                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                            <ProgressBar Value="{Binding Episode.VideoProgress}" Style="{StaticResource CircularProgressBar}"/>
-                        </materialDesign:Card>
-                        <TextBox Text="{Binding Episode.VideoUrl}" materialDesign:HintAssist.Hint="Video Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
-                    </DockPanel>
-
-                    <DockPanel Margin="10" Grid.Row="4" Grid.ColumnSpan="3">
-                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenVideoImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                            <ProgressBar Value="{Binding Episode.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
-                        </materialDesign:Card>
-                        <TextBox Text="{Binding Episode.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
-                    </DockPanel>
-
-                </Grid>
-            </Border>
-
-            <Border Background="#fff" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
-                <UniformGrid Columns="2" VerticalAlignment="Center">
-                    <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SaveCancelButton}"/>
-                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
-                </UniformGrid>
-            </Border>
-
-        </Grid>
+                </Border>
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddActorViewModel}">
-        <Grid Background="#f7f6f4" Height="500" Width="800">
+        <Border Background="{StaticResource RootBorderBgColor}" CornerRadius="7" Height="500" Width="800">
+            <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="4*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Border Background="#fb7657">
-                <DockPanel Margin="20, 10">
-                    <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
+                <Border  Background="{StaticResource AppColor}" CornerRadius="5 5 0 0" >
+                    <DockPanel Margin="20, 10">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource CloseDialogButton}" DockPanel.Dock="Right"/>
-                    <TextBlock Text="Actor Details" Foreground="#f4faf7" Margin="10"
+                        <TextBlock Text="Actor Details" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Border>
-
-            <Border Background="#fff" CornerRadius="7" Margin="20" Grid.Row="1">
-                <Grid>
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="1.5*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBox Text="{Binding Actor.Name}" materialDesign:HintAssist.Hint="Name" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
-
-                    <TextBox Text="{Binding Actor.Surname}" materialDesign:HintAssist.Hint="Surname" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
-
-                    <TextBox Text="{Binding Actor.About}" materialDesign:HintAssist.Hint="About" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="2"/>
-
-                    <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
-                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                            <ProgressBar Value="{Binding Actor.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
-                        </materialDesign:Card>
-                        <TextBox Text="{Binding Actor.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
                     </DockPanel>
+                </Border>
 
-                </Grid>
-            </Border>
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20" Grid.Row="1">
+                    <Grid>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
-                <UniformGrid Columns="2" VerticalAlignment="Center">
-                    <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SaveCancelButton}"/>
-                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
-                </UniformGrid>
-            </Border>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="1.5*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-        </Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Text="{Binding Actor.Name}" materialDesign:HintAssist.Hint="Name" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
+
+                        <TextBox Text="{Binding Actor.Surname}" materialDesign:HintAssist.Hint="Surname" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
+
+                        <TextBox Text="{Binding Actor.About}" materialDesign:HintAssist.Hint="About" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+                        <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
+                            <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                            <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                <ProgressBar Value="{Binding Actor.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                            </materialDesign:Card>
+                            <TextBox Text="{Binding Actor.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                        </DockPanel>
+
+                    </Grid>
+                </Border>
+
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
+                    <UniformGrid Columns="2" VerticalAlignment="Center">
+                        <Button Content="Cancel" Command="{Binding CancelCommand}" IsEnabled="{Binding ProcessStarted}" Style="{StaticResource SaveCancelButton}"/>
+                        <Button Content="Save" Command="{Binding SaveCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource SaveCancelButton}"/>
+                    </UniformGrid>
+                </Border>
+
+            </Grid>
+        </Border>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type viewModel:AddProducerViewModel}">
-        <Grid Background="#f7f6f4" Height="500" Width="800">
+    <DataTemplate DataType="{x:Type viewModel:AddDirectorViewModel}">
+        <Border Background="{StaticResource RootBorderBgColor}" CornerRadius="7" Height="500" Width="800">
+            <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="4*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Border Background="#fb7657">
-                <DockPanel Margin="20, 10">
-                    <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
+                <Border  Background="{StaticResource AppColor}" CornerRadius="5 5 0 0" >
+                    <DockPanel Margin="20, 10">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource CloseDialogButton}" DockPanel.Dock="Right"/>
-                    <TextBlock Text="Producer Details" Foreground="#f4faf7" Margin="10"
+                        <TextBlock Text="Director Details" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Border>
-
-            <Border Background="#fff" CornerRadius="7" Margin="20" Grid.Row="1">
-                <Grid>
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="1.5*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBox Text="{Binding Producer.Name}" materialDesign:HintAssist.Hint="Name" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
-
-                    <TextBox Text="{Binding Producer.Surname}" materialDesign:HintAssist.Hint="Surname" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
-
-                    <TextBox Text="{Binding Producer.About}" materialDesign:HintAssist.Hint="About" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="2"/>
-
-                    <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
-                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                            <ProgressBar Value="{Binding Producer.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
-                        </materialDesign:Card>
-                        <TextBox Text="{Binding Producer.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
                     </DockPanel>
+                </Border>
 
-                </Grid>
-            </Border>
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20" Grid.Row="1">
+                    <Grid>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
-                <UniformGrid Columns="2" VerticalAlignment="Center">
-                    <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SaveCancelButton}"/>
-                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
-                </UniformGrid>
-            </Border>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="1.5*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-        </Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Text="{Binding Director.Name}" materialDesign:HintAssist.Hint="Name" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="0"/>
+
+                        <TextBox Text="{Binding Director.Surname}" materialDesign:HintAssist.Hint="Surname" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}" Grid.Column="1"/>
+
+                        <TextBox Text="{Binding Director.About}" materialDesign:HintAssist.Hint="About" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextArea}" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+                        <DockPanel Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
+                            <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                            <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                <ProgressBar Value="{Binding Director.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                            </materialDesign:Card>
+                            <TextBox Text="{Binding Director.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                        </DockPanel>
+
+                    </Grid>
+                </Border>
+
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
+                    <UniformGrid Columns="2" VerticalAlignment="Center">
+                        <Button Content="Cancel" Command="{Binding CancelCommand}" IsEnabled="{Binding ProcessStarted}" Style="{StaticResource SaveCancelButton}"/>
+                        <Button Content="Save" Command="{Binding SaveCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource SaveCancelButton}"/>
+                    </UniformGrid>
+                </Border>
+
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddGenreViewModel}">
-        <Grid Background="#f7f6f4" Height="400" Width="600">
+        <Border Background="{StaticResource RootBorderBgColor}" CornerRadius="7" Height="400" Width="600">
+            <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="3*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Border Background="#fb7657">
-                <DockPanel Margin="20, 10">
-                    <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
+                <Border  Background="{StaticResource AppColor}" CornerRadius="5 5 0 0" >
+                    <DockPanel Margin="20, 10">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource CloseDialogButton}" DockPanel.Dock="Right"/>
-                    <TextBlock Text="Genre Details" Foreground="#f4faf7" Margin="10"
+                        <TextBlock Text="Genre Details" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Border>
-
-            <Border Background="#fff" CornerRadius="7" Margin="20" Grid.Row="1">
-                <Grid>
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBox Text="{Binding Genre.Name}" materialDesign:HintAssist.Hint="Name" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}"/>
-
-                    <DockPanel Margin="10" Grid.Row="1">
-                        <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
-                        <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
-                            <ProgressBar Value="{Binding Genre.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
-                        </materialDesign:Card>
-                        <TextBox Text="{Binding Genre.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
                     </DockPanel>
+                </Border>
 
-                </Grid>
-            </Border>
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20" Grid.Row="1">
+                    <Grid>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
-                <UniformGrid Columns="2" VerticalAlignment="Center">
-                    <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SaveCancelButton}"/>
-                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
-                </UniformGrid>
-            </Border>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-        </Grid>
+                        <TextBox Text="{Binding Genre.Name}" materialDesign:HintAssist.Hint="Name" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputTextBox}"/>
+
+                        <DockPanel Margin="10" Grid.Row="1">
+                            <Button Content="{materialDesign:PackIcon Kind=Paperclip}" Command="{Binding OpenImageDialogCommand}" Style="{StaticResource FileDialogButton}" DockPanel.Dock="Right"/>
+                            <materialDesign:Card Style="{StaticResource CircularProgressBarCard}" DockPanel.Dock="Right">
+                                <ProgressBar Value="{Binding Genre.ImageProgress.Progress}" Style="{StaticResource CircularProgressBar}"/>
+                            </materialDesign:Card>
+                            <TextBox Text="{Binding Genre.ImageUrl}" materialDesign:HintAssist.Hint="Image Path" IsReadOnly="True" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Margin="0 0 10 0" Style="{StaticResource InputTextBox}"/>
+                        </DockPanel>
+
+                    </Grid>
+                </Border>
+
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
+                    <UniformGrid Columns="2" VerticalAlignment="Center">
+                        <Button Content="Cancel" Command="{Binding CancelCommand}" IsEnabled="{Binding ProcessStarted}" Style="{StaticResource SaveCancelButton}"/>
+                        <Button Content="Save" Command="{Binding SaveCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource SaveCancelButton}"/>
+                    </UniformGrid>
+                </Border>
+
+            </Grid>
+        </Border>
     </DataTemplate>
 
 
     <DataTemplate DataType="{x:Type viewModel:AddMovieGenreViewModel}">
-        <Grid Background="#f7f6f4" Height="400" Width="600">
+        <Border Background="{StaticResource RootBorderBgColor}" CornerRadius="7" Height="400" Width="600">
+            <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="3*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Border Background="#fb7657">
-                <DockPanel Margin="20, 10">
-                    <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
+                <Border  Background="{StaticResource AppColor}" CornerRadius="5 5 0 0" >
+                    <DockPanel Margin="20, 10">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
                                 Style="{StaticResource CloseDialogButton}" DockPanel.Dock="Right"/>
-                    <TextBlock Text="Movie Genre Details" Foreground="#f4faf7" Margin="10"
+                        <TextBlock Text="Movie Genre Details" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                                FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Border>
+                    </DockPanel>
+                </Border>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20" Grid.Row="1">
-                <UniformGrid Rows="2">
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20" Grid.Row="1">
+                    <UniformGrid Rows="2">
 
-                    <ComboBox ItemsSource="{Binding Genres}" SelectedItem="{Binding MovieGenre.Genre, UpdateSourceTrigger=PropertyChanged}"
+                        <ComboBox ItemsSource="{Binding Genres}" SelectedItem="{Binding MovieGenre.Genre, UpdateSourceTrigger=PropertyChanged}"
                               materialDesign:HintAssist.Hint="Genre" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                    <ComboBox ItemsSource="{Binding Movies}" SelectedItem="{Binding MovieGenre.Movie, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
+                        <ComboBox ItemsSource="{Binding Movies}" SelectedItem="{Binding MovieGenre.Movie, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
                               materialDesign:HintAssist.Hint="Movie" Style="{StaticResource InputComboBox}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                </UniformGrid>
-            </Border>
+                    </UniformGrid>
+                </Border>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
-                <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
-            </Border>
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
+                    <Button Content="Save" Command="{Binding SaveCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource SaveCancelButton}"/>
+                </Border>
 
-        </Grid>
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddMovieActorViewModel}">
-        <Grid Background="#f7f6f4" Height="400" Width="600">
+        <Border Background="{StaticResource RootBorderBgColor}" CornerRadius="7" Height="400" Width="600">
+            <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="3*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Border Background="#fb7657">
-                <DockPanel Margin="20, 10">
-                    <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
+                <Border  Background="{StaticResource AppColor}" CornerRadius="5 5 0 0" >
+                    <DockPanel Margin="20, 10">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource CloseDialogButton}" DockPanel.Dock="Right"/>
-                    <TextBlock Text="Movie Actor Details" Foreground="#f4faf7" Margin="10"
+                        <TextBlock Text="Movie Actor Details" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Border>
+                    </DockPanel>
+                </Border>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20" Grid.Row="1">
-                <UniformGrid Rows="2">
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20" Grid.Row="1">
+                    <UniformGrid Rows="2">
 
-                    <ComboBox ItemsSource="{Binding Actors}" SelectedItem="{Binding MovieActor.Actor, UpdateSourceTrigger=PropertyChanged}"
+                        <ComboBox ItemsSource="{Binding Actors}" SelectedItem="{Binding MovieActor.Actor, UpdateSourceTrigger=PropertyChanged}"
                               materialDesign:HintAssist.Hint="Actor" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Id, StringFormat={}{0:00000}}"/>
-                                    <TextBlock Text=" - "/>
-                                    <TextBlock Text="{Binding Name}"/>
-                                    <TextBlock Text=" "/>
-                                    <TextBlock Text="{Binding Surname}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Id, StringFormat={}{0:00000}}"/>
+                                        <TextBlock Text=" - "/>
+                                        <TextBlock Text="{Binding Name}"/>
+                                        <TextBlock Text=" "/>
+                                        <TextBlock Text="{Binding Surname}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                    <ComboBox ItemsSource="{Binding Movies}" SelectedItem="{Binding MovieActor.Movie, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
+                        <ComboBox ItemsSource="{Binding Movies}" SelectedItem="{Binding MovieActor.Movie, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
                               materialDesign:HintAssist.Hint="Movie" Style="{StaticResource InputComboBox}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                </UniformGrid>
-            </Border>
+                    </UniformGrid>
+                </Border>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
-                <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
-            </Border>
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
+                    <Button Content="Save" Command="{Binding SaveCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource SaveCancelButton}"/>
+                </Border>
 
-        </Grid>
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddSerialGenreViewModel}">
-        <Grid Background="#f7f6f4" Height="400" Width="600">
+        <Border Background="{StaticResource RootBorderBgColor}" CornerRadius="7" Height="400" Width="600">
+            <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="3*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Border Background="#fb7657">
-                <DockPanel Margin="20, 10">
-                    <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
+                <Border  Background="{StaticResource AppColor}" CornerRadius="5 5 0 0" >
+                    <DockPanel Margin="20, 10">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource CloseDialogButton}" DockPanel.Dock="Right"/>
-                    <TextBlock Text="Serial Genre Details" Foreground="#f4faf7" Margin="10"
+                        <TextBlock Text="Serial Genre Details" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Border>
+                    </DockPanel>
+                </Border>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20" Grid.Row="1">
-                <UniformGrid Rows="2">
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20" Grid.Row="1">
+                    <UniformGrid Rows="2">
 
-                    <ComboBox ItemsSource="{Binding Genres}" SelectedItem="{Binding SerialGenre.Genre, UpdateSourceTrigger=PropertyChanged}"
+                        <ComboBox ItemsSource="{Binding Genres}" SelectedItem="{Binding SerialGenre.Genre, UpdateSourceTrigger=PropertyChanged}"
                               materialDesign:HintAssist.Hint="Genre" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                    <ComboBox ItemsSource="{Binding Serials}" SelectedItem="{Binding SerialGenre.Serial, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
+                        <ComboBox ItemsSource="{Binding Serials}" SelectedItem="{Binding SerialGenre.Serial, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
                               materialDesign:HintAssist.Hint="Serial" Style="{StaticResource InputComboBox}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                </UniformGrid>
-            </Border>
+                    </UniformGrid>
+                </Border>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
-                <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
-            </Border>
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
+                    <Button Content="Save" Command="{Binding SaveCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource SaveCancelButton}"/>
+                </Border>
 
-        </Grid>
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddSerialActorViewModel}">
-        <Grid Background="#f7f6f4" Height="400" Width="600">
+        <Border Background="{StaticResource RootBorderBgColor}" CornerRadius="7" Height="400" Width="600">
+            <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="3*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Border Background="#fb7657">
-                <DockPanel Margin="20, 10">
-                    <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
+                <Border  Background="{StaticResource AppColor}" CornerRadius="5 5 0 0" >
+                    <DockPanel Margin="20, 10">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource CloseDialogButton}" DockPanel.Dock="Right"/>
-                    <TextBlock Text="Serial Actor Details" Foreground="#f4faf7" Margin="10"
+                        <TextBlock Text="Serial Actor Details" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Border>
+                    </DockPanel>
+                </Border>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20" Grid.Row="1">
-                <UniformGrid Rows="2">
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20" Grid.Row="1">
+                    <UniformGrid Rows="2">
 
-                    <ComboBox ItemsSource="{Binding Actors}" SelectedItem="{Binding SerialActor.Actor, UpdateSourceTrigger=PropertyChanged}"
+                        <ComboBox ItemsSource="{Binding Actors}" SelectedItem="{Binding SerialActor.Actor, UpdateSourceTrigger=PropertyChanged}"
                               materialDesign:HintAssist.Hint="Actor" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Id, StringFormat={}{0:00000}}"/>
-                                    <TextBlock Text=" - "/>
-                                    <TextBlock Text="{Binding Name}"/>
-                                    <TextBlock Text=" "/>
-                                    <TextBlock Text="{Binding Surname}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Id, StringFormat={}{0:00000}}"/>
+                                        <TextBlock Text=" - "/>
+                                        <TextBlock Text="{Binding Name}"/>
+                                        <TextBlock Text=" "/>
+                                        <TextBlock Text="{Binding Surname}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                    <ComboBox ItemsSource="{Binding Serials}" SelectedItem="{Binding SerialActor.Serial, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
+                        <ComboBox ItemsSource="{Binding Serials}" SelectedItem="{Binding SerialActor.Serial, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
                               materialDesign:HintAssist.Hint="Serial" Style="{StaticResource InputComboBox}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                </UniformGrid>
-            </Border>
+                    </UniformGrid>
+                </Border>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
-                <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
-            </Border>
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
+                    <Button Content="Save" Command="{Binding SaveCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource SaveCancelButton}"/>
+                </Border>
 
-        </Grid>
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:AddSoonGenreViewModel}">
-        <Grid Background="#f7f6f4" Height="400" Width="600">
+        <Border Background="{StaticResource RootBorderBgColor}" CornerRadius="7" Height="400" Width="600">
+            <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="3*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Border Background="#fb7657">
-                <DockPanel Margin="20, 10">
-                    <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
+                <Border  Background="{StaticResource AppColor}" CornerRadius="5 5 0 0" >
+                    <DockPanel Margin="20, 10">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource CloseDialogButton}" DockPanel.Dock="Right"/>
-                    <TextBlock Text="Soon Genre Details" Foreground="#f4faf7" Margin="10"
+                        <TextBlock Text="Soon Genre Details" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                </DockPanel>
-            </Border>
+                    </DockPanel>
+                </Border>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20" Grid.Row="1">
-                <UniformGrid Rows="2">
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20" Grid.Row="1">
+                    <UniformGrid Rows="2">
 
-                    <ComboBox ItemsSource="{Binding Genres}" SelectedItem="{Binding SoonGenre.Genre, UpdateSourceTrigger=PropertyChanged}"
+                        <ComboBox ItemsSource="{Binding Genres}" SelectedItem="{Binding SoonGenre.Genre, UpdateSourceTrigger=PropertyChanged}"
                               materialDesign:HintAssist.Hint="Genre" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource InputComboBox}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                    <ComboBox ItemsSource="{Binding Soons}" SelectedItem="{Binding SoonGenre.Soon, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
+                        <ComboBox ItemsSource="{Binding Soons}" SelectedItem="{Binding SoonGenre.Soon, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
                               materialDesign:HintAssist.Hint="Soon" Style="{StaticResource InputComboBox}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                </UniformGrid>
-            </Border>
+                    </UniformGrid>
+                </Border>
 
-            <Border Background="#fff" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
-                <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SaveCancelButton}"/>
-            </Border>
+                <Border Background="{StaticResource ForegroundAppColor}" CornerRadius="7" Margin="20 0 20 20" Grid.Row="2">
+                    <Button Content="Save" Command="{Binding SaveCommand}" IsEnabled="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}" Style="{StaticResource SaveCancelButton}"/>
+                </Border>
 
-        </Grid>
+            </Grid>
+        </Border>
     </DataTemplate>
 
 </ResourceDictionary>

@@ -58,8 +58,8 @@ public partial class App : System.Windows.Application
         Services.AddSingleton<ActorViewModel>();
         Services.AddTransient<AddActorViewModel>();
 
-        Services.AddSingleton<ProducerViewModel>();
-        Services.AddTransient<AddProducerViewModel>();
+        Services.AddSingleton<DirectorViewModel>();
+        Services.AddTransient<AddDirectorViewModel>();
 
         Services.AddSingleton<GenreViewModel>();
         Services.AddTransient<AddGenreViewModel>();
@@ -74,32 +74,32 @@ public partial class App : System.Windows.Application
 
     private void Mapster()
     {
-        TypeAdapterConfig<UploadMovieModel, Movie>.NewConfig()
-            .Map(dest => dest.ProducerId, src => src.Producer.Id)
-            .Ignore(dest => dest.Producer);
+        TypeAdapterConfig<MovieViewModelContent, Movie>.NewConfig()
+            .Map(dest => dest.DirectorId, src => src.Director.Id)
+            .Ignore(dest => dest.Director);
 
-        TypeAdapterConfig<Movie, UploadMovieModel>.NewConfig()
-            .Ignore(dest => dest.Producer);
+        TypeAdapterConfig<Movie, MovieViewModelContent>.NewConfig()
+            .Ignore(dest => dest.Director);
 
-        TypeAdapterConfig<UploadSerialModel, Serial>.NewConfig()
-            .Map(dest => dest.ProducerId, src => src.Producer.Id)
-            .Ignore(dest => dest.Producer);
+        TypeAdapterConfig<SerialViewModelContent, Serial>.NewConfig()
+            .Map(dest => dest.DirectorId, src => src.Director.Id)
+            .Ignore(dest => dest.Director);
 
-        TypeAdapterConfig<Serial, UploadSerialModel>.NewConfig()
-            .Ignore(dest => dest.Producer);
+        TypeAdapterConfig<Serial, SerialViewModelContent>.NewConfig()
+            .Ignore(dest => dest.Director);
 
-        TypeAdapterConfig<UploadSeasonModel, Season>.NewConfig()
+        TypeAdapterConfig<SeasonViewModelContent, Season>.NewConfig()
             .Map(dest => dest.SerialName, src => src.Serial.Name)
             .Ignore(dest => dest.Serial);
 
-        TypeAdapterConfig<Season, UploadSeasonModel>.NewConfig()
+        TypeAdapterConfig<Season, SeasonViewModelContent>.NewConfig()
             .Ignore(dest => dest.Serial);
 
-        TypeAdapterConfig<UploadEpisodeModel, Episode>.NewConfig()
+        TypeAdapterConfig<EpisodeViewModelContent, Episode>.NewConfig()
             .Map(dest => dest.SeasonId, src => src.Season.Id)
             .Ignore(dest => dest.Season);
 
-        TypeAdapterConfig<Episode, UploadEpisodeModel>.NewConfig()
+        TypeAdapterConfig<Episode, EpisodeViewModelContent>.NewConfig()
             .Ignore(dest => dest.Serial)
             .Ignore(dest => dest.Season);
     }

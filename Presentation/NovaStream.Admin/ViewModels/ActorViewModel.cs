@@ -19,12 +19,12 @@ public class ActorViewModel : ViewModelBase
         set { _actors = value; RaisePropertyChanged(); }
     }
 
-    public RelayCommand SearchCommand { get; set; }
-    public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand<string> SearchCommand { get; set; }
+    public RelayCommand<Actor> DeleteCommand { get; set; }
     public RelayCommand RefreshCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
-    public RelayCommand OpenEditDialogHostCommand { get; set; }
+    public RelayCommand<Actor> OpenEditDialogHostCommand { get; set; }
 
 
     public ActorViewModel(AppDbContext dbContext, IStorageManager storageManager)
@@ -33,6 +33,14 @@ public class ActorViewModel : ViewModelBase
         _storageManager = storageManager;
 
         Initialize();
+         
+        SearchCommand = new RelayCommand<string>(pattern => Search(pattern));
+        DeleteCommand = new RelayCommand<Actor>(actor => Delete(actor));
+        RefreshCommand = new RelayCommand(() => Initialize());
+
+        OpenAddDialogHostCommand = new RelayCommand(() => OpenAddDialogHost());
+        OpenEditDialogHostCommand = new RelayCommand<Actor>(actor => OpenEditDialogHost(actor));
+
     }
 
 
@@ -40,72 +48,100 @@ public class ActorViewModel : ViewModelBase
     {
         await Task.CompletedTask;
 
-        Actors = new ObservableCollection<Actor>(_dbContext.Actors);
-        ActorCount = Actors.Count;
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
-        Actors.CollectionChanged += ActorCountChanged;
+        _ = MessageBoxService.Show($"Loading actors...", MessageBoxType.Progress);
 
-        SearchCommand = new RelayCommand(sender => Search(sender));
-        DeleteCommand = new RelayCommand(sender => Delete(sender));
-        RefreshCommand = new RelayCommand(_ => Initialize());
+        await Task.Delay(1000);
 
-        OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
-        OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
+        try
+        {
+            Actors = new ObservableCollection<Actor>(_dbContext.Actors);
+            ActorCount = Actors.Count;
+
+            Actors.CollectionChanged += ActorCountChanged;
+
+            MessageBoxService.Close();
+        }
+        catch
+        {
+            await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
+        }
     }
 
-    private async Task Search(object sender)
+    private async Task Search(string pattern)
     {
         await Task.CompletedTask;
 
-        var pattern = sender.ToString();
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
-        var actors = string.IsNullOrWhiteSpace(pattern) ?
-            _dbContext.Actors.ToList() : 
+        try
+        {
+            var actors = string.IsNullOrWhiteSpace(pattern) ?
+            _dbContext.Actors.ToList() :
             _dbContext.Actors.Where(a => (a.Name + " " + a.Surname).Contains(pattern)).ToList();
 
-        if (Actors.Count == actors.Count) return;
+            if (Actors.Count == actors.Count) return;
 
-        Actors.Clear();
+            Actors.Clear();
 
-        actors.ForEach(a => Actors.Add(a));
+            actors.ForEach(a => Actors.Add(a));
+        }
+        catch
+        {
+            await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
+        }
     }
 
-    private async Task Delete(object sender)
+    private async Task Delete(Actor actor)
     {
-        var button = sender as Button;
-        var actor = button?.DataContext as Actor;
+        await Task.CompletedTask;
 
-        ArgumentNullException.ThrowIfNull(actor); 
-        
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
+
+        ArgumentNullException.ThrowIfNull(actor);
+
         _ = MessageBoxService.Show($"Delete <{actor.Name} {actor.Surname}>...", MessageBoxType.Progress);
-        
-        await _storageManager.DeleteFileAsync(actor.ImageUrl);
 
-        _dbContext.Actors.Remove(actor);
-        await _dbContext.SaveChangesAsync();
+        await Task.Delay(1000);
 
-        Actors.Remove(actor);
+        try
+        {
+            var imageUrl = actor.ImageUrl;
 
-        MessageBoxService.Close();
+            _dbContext.Actors.Remove(actor);
+            await _dbContext.SaveChangesAsync();
+
+            Actors.Remove(actor);
+
+            await _storageManager.DeleteFileAsync(imageUrl);
+
+            MessageBoxService.Close();
+        }
+        catch
+        {
+            await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
+        }
     }
 
     private async Task OpenAddDialogHost()
     {
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
+
         var model = App.ServiceProvider.GetService<AddActorViewModel>();
 
         await DialogHost.Show(model, "RootDialog");
     }
 
-    private async Task OpenEditDialogHost(object sender)
+    private async Task OpenEditDialogHost(Actor actor)
     {
-        var button = sender as Button;
-        var actor = button?.DataContext as Actor;
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         ArgumentNullException.ThrowIfNull(actor);
 
         var model = App.ServiceProvider.GetService<AddActorViewModel>();
 
-        model.Actor = actor.Adapt<UploadActorModel>();
+        model.Actor = actor.Adapt<ActorViewModelContent>();
 
         await DialogHost.Show(model, "RootDialog");
     }

@@ -2973,11 +2973,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\HP\\Desktop\\backup\\NovaStream_Server\\Infrastructure\\NovaStream.Persistence\\NovaStream.Persistence.csproj",
+      "projectUniqueName": "C:\\Users\\HP\\Desktop\\NovaStream_Server\\Infrastructure\\NovaStream.Persistence\\NovaStream.Persistence.csproj",
       "projectName": "NovaStream.Persistence",
-      "projectPath": "C:\\Users\\HP\\Desktop\\backup\\NovaStream_Server\\Infrastructure\\NovaStream.Persistence\\NovaStream.Persistence.csproj",
+      "projectPath": "C:\\Users\\HP\\Desktop\\NovaStream_Server\\Infrastructure\\NovaStream.Persistence\\NovaStream.Persistence.csproj",
       "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\HP\\Desktop\\backup\\NovaStream_Server\\Infrastructure\\NovaStream.Persistence\\obj\\",
+      "outputPath": "C:\\Users\\HP\\Desktop\\NovaStream_Server\\Infrastructure\\NovaStream.Persistence\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2999,8 +2999,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\HP\\Desktop\\backup\\NovaStream_Server\\Core\\NovaStream.Applicaton\\NovaStream.Application.csproj": {
-              "projectPath": "C:\\Users\\HP\\Desktop\\backup\\NovaStream_Server\\Core\\NovaStream.Applicaton\\NovaStream.Application.csproj"
+            "C:\\Users\\HP\\Desktop\\NovaStream_Server\\Core\\NovaStream.Applicaton\\NovaStream.Application.csproj": {
+              "projectPath": "C:\\Users\\HP\\Desktop\\NovaStream_Server\\Core\\NovaStream.Applicaton\\NovaStream.Application.csproj"
             }
           }
         }

@@ -7,7 +7,7 @@ public class AppDbContext : DbContext
     public DbSet<Actor> Actors { get; set; }
     public DbSet<Season> Seasons { get; set; }
     public DbSet<Episode> Episodes { get; set; }
-    public DbSet<Producer> Producers { get; set; }
+    public DbSet<Director> Directors { get; set; }
 
     public DbSet<Soon> Soons { get; set; }
     public DbSet<SoonGenre> SoonGenres { get; set; }

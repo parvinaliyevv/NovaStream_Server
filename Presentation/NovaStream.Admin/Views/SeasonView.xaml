@@ -59,7 +59,7 @@
                 <DataGridTemplateColumn Header="Operations" IsReadOnly="True" Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Style="{StaticResource GridRemoveButton}" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=DataContext.DeleteCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="5 0 0 0">
+                            <Button Style="{StaticResource GridRemoveButton}" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=DataContext.DeleteCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}" Margin="5 0 0 0">
                                 <ContentControl Content="{materialDesign:PackIcon Kind=DeleteOutline, Size=12}" VerticalAlignment="Center"/>
                             </Button>
                         </DataTemplate>

@@ -1,4 +1,6 @@
-﻿namespace NovaStream.API.Controllers;
+﻿using NovaStream.Domain.Entities.Concrete;
+
+namespace NovaStream.API.Controllers;
 
 [ApiController, Authorize]
 [Route("api/[controller]")]
@@ -26,6 +28,8 @@ public class SerialController : ControllerBase
         {
             var serials = await _dbContext.Serials.ProjectToType<SerialDto>().ToListAsync();
 
+            serials = Random.Shared.Shuffle(serials);
+
             var json = JsonConvert.SerializeObject(serials, Formatting.Indented);
 
             return Ok(json);
@@ -43,7 +47,7 @@ public class SerialController : ControllerBase
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var serial = _dbContext.Serials.Include(s => s.Producer).Include(s => s.Actors).ThenInclude(a => a.Actor).FirstOrDefault(s => s.Name == name)?.Adapt<SerialDetailsDto>();
+            var serial = _dbContext.Serials.Include(s => s.Director).Include(s => s.Actors).ThenInclude(a => a.Actor).FirstOrDefault(s => s.Name == name)?.Adapt<SerialDetailsDto>();
 
             if (serial is null) return NotFound();
 
@@ -127,7 +131,7 @@ public class SerialController : ControllerBase
             {
                 var episode = season.Episodes.FirstOrDefault(e => e.Number == episodeNumber);
 
-                if (episode is not null) 
+                if (episode is not null)
                     return Ok(_awsStorageManager.GetSignedUrl(episode.VideoUrl, TimeSpan.FromHours(7)));
             }
 

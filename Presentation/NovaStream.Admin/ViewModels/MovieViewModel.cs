@@ -20,12 +20,12 @@ public class MovieViewModel : ViewModelBase
         set { _movies = value; RaisePropertyChanged(); }
     }
 
-    public RelayCommand SearchCommand { get; set; }
-    public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand<string> SearchCommand { get; set; }
+    public RelayCommand<Movie> DeleteCommand { get; set; }
     public RelayCommand RefreshCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
-    public RelayCommand OpenEditDialogHostCommand { get; set; }
+    public RelayCommand<Movie> OpenEditDialogHostCommand { get; set; }
 
 
     public MovieViewModel(AppDbContext dbContext, IStorageManager storageManager, IAWSStorageManager awsStorageManager)
@@ -35,6 +35,13 @@ public class MovieViewModel : ViewModelBase
         _awsStorageManager = awsStorageManager;
 
         Initialize();
+
+        SearchCommand = new RelayCommand<string>(pattern => Search(pattern));
+        DeleteCommand = new RelayCommand<Movie>(movie => Delete(movie));
+        RefreshCommand = new RelayCommand(() => Initialize());
+
+        OpenAddDialogHostCommand = new RelayCommand(() => OpenAddDialogHost());
+        OpenEditDialogHostCommand = new RelayCommand<Movie>(movie => OpenEditDialogHost(movie));
     }
 
 
@@ -42,77 +49,113 @@ public class MovieViewModel : ViewModelBase
     {
         await Task.CompletedTask;
 
-        Movies = new ObservableCollection<Movie>(_dbContext.Movies.Include(s => s.Producer));
-        MovieCount = Movies.Count;
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
-        Movies.CollectionChanged += MovieCountChanged;
+        try
+        {
+            _ = MessageBoxService.Show($"Loading movies...", MessageBoxType.Progress);
 
-        SearchCommand = new RelayCommand(sender => Search(sender));
-        DeleteCommand = new RelayCommand(sender => Delete(sender));
-        RefreshCommand = new RelayCommand(_ => Initialize());
+            await Task.Delay(1000);
+        }
+        catch { }
 
-        OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
-        OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
+        try
+        {
+            Movies = new ObservableCollection<Movie>(_dbContext.Movies.Include(s => s.Director));
+            MovieCount = Movies.Count;
+
+            Movies.CollectionChanged += MovieCountChanged;
+
+            MessageBoxService.Close();
+        }
+        catch
+        {
+            await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
+        }
     }
 
-    private async Task Search(object sender)
+    private async Task Search(string pattern)
     {
         await Task.CompletedTask;
 
-        var pattern = sender.ToString();
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
-        var movies = string.IsNullOrWhiteSpace(pattern) ?
-            _dbContext.Movies.Include(m => m.Producer).ToList() : 
-            _dbContext.Movies.Include(m => m.Producer).Where(m => m.Name.Contains(pattern)).ToList();
+        try
+        {
+            var movies = string.IsNullOrWhiteSpace(pattern) ?
+            _dbContext.Movies.Include(m => m.Director).ToList() :
+            _dbContext.Movies.Include(m => m.Director).Where(m => m.Name.Contains(pattern)).ToList();
 
-        if (Movies.Count == movies.Count) return;
+            if (Movies.Count == movies.Count) return;
 
-        Movies.Clear();
+            Movies.Clear();
 
-        movies.ForEach(m => Movies.Add(m));
+            movies.ForEach(m => Movies.Add(m));
+        }
+        catch
+        {
+            await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
+        }
     }
 
-    private async Task Delete(object sender)
+    private async Task Delete(Movie movie)
     {
-        var button = sender as Button;
-        var movie = button?.DataContext as Movie;
+        await Task.CompletedTask;
+
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         ArgumentNullException.ThrowIfNull(movie);
 
         _ = MessageBoxService.Show($"Delete <{movie.Name}>...", MessageBoxType.Progress);
-        
-        await _awsStorageManager.DeleteFileAsync(movie.VideoUrl);
-        await _storageManager.DeleteFileAsync(movie.VideoImageUrl);
-        await _storageManager.DeleteFileAsync(movie.TrailerUrl);
-        await _storageManager.DeleteFileAsync(movie.ImageUrl);
-        await _storageManager.DeleteFileAsync(movie.SearchImageUrl);
 
-        _dbContext.Movies.Remove(movie);
-        await _dbContext.SaveChangesAsync();
+        await Task.Delay(1000);
 
-        Movies.Remove(movie);
+        try
+        {
+            var videoUrl = movie.VideoUrl;
+            var videoImageUrl = movie.VideoImageUrl;
+            var trailerUrl = movie.TrailerUrl;
+            var imageUrl = movie.ImageUrl;
+            var searchImageUrl = movie.SearchImageUrl;
 
-        MessageBoxService.Close();
+            _dbContext.Movies.Remove(movie);
+            await _dbContext.SaveChangesAsync();
+
+            Movies.Remove(movie);
+
+            await _awsStorageManager.DeleteFileAsync(videoUrl);
+            await _storageManager.DeleteFileAsync(videoImageUrl);
+            await _storageManager.DeleteFileAsync(trailerUrl);
+            await _storageManager.DeleteFileAsync(imageUrl);
+            await _storageManager.DeleteFileAsync(searchImageUrl);
+
+            MessageBoxService.Close();
+        }
+        catch
+        {
+            await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
+        }
     }
 
     private async Task OpenAddDialogHost()
     {
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
+
         var model = App.ServiceProvider.GetService<AddMovieViewModel>();
 
         await DialogHost.Show(model, "RootDialog");
     }
 
-    private async Task OpenEditDialogHost(object sender)
+    private async Task OpenEditDialogHost(Movie movie)
     {
-        var button = sender as Button;
-        var movie = button?.DataContext as Movie;
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         ArgumentNullException.ThrowIfNull(movie);
 
         var model = App.ServiceProvider.GetService<AddMovieViewModel>();
-        
-        model.Movie = movie.Adapt<UploadMovieModel>();
-        model.Movie.Producer = movie.Producer;
+
+        model.Movie = movie.Adapt<MovieViewModelContent>();
+        model.Movie.Director = movie.Director;
         model.IsEdit = true;
 
         await DialogHost.Show(model, "RootDialog");

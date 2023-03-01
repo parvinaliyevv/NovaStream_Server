@@ -2,8 +2,8 @@
 
 public class Serial : Video
 {
-    public int? ProducerId { get; set; }
-    public Producer? Producer { get; set; }
+    public int? DirectorId { get; set; }
+    public Director? Director { get; set; }
 
     public ICollection<Season> Seasons { get; set; }
     public ICollection<SerialMark> Marks { get; set; }

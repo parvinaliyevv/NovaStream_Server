@@ -5,7 +5,7 @@ public class AddGenreViewModel : DependencyObject
     private readonly AppDbContext _dbContext;
     private readonly IStorageManager _storageManager;
 
-    public UploadGenreModel Genre { get; set; }
+    public GenreViewModelContent Genre { get; set; }
 
     public bool IsEdit { get; set; }
     public bool ProcessStarted
@@ -36,16 +36,18 @@ public class AddGenreViewModel : DependencyObject
         UploadTasks = new();
         UploadTaskTokens = new();
 
-        SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
-        CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
+        SaveCommand = new RelayCommand(() => Save());
+        CancelCommand = new RelayCommand(() => Cancel());
 
-        OpenImageDialogCommand = new RelayCommand(_ => Genre.ImageUrl = FileDialogService.OpenImageFile(Genre.ImageUrl), _ => !ProcessStarted);
+        OpenImageDialogCommand = new RelayCommand(() => Genre.ImageUrl = FileDialogService.OpenImageFile(Genre.ImageUrl));
     }
 
 
     private async Task Save()
     {
         await Task.CompletedTask;
+
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         try
         {
@@ -90,7 +92,6 @@ public class AddGenreViewModel : DependencyObject
 
                 imageUploadTask.ContinueWith(_ => Genre.ImageUploadSuccess = true);
             }
-            else Genre.ImageUploadSuccess = true;
 
             if (UploadTasks.Count > 0) await Task.WhenAll(UploadTasks);
 
@@ -117,15 +118,22 @@ public class AddGenreViewModel : DependencyObject
 
             await _dbContext.SaveChangesAsync();
 
+            Genre.ImageUploadSuccess = true;
+
             ProcessStarted = false;
 
             DialogHost.Close("RootDialog");
 
             await MessageBoxService.Show("Genre saved successfully!", MessageBoxType.Success);
         }
-        catch (Exception ex)
+        catch (OperationCanceledException) { return; }
+        catch
         {
-            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+            if (!InternetService.CheckInternet())
+                await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error);
+
+            else
+                await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
 
             await Cancel();
         }
@@ -138,6 +146,7 @@ public class AddGenreViewModel : DependencyObject
         UploadTaskTokens.ForEach(ts => ts.Cancel());
 
         Genre.ImageProgress.Progress = 0;
+
         if (Genre.ImageUploadSuccess) await _storageManager.DeleteFileAsync(Genre.ImageUrl);
     }
 }

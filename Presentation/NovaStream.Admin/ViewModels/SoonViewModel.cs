@@ -19,12 +19,12 @@ public class SoonViewModel : ViewModelBase
         set { _soons = value; RaisePropertyChanged(); }
     }
 
-    public RelayCommand SearchCommand { get; set; }
-    public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand<string> SearchCommand { get; set; }
+    public RelayCommand<Soon> DeleteCommand { get; set; }
     public RelayCommand RefreshCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
-    public RelayCommand OpenEditDialogHostCommand { get; set; }
+    public RelayCommand<Soon> OpenEditDialogHostCommand { get; set; }
 
 
     public SoonViewModel(AppDbContext dbContext, IStorageManager storageManager)
@@ -33,6 +33,13 @@ public class SoonViewModel : ViewModelBase
         _storageManager = storageManager;
 
         Initialize();
+
+        SearchCommand = new RelayCommand<string>(pattern => Search(pattern));
+        DeleteCommand = new RelayCommand<Soon>(soon => Delete(soon));
+        RefreshCommand = new RelayCommand(() => Initialize());
+
+        OpenAddDialogHostCommand = new RelayCommand(() => OpenAddDialogHost());
+        OpenEditDialogHostCommand = new RelayCommand<Soon>(soon => OpenEditDialogHost(soon));
     }
 
 
@@ -40,75 +47,104 @@ public class SoonViewModel : ViewModelBase
     {
         await Task.CompletedTask;
 
-        Soons = new ObservableCollection<Soon>(_dbContext.Soons);
-        SoonCount = Soons.Count;
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
-        Soons.CollectionChanged += SoonCountChanged;
+        _ = MessageBoxService.Show($"Loading soons...", MessageBoxType.Progress);
 
-        SearchCommand = new RelayCommand(sender => Search(sender));
-        DeleteCommand = new RelayCommand(sender => Delete(sender));
-        RefreshCommand = new RelayCommand(_ => Initialize());
+        await Task.Delay(1000);
 
-        OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
-        OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
+        try
+        {
+            Soons = new ObservableCollection<Soon>(_dbContext.Soons);
+            SoonCount = Soons.Count;
+
+            Soons.CollectionChanged += SoonCountChanged;
+
+            MessageBoxService.Close();
+        }
+        catch
+        {
+            await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
+        }
     }
 
-    private async Task Search(object sender)
+    private async Task Search(string pattern)
     {
         await Task.CompletedTask;
 
-        var pattern = sender.ToString();
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
-        var soons = string.IsNullOrWhiteSpace(pattern) ? 
-            _dbContext.Soons.ToList() : 
-            _dbContext.Soons.Where(s => s.Name.Contains(pattern)).ToList();
+        try
+        {
+            var soons = string.IsNullOrWhiteSpace(pattern) ?
+           _dbContext.Soons.ToList() :
+           _dbContext.Soons.Where(s => s.Name.Contains(pattern)).ToList();
 
-        if (Soons.Count == soons.Count) return;
+            if (Soons.Count == soons.Count) return;
 
-        Soons.Clear();
+            Soons.Clear();
 
-        soons.ForEach(s => Soons.Add(s));
+            soons.ForEach(s => Soons.Add(s));
+        }
+        catch
+        {
+            await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
+        }
     }
 
-    private async Task Delete(object sender)
+    private async Task Delete(Soon soon)
     {
-        var button = sender as Button;
-        var soon = button?.DataContext as Soon;
+        await Task.CompletedTask;
+
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         ArgumentNullException.ThrowIfNull(soon);
 
         _ = MessageBoxService.Show($"Delete <{soon.Name}>...", MessageBoxType.Progress);
 
-        await _storageManager.DeleteFileAsync(soon.TrailerUrl);
-        await _storageManager.DeleteFileAsync(soon.TrailerImageUrl);
+        await Task.Delay(1000);
 
-        _dbContext.Soons.Remove(soon);
-        await _dbContext.SaveChangesAsync();
+        try
+        {
+            var trailerUrl = soon.TrailerUrl;
+            var trailerImageUrl = soon.TrailerImageUrl;
 
-        Soons.Remove(soon);
+            _dbContext.Soons.Remove(soon);
+            await _dbContext.SaveChangesAsync();
 
-        MessageBoxService.Close();
+            Soons.Remove(soon);
+
+            await _storageManager.DeleteFileAsync(trailerUrl);
+            await _storageManager.DeleteFileAsync(trailerImageUrl);
+
+            MessageBoxService.Close();
+        }
+        catch
+        {
+            await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
+        }
     }
 
     private async Task OpenAddDialogHost()
     {
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
+
         var model = App.ServiceProvider.GetService<AddSoonViewModel>();
 
         await DialogHost.Show(model, "RootDialog");
     }
 
-    private async Task OpenEditDialogHost(object sender)
+    private async Task OpenEditDialogHost(Soon soon)
     {
-        var button = sender as Button;
-        var soon = button?.DataContext as Soon;
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         ArgumentNullException.ThrowIfNull(soon);
 
         var model = App.ServiceProvider.GetService<AddSoonViewModel>();
 
-        model.Soon = soon.Adapt<UploadSoonModel>();
+        model.Soon = soon.Adapt<SoonViewModelContent>();
         model.IsEdit = true;
-        
+
         await DialogHost.Show(model, "RootDialog");
     }
 

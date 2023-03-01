@@ -4,6 +4,8 @@ public static class MessageBoxService
 {
     public static Task Show(string message, MessageBoxType type, string identifier = "MessageBox")
     {
+        if (DialogHost.IsDialogOpen(identifier)) Close();
+
         BaseMessageBox model = null;
 
         switch (type)
@@ -25,5 +27,11 @@ public static class MessageBoxService
         return DialogHost.Show(model, identifier);
     }
 
-    public static void Close(string identifier = "MessageBox") => DialogHost.Close(identifier);
+    public static void Close(string identifier = "MessageBox")
+    {
+        if (DialogHost.IsDialogOpen(identifier))
+        {
+            DialogHost.Close(identifier);
+        }
+    }
 }

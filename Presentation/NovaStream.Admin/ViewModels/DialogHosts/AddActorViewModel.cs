@@ -5,7 +5,7 @@ public class AddActorViewModel : DependencyObject
     private readonly AppDbContext _dbContext;
     private readonly IStorageManager _storageManager;
     
-    public UploadActorModel Actor { get; set; }
+    public ActorViewModelContent Actor { get; set; }
 
     public bool ProcessStarted
     {
@@ -33,10 +33,10 @@ public class AddActorViewModel : DependencyObject
         UploadTasks = new();
         UploadTaskTokens = new();
 
-        SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
-        CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
+        SaveCommand = new RelayCommand(() => Save());
+        CancelCommand = new RelayCommand(() => Cancel());
 
-        OpenImageDialogCommand = new RelayCommand(_ => Actor.ImageUrl = FileDialogService.OpenImageFile(Actor.ImageUrl), _ => !ProcessStarted);
+        OpenImageDialogCommand = new RelayCommand(() => Actor.ImageUrl = FileDialogService.OpenImageFile(Actor.ImageUrl));
     }
 
 
@@ -44,12 +44,14 @@ public class AddActorViewModel : DependencyObject
     {
         await Task.CompletedTask;
 
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
+
         try
         {
             Actor.Verify();
 
             if (Actor.HasErrors) return;
-
+            
             ProcessStarted = true;
 
             var actor = Actor.Adapt<Actor>();
@@ -80,7 +82,6 @@ public class AddActorViewModel : DependencyObject
 
                 imageUploadTask.ContinueWith(_ => Actor.ImageUploadSuccess = true);
             }
-            else Actor.ImageUploadSuccess = true;
 
             if (UploadTasks.Count > 0) await Task.WhenAll(UploadTasks);
 
@@ -107,15 +108,22 @@ public class AddActorViewModel : DependencyObject
 
             await _dbContext.SaveChangesAsync();
 
+            Actor.ImageUploadSuccess = true;
+
             ProcessStarted = false;
 
             DialogHost.Close("RootDialog");
 
             await MessageBoxService.Show("Actor saved succesfully!", MessageBoxType.Success);
         }
-        catch (Exception ex)
+        catch (OperationCanceledException) { return; }
+        catch
         {
-            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+            if (!InternetService.CheckInternet())
+                await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error);
+
+            else
+                await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
 
             await Cancel();
         }

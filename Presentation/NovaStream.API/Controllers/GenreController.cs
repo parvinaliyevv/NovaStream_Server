@@ -2,7 +2,7 @@
 
 [ApiController]
 [Route("api/[controller]")]
-public class GenreController : ControllerBase 
+public class GenreController : ControllerBase
 {
     private readonly AppDbContext _dbContext;
 
@@ -26,6 +26,8 @@ public class GenreController : ControllerBase
 
             genres.AddRange(_dbContext.MovieGenres.Include(mc => mc.Genre).Select(mc => mc.Genre).ProjectToType<GenreDto>());
             genres.AddRange(_dbContext.SerialGenres.Include(sc => sc.Genre).Select(sc => sc.Genre).ProjectToType<GenreDto>());
+
+            genres = Random.Shared.Shuffle(genres);
 
             var unique = genres.Distinct();
 
@@ -53,7 +55,7 @@ public class GenreController : ControllerBase
             videos.AddRange(_dbContext.MovieGenres.Include(mc => mc.Movie).Include(mc => mc.Genre).Where(mc => mc.Genre.Name == name).Select(mc => mc.Movie).ProjectToType<MovieDto>());
             videos.AddRange(_dbContext.SerialGenres.Include(sc => sc.Serial).Include(sc => sc.Genre).Where(sc => sc.Genre.Name == name).Select(sc => sc.Serial).ProjectToType<SerialDto>());
 
-            videos.Sort((a, b) => string.Compare(a.Name, b.Name));
+            videos = Random.Shared.Shuffle(videos);
 
             var json = JsonConvert.SerializeObject(videos, Formatting.Indented);
 

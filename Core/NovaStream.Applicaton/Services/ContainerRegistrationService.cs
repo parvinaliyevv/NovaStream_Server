@@ -20,6 +20,6 @@ public static class ContainerRegistrationService
         _ = new ActorProfile(storageManager);
         _ = new SerialProfile(storageManager);
         _ = new EpisodeProfile(storageManager);
-        _ = new ProducerProfile(storageManager);
+        _ = new DirectorProfile(storageManager);
     }
 }

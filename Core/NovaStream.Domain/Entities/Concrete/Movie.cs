@@ -8,8 +8,8 @@ public class Movie : Video
     public string VideoDescription { get; set; }
     public TimeSpan VideoLength { get; set; }
 
-    public int? ProducerId { get; set; }
-    public Producer? Producer { get; set; }
+    public int? DirectorId { get; set; }
+    public Director? Director { get; set; }
 
     public ICollection<MovieMark> Marks { get; set; }
     public ICollection<MovieActor> Actors { get; set; }

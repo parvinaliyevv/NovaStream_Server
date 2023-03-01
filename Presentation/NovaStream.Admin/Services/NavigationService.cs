@@ -1,5 +1,10 @@
 ﻿namespace NovaStream.Admin.Services;
 
+public interface INavigationService
+{
+    void NavigateTo<T>() where T : ViewModelBase;
+}
+
 public class NavigationService : INavigationService
 {
     private readonly IMessenger _messenger;

@@ -5,7 +5,7 @@ public class AddSoonViewModel : DependencyObject
     private readonly AppDbContext _dbContext;
     private readonly IStorageManager _storageManager;
 
-    public UploadSoonModel Soon { get; set; }
+    public SoonViewModelContent Soon { get; set; }
 
     public bool IsEdit { get; set; }
     public bool ProcessStarted
@@ -38,17 +38,19 @@ public class AddSoonViewModel : DependencyObject
         UploadTasks = new();
         UploadTaskTokens = new();
 
-        SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
-        CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
+        SaveCommand = new RelayCommand(() => Save());
+        CancelCommand = new RelayCommand(() => Cancel());
 
-        OpenTrailerDialogCommand = new RelayCommand(_ => Soon.TrailerUrl = FileDialogService.OpenVideoFile(Soon.TrailerUrl), _ => !ProcessStarted);
-        OpenTrailerImageDialogCommand = new RelayCommand(_ => Soon.TrailerImageUrl = FileDialogService.OpenImageFile(Soon.TrailerImageUrl), _ => !ProcessStarted);
+        OpenTrailerDialogCommand = new RelayCommand(() => Soon.TrailerUrl = FileDialogService.OpenVideoFile(Soon.TrailerUrl));
+        OpenTrailerImageDialogCommand = new RelayCommand(() => Soon.TrailerImageUrl = FileDialogService.OpenImageFile(Soon.TrailerImageUrl));
     }
 
 
     private async Task Save()
     {
         await Task.CompletedTask;
+
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         try
         {
@@ -90,7 +92,6 @@ public class AddSoonViewModel : DependencyObject
 
                 trailerUploadTask.ContinueWith(_ => Soon.TrailerUploadSuccess = true);
             }
-            else Soon.TrailerUploadSuccess = true;
 
             // Soon TrailerImageUrl
             if (dbSoon is null || dbSoon is not null && dbSoon.TrailerImageUrl != Soon.TrailerImageUrl)
@@ -111,7 +112,6 @@ public class AddSoonViewModel : DependencyObject
 
                 imageUploadTask.ContinueWith(_ => Soon.TrailerImageUploadSuccess = true);
             }
-            else Soon.TrailerImageUploadSuccess = true;
 
             if (UploadTasks.Count > 0) await Task.WhenAll(UploadTasks);
 
@@ -137,15 +137,23 @@ public class AddSoonViewModel : DependencyObject
 
             await _dbContext.SaveChangesAsync();
 
+            Soon.TrailerUploadSuccess = true;
+            Soon.TrailerImageUploadSuccess = true;
+
             ProcessStarted = false;
 
             DialogHost.Close("RootDialog");
 
             await MessageBoxService.Show("Soon saved successfully!", MessageBoxType.Success);
         }
-        catch (Exception ex)
+        catch (OperationCanceledException) { return; }
+        catch
         {
-            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+            if (!InternetService.CheckInternet())
+                await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error);
+
+            else
+                await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
 
             await Cancel();
         }
@@ -158,9 +166,9 @@ public class AddSoonViewModel : DependencyObject
         UploadTaskTokens.ForEach(ts => ts.Cancel());
 
         Soon.TrailerProgress.Progress = 0;
-        if (Soon.TrailerUploadSuccess) await _storageManager.DeleteFileAsync(Soon.TrailerUrl);
-
         Soon.TrailerImageProgress.Progress = 0;
+
+        if (Soon.TrailerUploadSuccess) await _storageManager.DeleteFileAsync(Soon.TrailerUrl);
         if (Soon.TrailerImageUploadSuccess) await _storageManager.DeleteFileAsync(Soon.TrailerImageUrl);
     }
 }

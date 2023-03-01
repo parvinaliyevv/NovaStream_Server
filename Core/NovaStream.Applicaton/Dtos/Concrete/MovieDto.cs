@@ -19,7 +19,7 @@ public record MovieDetailsDto : BaseVideoDetailsDto
     public string VideoLength { get; set; }
     public string TrailerUrl { get; set; }
 
-    public ProducerDto Producer { get; set; }
+    public DirectorDto Director { get; set; }
     public ICollection<ActorDto> Actors { get; set; }
 }
 

@@ -6,7 +6,7 @@ public class AddEpisodeViewModel : DependencyObject
     private readonly IStorageManager _storageManager;
     private readonly IAWSStorageManager _awsStorageManager;
 
-    public UploadEpisodeModel Episode { get; set; }
+    public EpisodeViewModelContent Episode { get; set; }
 
     public List<Serial> Serials
     {
@@ -60,20 +60,22 @@ public class AddEpisodeViewModel : DependencyObject
         UploadTasks = new();
         UploadTaskTokens = new();
 
-        SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
-        CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
+        SaveCommand = new RelayCommand(() => Save());
+        CancelCommand = new RelayCommand(() => Cancel());
 
-        OpenVideoDialogCommand = new RelayCommand(_ => Episode.VideoUrl = FileDialogService.OpenVideoFile(Episode.VideoUrl), _ => !ProcessStarted);
-        OpenVideoImageDialogCommand = new RelayCommand(_ => Episode.ImageUrl = FileDialogService.OpenImageFile(Episode.ImageUrl), _ => !ProcessStarted);
+        OpenVideoDialogCommand = new RelayCommand(() => Episode.VideoUrl = FileDialogService.OpenVideoFile(Episode.VideoUrl));
+        OpenVideoImageDialogCommand = new RelayCommand(() => Episode.ImageUrl = FileDialogService.OpenImageFile(Episode.ImageUrl));
 
-        SelectedSerialChangedCommand = new RelayCommand(_ => SelectedSerialChanged(), _ => !ProcessStarted);
-        SelectedSeasonChangedCommand = new RelayCommand(_ => SelectedSeasonChanged(), _ => !ProcessStarted);
+        SelectedSerialChangedCommand = new RelayCommand(() => SelectedSerialChanged());
+        SelectedSeasonChangedCommand = new RelayCommand(() => SelectedSeasonChanged());
     }
 
 
     private async Task Save()
     {
         await Task.CompletedTask;
+
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         try
         {
@@ -110,7 +112,6 @@ public class AddEpisodeViewModel : DependencyObject
 
                 videoUploadTask.ContinueWith(_ => Episode.VideoUploadSuccess = true);
             }
-            else Episode.VideoUploadSuccess = true;
 
             // Episode ImageUrl
             if (dbEpisode is null || dbEpisode is not null && dbEpisode.ImageUrl != Episode.ImageUrl)
@@ -131,7 +132,6 @@ public class AddEpisodeViewModel : DependencyObject
 
                 imageUploadTask.ContinueWith(_ => Episode.ImageUploadSuccess = true);
             }
-            else Episode.ImageUploadSuccess = true;
 
             if (UploadTasks.Count > 0) await Task.WhenAll(UploadTasks);
 
@@ -142,15 +142,23 @@ public class AddEpisodeViewModel : DependencyObject
 
             App.ServiceProvider.GetService<EpisodeViewModel>()?.Episodes.Add(episode);
 
+            Episode.VideoUploadSuccess = true;
+            Episode.ImageUploadSuccess = true;
+
             ProcessStarted = false;
 
             DialogHost.Close("RootDialog");
 
             await MessageBoxService.Show($"Episode saved succesfully!", MessageBoxType.Success);
         }
-        catch (Exception ex)
+        catch (OperationCanceledException) { return; }
+        catch
         {
-            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+            if (!InternetService.CheckInternet())
+                await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error);
+
+            else
+                await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
 
             await Cancel();
         }
@@ -163,21 +171,23 @@ public class AddEpisodeViewModel : DependencyObject
         UploadTaskTokens.ForEach(ts => ts.Cancel());
 
         System.Windows.Application.Current.Dispatcher.Invoke(() => Episode.VideoProgress = 0);
-        if (Episode.VideoUploadSuccess) await _awsStorageManager.DeleteFileAsync(Episode.VideoUrl);
-
         Episode.ImageProgress.Progress = 0;
+
+        if (Episode.VideoUploadSuccess) await _awsStorageManager.DeleteFileAsync(Episode.VideoUrl);
         if (Episode.ImageUploadSuccess) await _storageManager.DeleteFileAsync(Episode.ImageUrl);
     }
 
     private void SelectedSerialChanged()
     {
-        Seasons = new List<Season>(_dbContext.Seasons.Where(s => s.SerialName == Episode.Serial.Name).ToList());
+        Seasons = _dbContext.Seasons.Where(s => s.SerialName == Episode.Serial.Name).ToList();
 
         Episode.Season = Seasons.FirstOrDefault();
     }
 
     private void SelectedSeasonChanged()
     {
+        if (Episode.Season is null) Episode.Season = Seasons.FirstOrDefault();
+
         var episodes = _dbContext.Episodes.Where(e => e.SeasonId == Episode.Season.Id);
 
         Episode.Number = episodes.Count() == 0 ? 1 : episodes.Max(e => e.Number) + 1;

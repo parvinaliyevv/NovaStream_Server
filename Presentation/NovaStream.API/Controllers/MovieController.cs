@@ -22,6 +22,8 @@ public class MovieController : ControllerBase
         {
             var movies = await _dbContext.Movies.ProjectToType<MovieDto>().ToListAsync();
 
+            movies = Random.Shared.Shuffle(movies);
+
             var json = JsonConvert.SerializeObject(movies, Formatting.Indented);
 
             return Ok(json);
@@ -39,7 +41,7 @@ public class MovieController : ControllerBase
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var movie = _dbContext.Movies.Include(m => m.Producer).Include(m => m.Actors).ThenInclude(a => a.Actor).FirstOrDefault(m => m.Name == name)?.Adapt<MovieDetailsDto>();
+            var movie = _dbContext.Movies.Include(m => m.Director).Include(m => m.Actors).ThenInclude(a => a.Actor).FirstOrDefault(m => m.Name == name)?.Adapt<MovieDetailsDto>();
 
             if (movie is null) return NotFound();
 

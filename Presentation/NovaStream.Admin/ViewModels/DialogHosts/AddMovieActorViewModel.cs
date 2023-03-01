@@ -6,7 +6,7 @@ public class AddMovieActorViewModel : DependencyObject
 
     public List<Movie> Movies { get; set; }
     public List<Actor> Actors { get; set; }
-    public UploadMovieActorViewModel MovieActor { get; set; }
+    public MovieActorViewModelContent MovieActor { get; set; }
 
     public bool ProcessStarted
     {
@@ -25,15 +25,17 @@ public class AddMovieActorViewModel : DependencyObject
 
         Actors = _dbContext.Actors.ToList();
 
-        MovieActor = new UploadMovieActorViewModel();
+        MovieActor = new MovieActorViewModelContent();
 
-        SaveCommand = new RelayCommand(_ => Save());
+        SaveCommand = new RelayCommand(() => Save());
     }
 
 
     private async Task Save()
     {
         await Task.CompletedTask;
+
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         try
         {
@@ -65,9 +67,13 @@ public class AddMovieActorViewModel : DependencyObject
 
             await MessageBoxService.Show("Movie Actor saved succesfully!", MessageBoxType.Success);
         }
-        catch (Exception ex)
+        catch
         {
-            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+            if (!InternetService.CheckInternet())
+                await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error);
+
+            else
+                await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
 
             ProcessStarted = false;
         }

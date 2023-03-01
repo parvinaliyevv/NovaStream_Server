@@ -6,9 +6,9 @@ public class MovieConfiguration : IEntityTypeConfiguration<Movie>
     {
         builder.HasKey(v => v.Name);
 
-        builder.HasOne(m => m.Producer)
+        builder.HasOne(m => m.Director)
             .WithMany(p => p.Movies)
-            .HasForeignKey(m => m.ProducerId)
+            .HasForeignKey(m => m.DirectorId)
             .OnDelete(DeleteBehavior.SetNull);
     }
 }

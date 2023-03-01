@@ -6,7 +6,7 @@ public class AddSoonGenreViewModel : DependencyObject
 
     public List<Soon> Soons { get; set; }
     public List<Genre> Genres { get; set; }
-    public UploadSoonGenreViewModel SoonGenre { get; set; }
+    public SoonGenreViewModelContent SoonGenre { get; set; }
 
     public bool ProcessStarted
     {
@@ -24,15 +24,17 @@ public class AddSoonGenreViewModel : DependencyObject
         _dbContext = dbContext;
 
         Genres = _dbContext.Genres.ToList();
-        SoonGenre = new UploadSoonGenreViewModel();
+        SoonGenre = new SoonGenreViewModelContent();
 
-        SaveCommand = new RelayCommand(_ => Save());
+        SaveCommand = new RelayCommand(() => Save());
     }
 
 
     private async Task Save()
     {
         await Task.CompletedTask;
+
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         try
         {
@@ -64,9 +66,13 @@ public class AddSoonGenreViewModel : DependencyObject
 
             await MessageBoxService.Show("Soon Genre saved successfully!", MessageBoxType.Success);
         }
-        catch (Exception ex)
+        catch
         {
-            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+            if (!InternetService.CheckInternet())
+                await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error);
+            
+            else
+                await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
 
             ProcessStarted = false;
         }

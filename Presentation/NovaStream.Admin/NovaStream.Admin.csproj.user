@@ -14,7 +14,7 @@
     <Compile Update="Views\MovieView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\ProducerView.xaml.cs">
+    <Compile Update="Views\DirectorView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\SeasonView.xaml.cs">
@@ -26,19 +26,19 @@
     <Compile Update="Views\SoonView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Tabs\MovieActorView.xaml.cs">
+    <Compile Update="Views\MovieActorView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Tabs\MovieGenreView.xaml.cs">
+    <Compile Update="Views\MovieGenreView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Tabs\SerialActorView.xaml.cs">
+    <Compile Update="Views\SerialActorView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Tabs\SerialGenreView.xaml.cs">
+    <Compile Update="Views\SerialGenreView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Tabs\SoonGenreView.xaml.cs">
+    <Compile Update="Views\SoonGenreView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -64,7 +64,7 @@
     <Page Update="Views\MovieView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\ProducerView.xaml">
+    <Page Update="Views\DirectorView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\SeasonView.xaml">
@@ -76,19 +76,19 @@
     <Page Update="Views\SoonView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Tabs\MovieActorView.xaml">
+    <Page Update="Views\MovieActorView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Tabs\MovieGenreView.xaml">
+    <Page Update="Views\MovieGenreView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Tabs\SerialActorView.xaml">
+    <Page Update="Views\SerialActorView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Tabs\SerialGenreView.xaml">
+    <Page Update="Views\SerialGenreView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Tabs\SoonGenreView.xaml">
+    <Page Update="Views\SoonGenreView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

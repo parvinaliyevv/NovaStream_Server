@@ -29,8 +29,18 @@
         <Separator Height="1" Grid.Row="2" Background="#dae2ea" Margin="0 -1 0 10"/>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 10 0 0">
-            <Button Content="Soons" Style="{StaticResource TabButton}" BorderBrush="#fb8757"/>
-            <Button Content="Genres" IsEnabled="{Binding ElementName=ItemsDataGrid, Path=Items.Count}" Click="SoonGenreView_ButtonClicked"  Style="{StaticResource TabButton}"/>
+            <Button Content="Soons" Style="{StaticResource TabButton}" BorderBrush="{StaticResource AppColor}"/>
+            <Button Content="Genres" Click="SoonGenreView_ButtonClicked">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource TabButton}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=ItemsDataGrid, Path=SelectedItem}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </StackPanel>
 
         <TextBlock Text="{Binding SoonCount, StringFormat={}{0} Soons}" Grid.Row="3" FontSize="18" FontWeight="SemiBold"
@@ -56,7 +66,7 @@
             </TextBox>
         </Grid>
 
-        <DataGrid x:Name="ItemsDataGrid" SelectedIndex="0" ItemsSource="{Binding Soons}" Style="{StaticResource DataGridStyle1}" CellStyle="{StaticResource DataGridCellStyle1}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle1}" RowStyle="{StaticResource DataGridRowStyle1}" Grid.Row="4">
+        <DataGrid x:Name="ItemsDataGrid" ItemsSource="{Binding Soons}" Style="{StaticResource DataGridStyle1}" CellStyle="{StaticResource DataGridCellStyle1}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle1}" RowStyle="{StaticResource DataGridRowStyle1}" Grid.Row="4">
             <DataGrid.Columns>
 
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" Width="auto"/>
@@ -67,10 +77,10 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Button Style="{StaticResource GridEditButton}" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=DataContext.OpenEditDialogHostCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                                <Button Style="{StaticResource GridEditButton}" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=DataContext.OpenEditDialogHostCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}">
                                     <ContentControl Content="{materialDesign:PackIcon Kind=PencilOutline, Size=12}" VerticalAlignment="Center"/>
                                 </Button>
-                                <Button Style="{StaticResource GridRemoveButton}" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=DataContext.DeleteCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Margin="5 0 0 0">
+                                <Button Style="{StaticResource GridRemoveButton}" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=DataContext.DeleteCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}" Margin="5 0 0 0">
                                     <ContentControl Content="{materialDesign:PackIcon Kind=DeleteOutline, Size=12}" VerticalAlignment="Center"/>
                                 </Button>
                             </StackPanel>

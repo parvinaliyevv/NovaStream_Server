@@ -6,9 +6,9 @@ public class SerialConfiguration : IEntityTypeConfiguration<Serial>
     {
         builder.HasKey(v => v.Name);
 
-        builder.HasOne(s => s.Producer)
+        builder.HasOne(s => s.Director)
             .WithMany(p => p.Serials)
-            .HasForeignKey(s => s.ProducerId)
+            .HasForeignKey(s => s.DirectorId)
             .OnDelete(DeleteBehavior.SetNull);
     }
 }

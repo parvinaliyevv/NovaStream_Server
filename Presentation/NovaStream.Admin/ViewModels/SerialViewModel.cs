@@ -20,12 +20,12 @@ public class SerialViewModel : ViewModelBase
         set { _serials = value; RaisePropertyChanged(); }
     }
 
-    public RelayCommand SearchCommand { get; set; }
-    public RelayCommand DeleteCommand { get; set; }
+    public RelayCommand<string> SearchCommand { get; set; }
+    public RelayCommand<Serial> DeleteCommand { get; set; }
     public RelayCommand RefreshCommand { get; set; }
 
     public RelayCommand OpenAddDialogHostCommand { get; set; }
-    public RelayCommand OpenEditDialogHostCommand { get; set; }
+    public RelayCommand<Serial> OpenEditDialogHostCommand { get; set; }
 
 
     public SerialViewModel(AppDbContext dbContext, IStorageManager storageManager, IAWSStorageManager awsStorageManager)
@@ -35,6 +35,13 @@ public class SerialViewModel : ViewModelBase
         _awsStorageManager = awsStorageManager;
 
         Initialize();
+
+        SearchCommand = new RelayCommand<string>(pattern => Search(pattern));
+        DeleteCommand = new RelayCommand<Serial>(serial => Delete(serial));
+        RefreshCommand = new RelayCommand(() => Initialize());
+
+        OpenAddDialogHostCommand = new RelayCommand(() => OpenAddDialogHost());
+        OpenEditDialogHostCommand = new RelayCommand<Serial>(serial => OpenEditDialogHost(serial));
     }
 
 
@@ -42,99 +49,155 @@ public class SerialViewModel : ViewModelBase
     {
         await Task.CompletedTask;
 
-        Serials = new ObservableCollection<Serial>(_dbContext.Serials.Include(s => s.Producer));
-        SerialCount = Serials.Count;
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
+        
+        _ = MessageBoxService.Show($"Loading serials...", MessageBoxType.Progress);
 
-        Serials.CollectionChanged += SerialCountChanged;
+        await Task.Delay(1000);
 
-        SearchCommand = new RelayCommand(sender => Search(sender));
-        DeleteCommand = new RelayCommand(sender => Delete(sender));
-        RefreshCommand = new RelayCommand(_ => Initialize());
+        try
+        {
+            Serials = new ObservableCollection<Serial>(_dbContext.Serials.Include(s => s.Director));
+            SerialCount = Serials.Count;
 
-        OpenAddDialogHostCommand = new RelayCommand(_ => OpenAddDialogHost());
-        OpenEditDialogHostCommand = new RelayCommand(sender => OpenEditDialogHost(sender));
+            Serials.CollectionChanged += SerialCountChanged;
+
+            MessageBoxService.Close();
+        }
+        catch
+        {
+            await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
+        }
     }
 
-    private async Task Search(object sender)
+    private async Task Search(string pattern)
     {
         await Task.CompletedTask;
 
-        var pattern = sender.ToString();
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
-        var serials = string.IsNullOrWhiteSpace(pattern) ?
-            _dbContext.Serials.Include(s => s.Producer).ToList() :
-            _dbContext.Serials.Include(s => s.Producer).Where(s => s.Name.Contains(pattern)).ToList();
+        try
+        {
+            var serials = string.IsNullOrWhiteSpace(pattern) ?
+            _dbContext.Serials.Include(s => s.Director).ToList() :
+            _dbContext.Serials.Include(s => s.Director).Where(s => s.Name.Contains(pattern)).ToList();
 
-        if (Serials.Count == serials.Count) return;
+            if (Serials.Count == serials.Count) return;
 
-        Serials.Clear();
+            Serials.Clear();
 
-        serials.ForEach(s => Serials.Add(s));
+            serials.ForEach(s => Serials.Add(s));
+        }
+        catch
+        {
+            await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
+        }
     }
 
-    private async Task Delete(object sender)
+    private async Task Delete(Serial serial)
     {
-        var button = sender as Button;
-        var serial = button?.DataContext as Serial;
+        await Task.CompletedTask;
+
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         ArgumentNullException.ThrowIfNull(serial);
 
         _ = MessageBoxService.Show($"Delete <{serial.Name}>...", MessageBoxType.Progress);
 
-        var episodes = _dbContext.Episodes.Include(e => e.Season).Where(e => e.Season.SerialName == serial.Name);
+        await Task.Delay(1000);
 
-        foreach (var episode in episodes)
+        try
         {
-            await _storageManager.DeleteFileAsync(episode.ImageUrl);
-            await _awsStorageManager.DeleteFileAsync(episode.VideoUrl);
+            var episodes = _dbContext.Episodes.Include(e => e.Season).Where(e => e.Season.SerialName == serial.Name);
+
+            var trailerUrl = serial.TrailerUrl;
+            var imageUrl = serial.ImageUrl;
+            var searchImageUrl = serial.SearchImageUrl;
+
+            var episodeImageUrls = new List<string>();
+            var episodeVideoUrls = new List<string>();
+
+            foreach (var episode in episodes)
+            {
+                episodeImageUrls.Add(episode.ImageUrl);
+                episodeVideoUrls.Add(episode.VideoUrl);
+            }
+
+            _dbContext.Serials.Remove(serial);
+            await _dbContext.SaveChangesAsync();
+
+            if (SeasonViewModel.isCreated)
+            {
+                var model = App.ServiceProvider.GetService<SeasonViewModel>();
+
+                var items = new List<Season>();
+                
+                foreach (var season in model.Seasons)
+                    if (season.SerialName == serial.Name) items.Add(season);
+
+                items.ForEach(season => model.Seasons.Remove(season));
+            }
+            if (EpisodeViewModel.isCreated)
+            {
+                var model = App.ServiceProvider.GetService<EpisodeViewModel>();
+
+                var items = new List<Episode>();
+
+                foreach (var episode in model.Episodes)
+                    if (episode.Season is null) items.Add(episode);
+
+                items.ForEach(episode => model.Episodes.Remove(episode));
+            }
+
+            Serials.Remove(serial);
+
+            foreach (var episodeImageUrl in episodeImageUrls) _storageManager.DeleteFile(episodeImageUrl);
+            foreach (var episodeVideoUrl in episodeVideoUrls) await _awsStorageManager.DeleteFileAsync(episodeVideoUrl);
+
+            await _storageManager.DeleteFileAsync(trailerUrl);
+            await _storageManager.DeleteFileAsync(imageUrl);
+            await _storageManager.DeleteFileAsync(searchImageUrl);
+
+            MessageBoxService.Close();
         }
-
-        await _storageManager.DeleteFileAsync(serial.TrailerUrl);
-        await _storageManager.DeleteFileAsync(serial.ImageUrl);
-        await _storageManager.DeleteFileAsync(serial.SearchImageUrl);
-
-        _dbContext.Serials.Remove(serial);
-        await _dbContext.SaveChangesAsync();
-
-        await App.ServiceProvider.GetService<SeasonViewModel>().Initialize();
-        await App.ServiceProvider.GetService<EpisodeViewModel>().Initialize();
-
-        Serials.Remove(serial);
-
-        MessageBoxService.Close();
+        catch
+        {
+            await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
+        }
     }
 
     private async Task OpenAddDialogHost()
     {
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
+
         var model = App.ServiceProvider.GetService<AddSerialViewModel>();
 
         await DialogHost.Show(model, "RootDialog");
     }
 
-    private async Task OpenEditDialogHost(object sender)
+    private async Task OpenEditDialogHost(Serial serial)
     {
-        var button = sender as Button;
-        var serial = button?.DataContext as Serial;
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         ArgumentNullException.ThrowIfNull(serial);
 
         var model = App.ServiceProvider.GetService<AddSerialViewModel>();
 
-        model.Serial = serial.Adapt<UploadSerialModel>();
-        model.Serial.Producer = serial.Producer;
+        model.Serial = serial.Adapt<SerialViewModelContent>();
+        model.Serial.Director = serial.Director;
         model.IsEdit = true;
 
         if (serial is not null)
         {
             var season = await _dbContext.Seasons.FirstOrDefaultAsync(s => s.SerialName == serial.Name && s.Number == 1);
 
-            model.Season = season.Adapt<UploadSeasonModel>();
+            model.Season = season.Adapt<SeasonViewModelContent>();
 
             if (model.Season is not null)
             {
                 var episode = await _dbContext.Episodes.FirstOrDefaultAsync(e => e.SeasonId == season.Id && e.Number == 1);
 
-                model.Episode = episode.Adapt<UploadEpisodeModel>();
+                model.Episode = episode.Adapt<EpisodeViewModelContent>();
             }
         }
 

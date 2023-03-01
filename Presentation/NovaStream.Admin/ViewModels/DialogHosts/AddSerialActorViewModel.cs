@@ -6,7 +6,7 @@ public class AddSerialActorViewModel : DependencyObject
 
     public List<Serial> Serials { get; set; }
     public List<Actor> Actors { get; set; }
-    public UploadSerialActorViewModel SerialActor { get; set; }
+    public SerialActorViewModelContent SerialActor { get; set; }
 
     public bool ProcessStarted
     {
@@ -24,15 +24,17 @@ public class AddSerialActorViewModel : DependencyObject
         _dbContext = dbContext;
 
         Actors = _dbContext.Actors.ToList();
-        SerialActor = new UploadSerialActorViewModel();
+        SerialActor = new SerialActorViewModelContent();
 
-        SaveCommand = new RelayCommand(_ => Save());
+        SaveCommand = new RelayCommand(() => Save());
     }
 
 
     private async Task Save()
     {
         await Task.CompletedTask;
+
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         try
         {
@@ -64,9 +66,13 @@ public class AddSerialActorViewModel : DependencyObject
 
             await MessageBoxService.Show("Serial Actor saved successfully!", MessageBoxType.Success);
         }
-        catch (Exception ex)
+        catch
         {
-            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+            if (!InternetService.CheckInternet())
+                await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error);
+
+            else
+                await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
 
             ProcessStarted = false;
         }

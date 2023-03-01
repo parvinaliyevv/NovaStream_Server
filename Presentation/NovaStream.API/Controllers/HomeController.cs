@@ -25,7 +25,7 @@ public class HomeController : ControllerBase
             videos.AddRange(_dbContext.Movies.ProjectToType<MovieDto>());
             videos.AddRange(_dbContext.Serials.ProjectToType<SerialDto>());
 
-            // sort for popular hit videos
+            videos = Random.Shared.Shuffle(videos);
 
             var json = JsonConvert.SerializeObject(videos, Formatting.Indented);
 
@@ -48,6 +48,8 @@ public class HomeController : ControllerBase
 
             videos.AddRange(_dbContext.Movies.Take(3).ProjectToType<MovieSearchDto>());
             videos.AddRange(_dbContext.Serials.Take(3).ProjectToType<SerialSearchDto>());
+
+            videos = Random.Shared.Shuffle(videos);
 
             var json = JsonConvert.SerializeObject(videos, Formatting.Indented);
 

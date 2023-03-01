@@ -13,7 +13,7 @@
             </Grid.RowDefinitions>
 
             <Border Background="#0b934f" Grid.Row="0">
-                <TextBlock Text="{Binding Title}" Foreground="#f4faf7" Margin="10"
+                <TextBlock Text="{Binding Title}" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
             </Border>
 
@@ -39,7 +39,7 @@
             </Grid.RowDefinitions>
 
             <Border Background="#1061cb" Grid.Row="0">
-                <TextBlock Text="{Binding Title}" Foreground="#f4faf7" Margin="10"
+                <TextBlock Text="{Binding Title}" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
             </Border>
 
@@ -54,7 +54,7 @@
 
         </Grid>
     </DataTemplate>
-    
+
     <DataTemplate DataType="{x:Type messageBox:ErrorMessageBox}">
         <Grid MinHeight="200" Width="500">
 
@@ -65,7 +65,7 @@
             </Grid.RowDefinitions>
 
             <Border Background="#ac0c16" Grid.Row="0">
-                <TextBlock Text="{Binding Title}" Foreground="#f4faf7" Margin="10"
+                <TextBlock Text="{Binding Title}" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
             </Border>
 
@@ -89,8 +89,8 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Border Background="#fb7657" Grid.Row="0">
-                <TextBlock Text="{Binding Title}" Foreground="#f4faf7" Margin="10"
+            <Border Background="{StaticResource AppColor}" Grid.Row="0">
+                <TextBlock Text="{Binding Title}" Foreground="{StaticResource ForegroundAppColor}" Margin="10"
                            FontFamily="Calibri" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
             </Border>
 

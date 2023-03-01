@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\HP\Desktop\backup\NovaStream_Server\Presentation\NovaStream.Admin\obj\Debug\net6.0-windows\
+C:\Users\HP\Desktop\NovaStream_Server\Presentation\NovaStream.Admin\obj\Debug\net6.0-windows\
 NovaStream.Admin
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-C:\Users\HP\Desktop\backup\NovaStream_Server\Presentation\NovaStream.Admin\App.xaml
-17-792475993
+C:\Users\HP\Desktop\NovaStream_Server\Presentation\NovaStream.Admin\App.xaml
+171686917395
 11413424753
-75-1798932902
-369-2109841947
-Resources\AppResources.xaml;Resources\DialogHostResources.xaml;Resources\MessageBoxResources.xaml;Views\ActorView.xaml;Views\EpisodeView.xaml;Views\GenreView.xaml;Views\MainView.xaml;Views\MovieView.xaml;Views\ProducerView.xaml;Views\SeasonView.xaml;Views\SerialView.xaml;Views\SoonView.xaml;Views\Tabs\MovieActorView.xaml;Views\Tabs\MovieGenreView.xaml;Views\Tabs\SerialActorView.xaml;Views\Tabs\SerialGenreView.xaml;Views\Tabs\SoonGenreView.xaml;
+73-91894680
+369-1883235945
+Resources\AppResources.xaml;Resources\DialogHostResources.xaml;Resources\MessageBoxResources.xaml;Views\ActorView.xaml;Views\DirectorView.xaml;Views\EpisodeView.xaml;Views\GenreView.xaml;Views\MainView.xaml;Views\MovieActorView.xaml;Views\MovieGenreView.xaml;Views\MovieView.xaml;Views\SeasonView.xaml;Views\SerialActorView.xaml;Views\SerialGenreView.xaml;Views\SerialView.xaml;Views\SoonGenreView.xaml;Views\SoonView.xaml;
 
 True
 

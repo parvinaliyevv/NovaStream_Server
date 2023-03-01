@@ -15,18 +15,18 @@ global using NovaStream.Application.Services;
 global using System.Runtime.CompilerServices;
 
 global using NovaStream.Admin.Views;
-global using NovaStream.Admin.Commands;
 global using NovaStream.Admin.Services;
-global using NovaStream.Admin.MessageBoxes;
+global using NovaStream.Admin.Utilities;
+global using GalaSoft.MvvmLight.Command;
 global using NovaStream.Admin.ViewModels;
+global using NovaStream.Admin.MessageBoxes;
 global using NovaStream.Persistence.Services;
-global using NovaStream.Admin.Models.Abstract;
-global using NovaStream.Admin.Models.Concrete;
-global using NovaStream.Admin.ViewModels.Tabs;
 global using NovaStream.Infrastructure.Services;
 global using NovaStream.Domain.Entities.Concrete;
 global using NovaStream.Persistence.Data.Contexts;
 global using NovaStream.Admin.ViewModels.DialogHosts;
+global using NovaStream.Admin.ViewModelContents.Abstract;
+global using NovaStream.Admin.ViewModelContents.Concrete;
 global using NovaStream.Domain.Entities.Concrete.Adapters;
 
 global using Mapster;

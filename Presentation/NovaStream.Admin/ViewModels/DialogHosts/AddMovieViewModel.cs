@@ -6,8 +6,8 @@ public class AddMovieViewModel : DependencyObject
     private readonly IStorageManager _storageManager;
     private readonly IAWSStorageManager _awsStorageManager;
 
-    public UploadMovieModel Movie { get; set; }
-    public List<Producer> Producers { get; set; }
+    public MovieViewModelContent Movie { get; set; }
+    public List<Director> Directors { get; set; }
 
     public bool IsEdit { get; set; }
     public bool ProcessStarted
@@ -37,7 +37,7 @@ public class AddMovieViewModel : DependencyObject
         _storageManager = storageManager;
         _awsStorageManager = awsStorageManager;
 
-        Producers = dbContext.Producers.ToList();
+        Directors = dbContext.Directors.ToList();
 
         Movie = new();
 
@@ -46,20 +46,22 @@ public class AddMovieViewModel : DependencyObject
         UploadTasks = new();
         UploadTaskTokens = new();
 
-        SaveCommand = new RelayCommand(_ => Save(), _ => !ProcessStarted);
-        CancelCommand = new RelayCommand(_ => Cancel(), _ => ProcessStarted);
+        SaveCommand = new RelayCommand(() => Save());
+        CancelCommand = new RelayCommand(() => Cancel());
 
-        OpenVideoDialogCommand = new RelayCommand(_ => Movie.VideoUrl = FileDialogService.OpenVideoFile(Movie.VideoUrl), _ => !ProcessStarted);
-        OpenVideoImageDialogCommand = new RelayCommand(_ => Movie.VideoImageUrl = FileDialogService.OpenImageFile(Movie.VideoImageUrl), _ => !ProcessStarted);
-        OpenTrailerDialogCommand = new RelayCommand(_ => Movie.TrailerUrl = FileDialogService.OpenVideoFile(Movie.TrailerUrl), _ => !ProcessStarted);
-        OpenImageDialogCommand = new RelayCommand(_ => Movie.ImageUrl = FileDialogService.OpenImageFile(Movie.ImageUrl), _ => !ProcessStarted);
-        OpenSearchImageDialogCommand = new RelayCommand(_ => Movie.SearchImageUrl = FileDialogService.OpenImageFile(Movie.SearchImageUrl), _ => !ProcessStarted);
+        OpenVideoDialogCommand = new RelayCommand(() => Movie.VideoUrl = FileDialogService.OpenVideoFile(Movie.VideoUrl));
+        OpenVideoImageDialogCommand = new RelayCommand(() => Movie.VideoImageUrl = FileDialogService.OpenImageFile(Movie.VideoImageUrl));
+        OpenTrailerDialogCommand = new RelayCommand(() => Movie.TrailerUrl = FileDialogService.OpenVideoFile(Movie.TrailerUrl));
+        OpenImageDialogCommand = new RelayCommand(() => Movie.ImageUrl = FileDialogService.OpenImageFile(Movie.ImageUrl));
+        OpenSearchImageDialogCommand = new RelayCommand(() => Movie.SearchImageUrl = FileDialogService.OpenImageFile(Movie.SearchImageUrl));
     }
 
 
     private async Task Save()
     {
         await Task.CompletedTask;
+
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         try
         {
@@ -102,7 +104,6 @@ public class AddMovieViewModel : DependencyObject
 
                 videoUploadTask.ContinueWith(_ => Movie.VideoUploadSuccess = true);
             }
-            else Movie.VideoUploadSuccess = true;
 
             // Movie VideoImageUrl
             if (dbMovie is null || dbMovie is not null && dbMovie.VideoImageUrl != Movie.VideoImageUrl)
@@ -123,7 +124,6 @@ public class AddMovieViewModel : DependencyObject
 
                 videoImageUploadTask.ContinueWith(_ => Movie.VideoImageUploadSuccess = true);
             }
-            else Movie.VideoImageUploadSuccess = true;
 
             // Movie TrailerUrl
             if (dbMovie is null || dbMovie is not null && dbMovie.TrailerUrl != Movie.TrailerUrl)
@@ -142,7 +142,6 @@ public class AddMovieViewModel : DependencyObject
 
                 trailerUploadTask.ContinueWith(_ => Movie.TrailerUploadSuccess = true);
             }
-            else Movie.TrailerUploadSuccess = true;
 
             // Movie ImageUrl
             if (dbMovie is null || dbMovie is not null && dbMovie.ImageUrl != Movie.ImageUrl)
@@ -163,7 +162,6 @@ public class AddMovieViewModel : DependencyObject
 
                 imageUploadTask.ContinueWith(_ => Movie.ImageUploadSuccess = true);
             }
-            else Movie.ImageUploadSuccess = true;
 
             // Movie SearchImageUrl
             if (dbMovie is null || dbMovie is not null && dbMovie.SearchImageUrl != Movie.SearchImageUrl)
@@ -184,7 +182,6 @@ public class AddMovieViewModel : DependencyObject
 
                 searchImageUploadTask.ContinueWith(_ => Movie.SearchImageUploadSuccess = true);
             }
-            else Movie.SearchImageUploadSuccess = true;
 
             if (UploadTasks.Count > 0) await Task.WhenAll(UploadTasks);
 
@@ -210,15 +207,26 @@ public class AddMovieViewModel : DependencyObject
 
             await _dbContext.SaveChangesAsync();
 
+            Movie.VideoUploadSuccess = true;
+            Movie.VideoImageUploadSuccess = true;
+            Movie.TrailerUploadSuccess = true;
+            Movie.ImageUploadSuccess = true;
+            Movie.SearchImageUploadSuccess = true;
+
             ProcessStarted = false;
 
             DialogHost.Close("RootDialog");
 
             await MessageBoxService.Show("Movie saved succesfully!", MessageBoxType.Success);
         }
-        catch (Exception ex)
+        catch (OperationCanceledException) { return; }
+        catch
         {
-            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+            if (!InternetService.CheckInternet())
+                await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error);
+            
+            else
+                await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
 
             await Cancel();
         }
@@ -231,18 +239,15 @@ public class AddMovieViewModel : DependencyObject
         UploadTaskTokens.ForEach(ts => ts.Cancel());
 
         System.Windows.Application.Current.Dispatcher.Invoke(() => Movie.VideoProgress = 0);
-        if (Movie.VideoUploadSuccess) await _awsStorageManager.DeleteFileAsync(Movie.VideoUrl);
-
         Movie.VideoImageProgress.Progress = 0;
-        if (Movie.VideoImageUploadSuccess) await _storageManager.DeleteFileAsync(Movie.VideoImageUrl);
-
         Movie.TrailerProgress.Progress = 0;
-        if (Movie.TrailerUploadSuccess) await _storageManager.DeleteFileAsync(Movie.TrailerUrl);
-
         Movie.ImageProgress.Progress = 0;
-        if (Movie.ImageUploadSuccess) await _storageManager.DeleteFileAsync(Movie.ImageUrl);
-
         Movie.SearchImageProgress.Progress = 0;
+
+        if (Movie.VideoUploadSuccess) await _awsStorageManager.DeleteFileAsync(Movie.VideoUrl);
+        if (Movie.VideoImageUploadSuccess) await _storageManager.DeleteFileAsync(Movie.VideoImageUrl);
+        if (Movie.TrailerUploadSuccess) await _storageManager.DeleteFileAsync(Movie.TrailerUrl);
+        if (Movie.ImageUploadSuccess) await _storageManager.DeleteFileAsync(Movie.ImageUrl);
         if (Movie.SearchImageUploadSuccess) await _storageManager.DeleteFileAsync(Movie.SearchImageUrl);
     }
 }

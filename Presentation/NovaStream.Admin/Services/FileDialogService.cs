@@ -2,6 +2,10 @@
 
 public static class FileDialogService
 {
+    public const int MaxVideoSize = 2; // gb 
+    public const int MaxTrailerSize = 50; // mb 
+    public const int MaxImageSize = 1024; // kb
+
     public static string OpenImageFile(string onCancelValue = "")
     {
         var fileDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();

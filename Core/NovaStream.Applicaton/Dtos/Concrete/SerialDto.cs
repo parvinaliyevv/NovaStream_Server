@@ -15,7 +15,7 @@ public record SerialDetailsDto : BaseVideoDetailsDto
     public string TrailerUrl { get; set; }
     public int SeasonCount { get; set; }
 
-    public ProducerDto Producer { get; set; }
+    public DirectorDto Director { get; set; }
     public ICollection<ActorDto> Actors { get; set; }
     public ICollection<EpisodeDto> Episodes { get; set; }
 }

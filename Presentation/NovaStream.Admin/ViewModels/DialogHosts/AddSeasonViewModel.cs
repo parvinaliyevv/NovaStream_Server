@@ -4,7 +4,7 @@ public class AddSeasonViewModel : DependencyObject
 {
     private readonly AppDbContext _dbContext;
 
-    public UploadSeasonModel Season { get; set; }
+    public SeasonViewModelContent Season { get; set; }
     public List<Serial> Serials { get; set; }
 
     public bool ProcessStarted
@@ -27,14 +27,16 @@ public class AddSeasonViewModel : DependencyObject
 
         Season = new();
 
-        SaveCommand = new RelayCommand(_ => Save());
-        SelectedSerialChangedCommand = new RelayCommand(_ => SelectedSerialChanged());
+        SaveCommand = new RelayCommand(() => Save());
+        SelectedSerialChangedCommand = new RelayCommand(() => SelectedSerialChanged());
     }
 
 
     private async Task Save()
     {
         await Task.CompletedTask;
+
+        if (!InternetService.CheckInternet()) { await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error); return; }
 
         try
         {
@@ -57,9 +59,13 @@ public class AddSeasonViewModel : DependencyObject
 
             await MessageBoxService.Show("Season saved succesfully!", MessageBoxType.Success);
         }
-        catch (Exception ex)
+        catch
         {
-            await MessageBoxService.Show(ex.Message, MessageBoxType.Error);
+            if (!InternetService.CheckInternet())
+                await MessageBoxService.Show("You are not connected to the Internet!", MessageBoxType.Error);
+
+            else
+                await MessageBoxService.Show("Server not responding please try again later!", MessageBoxType.Error);
 
             ProcessStarted = false;
         }

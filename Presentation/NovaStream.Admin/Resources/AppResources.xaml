@@ -3,8 +3,31 @@
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
 
+    <SolidColorBrush x:Key="AppColor" Color="#F24C4C"/>
+    <SolidColorBrush x:Key="SecondAppColor" Color="#DF7861"/>
+
+    <Color x:Key="AppColorVersion2">#F24C4C</Color>
+    <Color x:Key="SecondAppColorVersion2">#DF7861</Color>
+
+    <!--<Color x:Key="AppColorVersion2">#212629</Color> Back to Black
+    <Color x:Key="SecondAppColorVersion2">#2E3840</Color>
+    
+    <Color x:Key="AppColorVersion2">#BD1616</Color> Dark red
+    <Color x:Key="SecondAppColorVersion2">#FF2626</Color>-->
+
+    <SolidColorBrush x:Key="ForegroundAppColor" Color="White"/>
+    <SolidColorBrush x:Key="SecondForegroundAppColor" Color="#121518"/>
+
+    <SolidColorBrush x:Key="SearchBorderBrush" Color="#e0e6ed"/>
+    <SolidColorBrush x:Key="SearchHoverBorderBrush" Color="#d9d9d9"/>
+
+    <SolidColorBrush x:Key="DisableColor" Color="#eee"/>
+    <SolidColorBrush x:Key="DisableButtonColor" Color="#D8D9CF"/>
+
+    <SolidColorBrush x:Key="RootBorderBgColor" Color="#d7dbe2"/>
+
     <Style x:Key="MenuTitle" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="#fff"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundAppColor}"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Margin" Value="40 15 0 15"/>
@@ -12,7 +35,8 @@
 
     <Style x:Key="MenuButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="#fed6ce"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundAppColor}"/>
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Height" Value="45"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Margin" Value="15 0 15 5"/>
@@ -28,8 +52,8 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#f7f6f4"/>
-                <Setter Property="Foreground" Value="#fb7657"/>
+                <Setter Property="Background" Value="{StaticResource ForegroundAppColor}"/>
+                <Setter Property="Foreground" Value="{StaticResource AppColor}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -46,10 +70,10 @@
     </Style>
 
     <Style x:Key="WhiteBorder" TargetType="Border">
-        <Setter Property="Background" Value="#fff"/>
+        <Setter Property="Background" Value="{StaticResource ForegroundAppColor}"/>
         <Setter Property="CornerRadius" Value="15"/>
         <Setter Property="Padding" Value="20"/>
-        <Setter Property="Margin" Value="20 7"/>
+        <Setter Property="Margin" Value="20 7 0 7"/>
     </Style>
 
     <Style x:Key="TitleText" TargetType="TextBlock">
@@ -61,8 +85,8 @@
     <!--#region TableView-->
 
     <Style x:Key="TextboxSearch" TargetType="TextBox">
-        <Setter Property="Background" Value="#fff"/>
-        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="{StaticResource ForegroundAppColor}"/>
+        <Setter Property="Foreground" Value="{StaticResource SecondForegroundAppColor}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="Padding" Value="25 17"/>
@@ -74,18 +98,18 @@
             <Setter.Value>
                 <ControlTemplate TargetType="TextBoxBase">
                     <Border x:Name="border" CornerRadius="20" Background="{TemplateBinding Background}" SnapsToDevicePixels="True"
-                            BorderThickness="1" BorderBrush="#e0e6ed">
+                            BorderThickness="1" BorderBrush="{StaticResource SearchBorderBrush}">
                         <ScrollViewer x:Name="PART_ContentHost" Focusable="False" HorizontalScrollBarVisibility="Hidden"
                                       VerticalScrollBarVisibility="Hidden"/>
                     </Border>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="#d9d9d9" TargetName="border"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource SearchHoverBorderBrush}" TargetName="border"/>
                         </Trigger>
 
                         <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter Property="BorderBrush" Value="#d9d9d9" TargetName="border"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource SearchHoverBorderBrush}" TargetName="border"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -99,18 +123,18 @@
             <Setter.Value>
                 <ControlTemplate TargetType="TextBoxBase">
                     <Border x:Name="border" CornerRadius="7" Background="{TemplateBinding Background}" SnapsToDevicePixels="True"
-                            BorderThickness="1" BorderBrush="#e0e6ed">
+                            BorderThickness="1" BorderBrush="{StaticResource SearchBorderBrush}">
                         <ScrollViewer x:Name="PART_ContentHost" Focusable="False" HorizontalScrollBarVisibility="Hidden"
                                       VerticalScrollBarVisibility="Hidden"/>
                     </Border>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="#d9d9d9" TargetName="border"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource SearchHoverBorderBrush}" TargetName="border"/>
                         </Trigger>
 
                         <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter Property="BorderBrush" Value="#d9d9d9" TargetName="border"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource SearchHoverBorderBrush}" TargetName="border"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -120,11 +144,12 @@
 
 
     <Style x:Key="AddButton" TargetType="Button">
-        <Setter Property="Background" Value="#fb7657"/>
-        <Setter Property="Foreground" Value="#f7f6f4"/>
+        <Setter Property="Background" Value="{StaticResource AppColor}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundAppColor}"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Width" Value="170"/>
         <Setter Property="Height" Value="35"/>
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="HorizontalAlignment" Value="Right"/>
         <Setter Property="Margin" Value="0 20 0 0"/>
         <Setter Property="FontSize" Value="13"/>
@@ -140,16 +165,16 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#fb8757"/>
-                <Setter Property="Foreground" Value="#fed6ce"/>
+                <Setter Property="Background" Value="{StaticResource SecondAppColor}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <Style x:Key="TabButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="#121518"/>
+        <Setter Property="Foreground" Value="{StaticResource SecondForegroundAppColor}"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Width" Value="70"/>
         <Setter Property="Height" Value="45"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
@@ -167,13 +192,13 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="#fb8757"/>
+                <Setter Property="BorderBrush" Value="{StaticResource AppColor}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="#eee"/>
+                <Setter Property="Foreground" Value="{StaticResource DisableColor}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="True">
-                <Setter Property="Foreground" Value="#121518"/>
+                <Setter Property="Foreground" Value="{StaticResource SecondForegroundAppColor}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -198,16 +223,16 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#fb8757" />
-                <Setter Property="Foreground" Value="#f7f6f4" />
+                <Setter Property="Foreground" Value="{StaticResource ForegroundAppColor}" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
 
     <Style x:Key="GridEditButton" TargetType="Button">
-        <Setter Property="Background" Value="#ADE792" />
-        <Setter Property="BorderBrush" Value="#B4E197" />
-        <Setter Property="Foreground" Value="#ffffff" />
+        <Setter Property="Background" Value="#4dd171" />
+        <Setter Property="BorderBrush" Value="#40c263" />
+        <Setter Property="Foreground" Value="{StaticResource ForegroundAppColor}" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template" >
@@ -221,7 +246,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#94EB99" />
+                <Setter Property="Background" Value="#5ae67f" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -246,7 +271,7 @@
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid>
                         <Rectangle x:Name="Border" Fill="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" SnapsToDevicePixels="True"/>
-                        <Polygon x:Name="Arrow" Fill="Black" HorizontalAlignment="Right" Margin="8,8,3,3" Opacity="0.15" Points="0,10 10,10 10,0" Stretch="Uniform" VerticalAlignment="Bottom"/>
+                        <Polygon x:Name="Arrow" Fill="{StaticResource SecondForegroundAppColor}" HorizontalAlignment="Right" Margin="8,8,3,3" Opacity="0.15" Points="0,10 10,10 10,0" Stretch="Uniform" VerticalAlignment="Bottom"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -279,7 +304,7 @@
 
     <Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="#222528"/>
+        <Setter Property="Foreground" Value="{StaticResource SecondForegroundAppColor}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
@@ -386,7 +411,7 @@
 
     <Style x:Key="DataGridRowStyle1" TargetType="{x:Type DataGridRow}">
         <Setter Property="Margin" Value="0 4 0 0" />
-        <Setter Property="Background" Value="#FFFFFF"/>
+        <Setter Property="Background" Value="{StaticResource ForegroundAppColor}"/>
         <Setter Property="SnapsToDevicePixels" Value="true"/>
         <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
         <Setter Property="ValidationErrorTemplate">
@@ -420,12 +445,12 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#fb8757"/>
-                <Setter Property="Foreground" Value="#f7f6f4"/>
+                <Setter Property="Background" Value="{StaticResource AppColor}"/>
+                <Setter Property="Foreground" Value="{StaticResource ForegroundAppColor}"/>
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="#fb8757"/>
-                <Setter Property="Foreground" Value="#f7f6f4"/>
+                <Setter Property="Background" Value="{StaticResource AppColor}"/>
+                <Setter Property="Foreground" Value="{StaticResource ForegroundAppColor}"/>
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
@@ -440,22 +465,22 @@
     <!--#endregion-->
 
     <!--#region Calendar-->
-    
+
     <Style x:Key="CustomCalendarDayButton" TargetType="CalendarDayButton" BasedOn="{StaticResource MaterialDesignCalendarDayButton}">
-        <Setter Property="materialDesign:CalendarAssist.SelectionColor" Value="#fb7657" />
-        <Setter Property="materialDesign:CalendarAssist.SelectionForegroundColor" Value="#fff" />
+        <Setter Property="materialDesign:CalendarAssist.SelectionColor" Value="{StaticResource AppColor}" />
+        <Setter Property="materialDesign:CalendarAssist.SelectionForegroundColor" Value="{StaticResource ForegroundAppColor}" />
     </Style>
 
     <Style x:Key="CustomCalendarButton" TargetType="CalendarButton" BasedOn="{StaticResource MaterialDesignCalendarButton}">
-        <Setter Property="materialDesign:CalendarAssist.SelectionColor" Value="#fb7657" />
-        <Setter Property="materialDesign:CalendarAssist.SelectionForegroundColor" Value="#fff" />
+        <Setter Property="materialDesign:CalendarAssist.SelectionColor" Value="{StaticResource AppColor}" />
+        <Setter Property="materialDesign:CalendarAssist.SelectionForegroundColor" Value="{StaticResource ForegroundAppColor}" />
     </Style>
 
     <Style x:Key="CustomCalendar" TargetType="{x:Type Calendar}" BasedOn="{StaticResource MaterialDesignDatePickerCalendarPortrait}">
-        <Setter Property="Background" Value="#fff" />
-        <Setter Property="Foreground" Value="#fb7657" />
-        <Setter Property="materialDesign:CalendarAssist.HeaderBackground" Value="#fb7657" />
-        <Setter Property="materialDesign:CalendarAssist.HeaderForeground" Value="#fff" />
+        <Setter Property="Background" Value="{StaticResource ForegroundAppColor}" />
+        <Setter Property="Foreground" Value="{StaticResource AppColor}" />
+        <Setter Property="materialDesign:CalendarAssist.HeaderBackground" Value="{StaticResource AppColor}" />
+        <Setter Property="materialDesign:CalendarAssist.HeaderForeground" Value="{StaticResource ForegroundAppColor}" />
         <Setter Property="CalendarDayButtonStyle" Value="{StaticResource CustomCalendarDayButton}" />
         <Setter Property="CalendarButtonStyle" Value="{StaticResource CustomCalendarButton}" />
     </Style>
@@ -468,8 +493,8 @@
         <Setter Property="Height" Value="50"/>
         <Setter Property="Margin" Value="10"/>
 
-        <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="#fb7657"/>
-        <Setter Property="materialDesign:HintAssist.Foreground" Value="#fb7657"/>
+        <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="{StaticResource AppColor}"/>
+        <Setter Property="materialDesign:HintAssist.Foreground" Value="{StaticResource AppColor}"/>
         <Setter Property="materialDesign:HintAssist.FloatingScale" Value="1.1"/>
         <Setter Property="materialDesign:ValidationAssist.OnlyShowOnFocus" Value="True"/>
         <Setter Property="materialDesign:ValidationAssist.UsePopup" Value="True"/>
@@ -477,7 +502,7 @@
 
         <Style.Triggers>
             <Trigger Property="materialDesign:HintAssist.IsFloating" Value="True">
-                <Setter Property="materialDesign:HintAssist.Background" Value="#fff"/>
+                <Setter Property="materialDesign:HintAssist.Background" Value="{StaticResource ForegroundAppColor}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -488,8 +513,8 @@
         <Setter Property="Height" Value="90"/>
         <Setter Property="Margin" Value="10"/>
 
-        <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="#fb7657"/>
-        <Setter Property="materialDesign:HintAssist.Foreground" Value="#fb7657"/>
+        <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="{StaticResource AppColor}"/>
+        <Setter Property="materialDesign:HintAssist.Foreground" Value="{StaticResource AppColor}"/>
         <Setter Property="materialDesign:HintAssist.FloatingScale" Value="1.1"/>
         <Setter Property="materialDesign:ValidationAssist.OnlyShowOnFocus" Value="True"/>
         <Setter Property="materialDesign:ValidationAssist.UsePopup" Value="True"/>
@@ -497,25 +522,25 @@
 
         <Style.Triggers>
             <Trigger Property="materialDesign:HintAssist.IsFloating" Value="True">
-                <Setter Property="materialDesign:HintAssist.Background" Value="#fff"/>
+                <Setter Property="materialDesign:HintAssist.Background" Value="{StaticResource ForegroundAppColor}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
     <Style x:Key="InputComboBox" TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
         <Setter Property="Height" Value="50"/>
         <Setter Property="Margin" Value="10"/>
-        
-        <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="#fb7657"/>
-        <Setter Property="materialDesign:HintAssist.Foreground" Value="#fb7657"/>
+
+        <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="{StaticResource AppColor}"/>
+        <Setter Property="materialDesign:HintAssist.Foreground" Value="{StaticResource AppColor}"/>
         <Setter Property="materialDesign:HintAssist.FloatingScale" Value="1.1"/>
         <Setter Property="materialDesign:ValidationAssist.OnlyShowOnFocus" Value="True"/>
-        <Setter Property="materialDesign:ValidationAssist.UsePopup" Value="True"/>
+        <Setter Property="materialDesign:ValidationAssist.UsePopup" Value="False"/>
         <Setter Property="materialDesign:ValidationAssist.Background" Value="Transparent"/>
 
         <Style.Triggers>
             <Trigger Property="materialDesign:HintAssist.IsFloating" Value="True">
-                <Setter Property="materialDesign:HintAssist.Background" Value="#fff"/>
+                <Setter Property="materialDesign:HintAssist.Background" Value="{StaticResource ForegroundAppColor}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -523,19 +548,19 @@
     <Style x:Key="InputDatePicker" TargetType="DatePicker" BasedOn="{StaticResource MaterialDesignOutlinedDatePicker}">
         <Setter Property="Height" Value="50"/>
         <Setter Property="Margin" Value="10"/>
-        
-        <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="#fb7657"/>
-        <Setter Property="materialDesign:HintAssist.Foreground" Value="#fb7657"/>
+
+        <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="{StaticResource AppColor}"/>
+        <Setter Property="materialDesign:HintAssist.Foreground" Value="{StaticResource AppColor}"/>
         <Setter Property="materialDesign:HintAssist.FloatingScale" Value="1.1"/>
         <Setter Property="materialDesign:ValidationAssist.OnlyShowOnFocus" Value="True"/>
-        <Setter Property="materialDesign:ValidationAssist.UsePopup" Value="True"/>
+        <Setter Property="materialDesign:ValidationAssist.UsePopup" Value="False"/>
         <Setter Property="CalendarStyle" Value="{StaticResource CustomCalendar}" />
 
         <Style.Resources>
             <SolidColorBrush x:Key="MaterialDesignPaper" Color="#fff"/>
-            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#fb7657"/>
+            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource AppColorVersion2}"/>
         </Style.Resources>
-        
+
         <Style.Triggers>
             <Trigger Property="Validation.HasError" Value="False">
                 <Setter Property="materialDesign:DatePickerAssist.OutlinedBorderInactiveThickness" Value="1"/>
@@ -550,21 +575,22 @@
     </Style>
 
     <Style x:Key="CircularProgressBar" TargetType="ProgressBar" BasedOn="{StaticResource MaterialDesignCircularProgressBar}">
-        <Setter Property="Foreground" Value="#fb7657"/>
+        <Setter Property="Foreground" Value="{StaticResource AppColor}"/>
     </Style>
-        
+
     <Style x:Key="CircularProgressBarCard" TargetType="materialDesign:Card" >
-        <Setter Property="Background" Value="#B5D5C5"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Margin" Value="3, 0"/>
         <Setter Property="Width" Value="80"/>
     </Style>
-        
+
     <Style x:Key="SaveCancelButton" TargetType="Button">
-        <Setter Property="Background" Value="#fb7657"/>
-        <Setter Property="Foreground" Value="#f7f6f4"/>
+        <Setter Property="Background" Value="{StaticResource AppColor}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundAppColor}"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Height" Value="40"/>
-        <Setter Property="Margin" Value="10 0"/>
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Margin" Value="20 4"/>
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -578,22 +604,22 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#fb8757"/>
-                <Setter Property="Foreground" Value="#fed6ce"/>
+                <Setter Property="Background" Value="{StaticResource SecondAppColor}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="#FFB8A7"/>
-                <Setter Property="Foreground" Value="GhostWhite"/>
+                <Setter Property="Background" Value="{StaticResource DisableButtonColor}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <Style x:Key="FileDialogButton" TargetType="Button">
-        <Setter Property="Background" Value="#fb7657"/>
-        <Setter Property="Foreground" Value="#f7f6f4"/>
+        <Setter Property="Background" Value="{StaticResource AppColor}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundAppColor}"/>
         <Setter Property="Width" Value="80"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="FontSize" Value="13"/>
+        <Setter Property="IsEnabled" Value="{Binding ProcessStarted, Converter={StaticResource InvertBooleanConverter}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -606,20 +632,19 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#fb8757"/>
-                <Setter Property="Foreground" Value="#fed6ce"/>
+                <Setter Property="Background" Value="{StaticResource SecondAppColor}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="#FFB8A7"/>
-                <Setter Property="Foreground" Value="GhostWhite"/>
+                <Setter Property="Background" Value="{StaticResource DisableButtonColor}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <Style x:Key="CloseDialogButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignIconForegroundButton}">
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Content" Value="{materialDesign:PackIcon Kind=Close}"/>
-        <Setter Property="Foreground" Value="#fff"/>
-        <Setter Property="materialDesign:RippleAssist.Feedback" Value="#fff"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundAppColor}"/>
+        <Setter Property="materialDesign:RippleAssist.Feedback" Value="{StaticResource ForegroundAppColor}"/>
     </Style>
 
     <!--#endregion-->
