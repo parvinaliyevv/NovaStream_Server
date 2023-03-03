@@ -1,6 +1,7 @@
 ﻿global using System.Reflection;
 global using System.Security.Claims;
 
+global using NovaStream.Domain.Enums;
 global using NovaStream.Application.Services;
 global using NovaStream.Domain.Entities.Concrete;
 global using NovaStream.Persistence.Data.Contexts;

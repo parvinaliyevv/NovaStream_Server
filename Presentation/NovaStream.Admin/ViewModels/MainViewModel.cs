@@ -11,6 +11,8 @@ public class MainViewModel : ViewModelBase
         set => Set(ref _currentViewModel, value);
     }
 
+    public User User { get; set; }
+
 
     public MainViewModel(INavigationService navigationService, IMessenger messenger)
     {

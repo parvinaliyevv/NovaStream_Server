@@ -112,10 +112,10 @@ public class SoonViewModel : ViewModelBase
             _dbContext.Soons.Remove(soon);
             await _dbContext.SaveChangesAsync();
 
-            Soons.Remove(soon);
-
             await _storageManager.DeleteFileAsync(trailerUrl);
             await _storageManager.DeleteFileAsync(trailerImageUrl);
+
+            Soons.Remove(soon);
 
             MessageBoxService.Close();
         }

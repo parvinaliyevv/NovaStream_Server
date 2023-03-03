@@ -1,8 +1,6 @@
-﻿using NovaStream.Domain.Entities.Concrete;
+﻿namespace NovaStream.API.Controllers;
 
-namespace NovaStream.API.Controllers;
-
-[ApiController, Authorize]
+[ApiController, Authorize(Roles = "Client")]
 [Route("api/[controller]")]
 public class SerialController : ControllerBase
 {

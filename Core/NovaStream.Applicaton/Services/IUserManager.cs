@@ -11,6 +11,9 @@ public interface IUserManager
     bool DeleteUser(User user);
     Task<bool> DeleteUserAsync(User user);
 
+    bool AssignRole(User user, UserRoles role);
+    Task<bool> AssignRoleAsync(User user, UserRoles role);
+
     User? FindUserByEmail(string email);
     Task<User?> FindUserByEmailAsync(string email);
 

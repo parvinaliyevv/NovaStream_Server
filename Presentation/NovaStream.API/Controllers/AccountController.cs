@@ -41,7 +41,7 @@ public class AccountController : ControllerBase
 
             var user = await _userManager.FindUserByEmailAsync(dto.Email);
 
-            if (user is not null && _userManager.CheckPassword(user, dto.Password))
+            if (user is not null && _userManager.CheckPassword(user, dto.Password) && user.Role == UserRoles.Client.ToString())
             {
                 var token = await _tokenGeneratorService.GenerateAuthorizeTokenAsync(user);
                 var response = new { Nickname = user.Nickname, AvatarUrl = user.AvatarUrl, Email = dto.Email, PasswordLength = dto.Password.Length, Token = token };
@@ -71,6 +71,8 @@ public class AccountController : ControllerBase
             {
                 var result = await _userManager.CreateUserAsync(user, dto.Password);
 
+                await _userManager.AssignRoleAsync(user, UserRoles.Client);
+
                 if (result)
                 {
                     var token = await _tokenGeneratorService.GenerateAuthorizeTokenAsync(user);
@@ -90,7 +92,7 @@ public class AccountController : ControllerBase
         }
     }
 
-    [HttpPut("[Action]"), Authorize]
+    [HttpPut("[Action]"), Authorize(Roles = "Client")]
     public async Task<IActionResult> Edit([FromForm] EditUserDto dto)
     {
         try
@@ -113,7 +115,7 @@ public class AccountController : ControllerBase
         }
     }
 
-    [HttpPut("[Action]"), Authorize]
+    [HttpPut("[Action]"), Authorize(Roles = "Client")]
     public async Task<IActionResult> ChangePassword([FromForm] string oldPassword, [FromForm] string newPassword)
     {
         try
@@ -145,7 +147,7 @@ public class AccountController : ControllerBase
         }
     }
 
-    [HttpDelete("[Action]"), Authorize]
+    [HttpDelete("[Action]"), Authorize(Roles = "Client")]
     public async Task<IActionResult> Delete([FromForm] string password)
     {
         try

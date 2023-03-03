@@ -3,17 +3,11 @@
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
 
-    <SolidColorBrush x:Key="AppColor" Color="#F24C4C"/>
-    <SolidColorBrush x:Key="SecondAppColor" Color="#DF7861"/>
+    <SolidColorBrush x:Key="AppColor" Color="#fb7657"/>
+    <SolidColorBrush x:Key="SecondAppColor" Color="#fb6161"/>
 
-    <Color x:Key="AppColorVersion2">#F24C4C</Color>
-    <Color x:Key="SecondAppColorVersion2">#DF7861</Color>
-
-    <!--<Color x:Key="AppColorVersion2">#212629</Color> Back to Black
-    <Color x:Key="SecondAppColorVersion2">#2E3840</Color>
-    
-    <Color x:Key="AppColorVersion2">#BD1616</Color> Dark red
-    <Color x:Key="SecondAppColorVersion2">#FF2626</Color>-->
+    <Color x:Key="AppColorVersion2">#fb7657</Color>
+    <Color x:Key="SecondAppColorVersion2">#fb6161</Color>
 
     <SolidColorBrush x:Key="ForegroundAppColor" Color="White"/>
     <SolidColorBrush x:Key="SecondForegroundAppColor" Color="#121518"/>

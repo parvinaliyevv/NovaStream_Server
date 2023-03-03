@@ -112,9 +112,9 @@ public class ActorViewModel : ViewModelBase
             _dbContext.Actors.Remove(actor);
             await _dbContext.SaveChangesAsync();
 
-            Actors.Remove(actor);
-
             await _storageManager.DeleteFileAsync(imageUrl);
+
+            Actors.Remove(actor);
 
             MessageBoxService.Close();
         }

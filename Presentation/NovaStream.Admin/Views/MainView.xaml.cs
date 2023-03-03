@@ -5,12 +5,13 @@ public partial class MainView : Window
     private bool _isMaximized;
 
 
-    public MainView()
+    public MainView(User user)
     {
         InitializeComponent();
 
         var context = App.ServiceProvider.GetService<MainViewModel>();
 
+        context.User = user;
         context.CurrentViewModel = App.ServiceProvider.GetService<MovieViewModel>();
 
         DataContext = context;

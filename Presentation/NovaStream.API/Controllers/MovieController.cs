@@ -1,6 +1,6 @@
 ﻿namespace NovaStream.API.Controllers;
 
-[ApiController, Authorize]
+[ApiController, Authorize(Roles = "Client")]
 [Route("api/[controller]")]
 public class MovieController : ControllerBase
 {

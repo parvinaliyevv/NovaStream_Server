@@ -3,6 +3,7 @@ global using System.Reflection;
 global using System.Globalization;
 global using System.Runtime.Caching;
 
+global using NovaStream.Domain.Enums;
 global using NovaStream.Application.Services;
 global using NovaStream.Domain.Entities.Concrete;
 global using NovaStream.Application.Dtos.Abstract;

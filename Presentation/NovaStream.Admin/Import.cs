@@ -15,6 +15,7 @@ global using NovaStream.Application.Services;
 global using System.Runtime.CompilerServices;
 
 global using NovaStream.Admin.Views;
+global using NovaStream.Domain.Enums;
 global using NovaStream.Admin.Services;
 global using NovaStream.Admin.Utilities;
 global using GalaSoft.MvvmLight.Command;

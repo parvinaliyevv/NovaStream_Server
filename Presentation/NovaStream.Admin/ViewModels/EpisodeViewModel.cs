@@ -130,10 +130,10 @@ public class EpisodeViewModel : ViewModelBase
             _dbContext.Episodes.Remove(episode);
             await _dbContext.SaveChangesAsync();
 
-            Episodes.Remove(episode);
-
             await _awsStorageManager.DeleteFileAsync(videoUrl);
             await _storageManager.DeleteFileAsync(imageUrl);
+
+            Episodes.Remove(episode);
 
             MessageBoxService.Close();
         }

@@ -111,9 +111,9 @@ public class DirectorViewModel : ViewModelBase
             _dbContext.Directors.Remove(director);
             await _dbContext.SaveChangesAsync();
 
-            Directors.Remove(director);
-
             await _storageManager.DeleteFileAsync(imageUrl);
+
+            Directors.Remove(director);
 
             MessageBoxService.Close();
         }

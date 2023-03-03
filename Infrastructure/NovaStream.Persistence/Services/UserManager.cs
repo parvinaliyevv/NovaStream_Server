@@ -49,7 +49,18 @@ public class UserManager : IUserManager
     }
     public async Task<bool> DeleteUserAsync(User user)
         => await Task.Factory.StartNew(() => DeleteUser(user));
-    
+
+    public bool AssignRole(User user, UserRoles role)
+    {
+        user.Role = role.ToString();
+
+        UpdateUser(user);
+
+        return true;
+    }
+    public async Task<bool> AssignRoleAsync(User user, UserRoles role)
+        => await Task.Factory.StartNew(() => AssignRole(user, role));
+
     public User? FindUserByEmail(string email)
     {
         var user = _dbContext.Users.FirstOrDefault(user => user.Email == email);

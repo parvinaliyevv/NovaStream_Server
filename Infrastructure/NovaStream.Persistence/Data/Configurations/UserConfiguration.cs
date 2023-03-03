@@ -10,6 +10,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             {
                 Id = 1,
                 Nickname = "Admin",
+                Role = UserRoles.Admin.ToString(),
                 Email = "admin@novastream.api",
                 PasswordHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
                 OldPasswordHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
@@ -19,6 +20,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             {
                 Id = 2,
                 Nickname = "tyler",
+                Role = UserRoles.Tester.ToString(),
                 Email = "novastream.tester@gmail.com",
                 PasswordHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
                 OldPasswordHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",

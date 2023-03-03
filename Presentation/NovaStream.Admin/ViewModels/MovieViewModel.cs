@@ -121,13 +121,13 @@ public class MovieViewModel : ViewModelBase
             _dbContext.Movies.Remove(movie);
             await _dbContext.SaveChangesAsync();
 
-            Movies.Remove(movie);
-
-            await _awsStorageManager.DeleteFileAsync(videoUrl);
             await _storageManager.DeleteFileAsync(videoImageUrl);
             await _storageManager.DeleteFileAsync(trailerUrl);
             await _storageManager.DeleteFileAsync(imageUrl);
             await _storageManager.DeleteFileAsync(searchImageUrl);
+            await _awsStorageManager.DeleteFileAsync(videoUrl);
+
+            Movies.Remove(movie);
 
             MessageBoxService.Close();
         }

@@ -126,6 +126,13 @@ public class SerialViewModel : ViewModelBase
             _dbContext.Serials.Remove(serial);
             await _dbContext.SaveChangesAsync();
 
+            foreach (var episodeImageUrl in episodeImageUrls) _storageManager.DeleteFile(episodeImageUrl);
+            foreach (var episodeVideoUrl in episodeVideoUrls) await _awsStorageManager.DeleteFileAsync(episodeVideoUrl);
+
+            await _storageManager.DeleteFileAsync(trailerUrl);
+            await _storageManager.DeleteFileAsync(imageUrl);
+            await _storageManager.DeleteFileAsync(searchImageUrl);
+
             if (SeasonViewModel.isCreated)
             {
                 var model = App.ServiceProvider.GetService<SeasonViewModel>();
@@ -150,13 +157,6 @@ public class SerialViewModel : ViewModelBase
             }
 
             Serials.Remove(serial);
-
-            foreach (var episodeImageUrl in episodeImageUrls) _storageManager.DeleteFile(episodeImageUrl);
-            foreach (var episodeVideoUrl in episodeVideoUrls) await _awsStorageManager.DeleteFileAsync(episodeVideoUrl);
-
-            await _storageManager.DeleteFileAsync(trailerUrl);
-            await _storageManager.DeleteFileAsync(imageUrl);
-            await _storageManager.DeleteFileAsync(searchImageUrl);
 
             MessageBoxService.Close();
         }

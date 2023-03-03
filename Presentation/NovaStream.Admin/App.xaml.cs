@@ -23,6 +23,7 @@ public partial class App : System.Windows.Application
         Services.AddSingleton<INavigationService, NavigationService>();
 
         Services.AddSingleton<MainViewModel>();
+        Services.AddTransient<LoginViewModel>();
 
         Services.AddSingleton<MovieViewModel>();
         Services.AddTransient<AddMovieViewModel>();
@@ -108,7 +109,7 @@ public partial class App : System.Windows.Application
     {
         Register();
 
-        new MainView().ShowDialog();
+        new LoginView().ShowDialog();
 
         base.OnStartup(e);
     }

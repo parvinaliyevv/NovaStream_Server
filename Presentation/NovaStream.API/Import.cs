@@ -2,6 +2,7 @@
 global using System.Text;
 global using System.Globalization;
 
+global using NovaStream.Domain.Enums;
 global using NovaStream.API.Middlewares;
 global using NovaStream.Application.Services;
 global using NovaStream.Persistence.Services;

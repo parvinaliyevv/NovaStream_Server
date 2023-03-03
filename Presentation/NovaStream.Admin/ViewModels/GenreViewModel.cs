@@ -111,9 +111,9 @@ public class GenreViewModel : ViewModelBase
             _dbContext.Genres.Remove(genre);
             await _dbContext.SaveChangesAsync();
 
-            Genres.Remove(genre);
-
             await _storageManager.DeleteFileAsync(imageUrl);
+
+            Genres.Remove(genre);
 
             MessageBoxService.Close();
         }

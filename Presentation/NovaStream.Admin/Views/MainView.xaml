@@ -148,8 +148,11 @@
                                 </Border>
 
                                 <StackPanel VerticalAlignment="Center">
-                                    <TextBlock Text="Hello, Admin" FontSize="26" FontWeight="Bold" Style="{StaticResource TitleText}"/>
-                                    <TextBlock Text="Moderator..." Foreground="#6c879a" Margin="0 3 0 0"/>
+                                    <TextBlock  FontSize="26" FontWeight="Bold" Style="{StaticResource TitleText}">
+                                        <Run Text="Hello, "/>
+                                        <Run Text="{Binding User.Nickname}"/>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding User.Role, StringFormat={}{0}...}" Foreground="#6c879a" Margin="0 3 0 0"/>
                                 </StackPanel>
                             </StackPanel>
 
