@@ -12,7 +12,7 @@ using NovaStream.Persistence.Data.Contexts;
 namespace NovaStream.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230303131241_init")]
+    [Migration("20230303210552_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

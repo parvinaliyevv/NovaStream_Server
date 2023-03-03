@@ -4,7 +4,7 @@ public static class MessageBoxService
 {
     public static Task Show(string message, MessageBoxType type, string identifier = "MessageBox")
     {
-        if (DialogHost.IsDialogOpen(identifier)) Close();
+        if (DialogHost.IsDialogOpen(identifier)) Close(identifier);
 
         BaseMessageBox model = null;
 

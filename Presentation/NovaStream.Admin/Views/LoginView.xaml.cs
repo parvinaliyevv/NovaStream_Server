@@ -36,6 +36,6 @@ public partial class LoginView : Window
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(passwordBox);
 
-        context.Content.Password = passwordBox.Password;
+        context.Password = passwordBox.Password;
     }
 }

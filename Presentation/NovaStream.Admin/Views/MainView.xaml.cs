@@ -47,5 +47,9 @@ public partial class MainView : Window
         }
     }
 
-    private void CloseApp_ButtonClicked(object sender, RoutedEventArgs e) => Close();
+    private void CloseApp_ButtonClicked(object sender, RoutedEventArgs e)
+    {
+        new LoginView().Show();
+        Close();
+    }
 }
