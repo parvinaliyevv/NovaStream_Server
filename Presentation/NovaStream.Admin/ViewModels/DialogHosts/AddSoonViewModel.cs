@@ -79,10 +79,12 @@ public class AddSoonViewModel : DependencyObject
             if (dbSoon is null || dbSoon is not null && dbSoon.TrailerUrl != Soon.TrailerUrl)
             {
                 var trailerStream = new FileStream(Soon.TrailerUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-trailer{1}", Path.GetFileNameWithoutExtension(Soon.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Soon.TrailerUrl));
+                var filename = string.Format("{0}-trailer-{1}{2}", Path.GetFileNameWithoutExtension(Soon.Name).ToLower().Replace(' ', '-'), Random.Shared.Next(), Path.GetExtension(Soon.TrailerUrl));
                 soon.TrailerUrl = string.Format("Soons/{0}/{1}", Soon.Name, filename);
 
                 Soon.TrailerProgress = new BlobStorageUploadProgress(trailerStream.Length);
+
+                if (dbSoon is not null) _ = _storageManager.DeleteFileAsync(dbSoon.TrailerUrl);
 
                 var trailerToken = new CancellationTokenSource();
                 var trailerUploadTask = _storageManager.UploadFileAsync(trailerStream, soon.TrailerUrl, Soon.TrailerProgress, trailerToken.Token);

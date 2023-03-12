@@ -93,8 +93,10 @@ public class AddMovieViewModel : DependencyObject
             if (dbMovie is null || dbMovie is not null && dbMovie.VideoUrl != Movie.VideoUrl)
             {
                 var videoStream = new FileStream(Movie.VideoUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-video{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.VideoUrl));
+                var filename = string.Format("{0}-video-{1}{2}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Random.Shared.Next(), Path.GetExtension(Movie.VideoUrl));
                 movie.VideoUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
+
+                if (dbMovie is not null) _ = _storageManager.DeleteFileAsync(dbMovie.VideoUrl);
 
                 var videoToken = new CancellationTokenSource();
                 var videoUploadTask = _awsStorageManager.UploadFileAsync(videoStream, movie.VideoUrl, Movie.VideoProgressEvent, videoToken.Token);
@@ -129,10 +131,12 @@ public class AddMovieViewModel : DependencyObject
             if (dbMovie is null || dbMovie is not null && dbMovie.TrailerUrl != Movie.TrailerUrl)
             {
                 var trailerStream = new FileStream(Movie.TrailerUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-trailer{1}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Movie.TrailerUrl));
+                var filename = string.Format("{0}-trailer-{1}{2}", Path.GetFileNameWithoutExtension(Movie.Name).ToLower().Replace(' ', '-'), Random.Shared.Next(), Path.GetExtension(Movie.TrailerUrl));
                 movie.TrailerUrl = string.Format("Movies/{0}/{1}", Movie.Name, filename);
 
                 Movie.TrailerProgress = new BlobStorageUploadProgress(trailerStream.Length);
+
+                if (dbMovie is not null) _ = _storageManager.DeleteFileAsync(dbMovie.TrailerUrl);
 
                 var trailerToken = new CancellationTokenSource();
                 var trailerUploadTask = _storageManager.UploadFileAsync(trailerStream, movie.TrailerUrl, Movie.TrailerProgress, trailerToken.Token);

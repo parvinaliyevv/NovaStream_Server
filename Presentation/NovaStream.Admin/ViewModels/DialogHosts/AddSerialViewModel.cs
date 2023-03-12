@@ -111,8 +111,10 @@ public class AddSerialViewModel : DependencyObject
             if (dbEpisode is null || dbEpisode is not null && dbEpisode.VideoUrl != Episode.VideoUrl)
             {
                 var videoStream = new FileStream(Episode.VideoUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-S01E01-video{1}", Path.GetFileNameWithoutExtension(Serial.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Episode.VideoUrl));
+                var filename = string.Format("{0}-S01E01-video-{1}{2}", Path.GetFileNameWithoutExtension(Serial.Name).ToLower().Replace(' ', '-'), Random.Shared.Next(), Path.GetExtension(Episode.VideoUrl));
                 episode.VideoUrl = string.Format("Serials/{0}/Season 1/Episode 1/{1}", Serial.Name, filename);
+
+                if (dbEpisode is not null) _ = _storageManager.DeleteFileAsync(dbEpisode.VideoUrl);
 
                 var videoToken = new CancellationTokenSource();
                 var videoUploadTask = _awsStorageManager.UploadFileAsync(videoStream, episode.VideoUrl, Episode.VideoProgressEvent, videoToken.Token);
@@ -147,10 +149,12 @@ public class AddSerialViewModel : DependencyObject
             if (dbSerial is null || dbSerial is not null && dbSerial.TrailerUrl != Serial.TrailerUrl)
             {
                 var trailerStream = new FileStream(Serial.TrailerUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-trailer{1}", Path.GetFileNameWithoutExtension(Serial.Name).ToLower().Replace(' ', '-'), Path.GetExtension(Serial.TrailerUrl));
+                var filename = string.Format("{0}-trailer-{1}{2}", Path.GetFileNameWithoutExtension(Serial.Name).ToLower().Replace(' ', '-'), Random.Shared.Next(), Path.GetExtension(Serial.TrailerUrl));
                 serial.TrailerUrl = string.Format("Serials/{0}/{1}", Serial.Name, filename);
 
                 Serial.TrailerProgress = new BlobStorageUploadProgress(trailerStream.Length);
+
+                if (dbSerial is not null) _ = _storageManager.DeleteFileAsync(dbSerial.TrailerUrl);
 
                 var trailerToken = new CancellationTokenSource();
                 var trailerUploadTask = _storageManager.UploadFileAsync(trailerStream, serial.TrailerUrl, Serial.TrailerProgress, trailerToken.Token);

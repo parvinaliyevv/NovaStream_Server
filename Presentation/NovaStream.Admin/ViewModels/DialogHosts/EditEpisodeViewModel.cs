@@ -74,8 +74,10 @@ public class EditEpisodeViewModel : DependencyObject
             if (dbEpisode is null || dbEpisode is not null && dbEpisode.VideoUrl != Episode.VideoUrl)
             {
                 var videoStream = new FileStream(Episode.VideoUrl, FileMode.Open, FileAccess.Read);
-                var filename = string.Format("{0}-S{1:00}E{2:00}-video{3}", Path.GetFileNameWithoutExtension(Episode.Serial.Name).ToLower().Replace(' ', '-'), Episode.Season.Number, Episode.Number, Path.GetExtension(Episode.VideoUrl));
+                var filename = string.Format("{0}-S{1:00}E{2:00}-video-{3}{4}", Path.GetFileNameWithoutExtension(Episode.Serial.Name).ToLower().Replace(' ', '-'), Episode.Season.Number, Episode.Number, Random.Shared.Next(), Path.GetExtension(Episode.VideoUrl));
                 episode.VideoUrl = string.Format("Serials/{0}/Season {1}/Episode {2}/{3}", Episode.Serial.Name, Episode.Season.Number, Episode.Number, filename);
+
+                if (dbEpisode is not null) _ = _storageManager.DeleteFileAsync(dbEpisode.VideoUrl);
 
                 var videoToken = new CancellationTokenSource();
                 var videoUploadTask = _awsStorageManager.UploadFileAsync(videoStream, episode.VideoUrl, Episode.VideoProgressEvent, videoToken.Token);
